@@ -1,0 +1,38 @@
+<app-products-components-tab [(productComponent)]="record"></app-products-components-tab>
+<div class="row" *ngIf="record?.id !== undefined">
+  <div class="col-md-12">
+    <br>
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="active">
+        <a href="javascript:void(0);">Versões</a>
+      </li>
+      <!--<li role="presentation" [class.active]="selectedTab === 'components'">
+        <a href="javascript:void(0);" (click)="selectTab('components')">Componentes</a>
+      </li>
+      <li role="presentation" [class.active]="selectedTab === 'versions'">
+        <a href="javascript:void(0);" (click)="selectTab('versions')">Versões</a>
+      </li>
+      <li role="presentation" [class.active]="selectedTab === 'builds'">
+        <a href="javascript:void(0);" (click)="selectTab('builds')">Builds</a>
+      </li>-->
+    </ul>
+  </div>
+</div>
+<app-products-components-versions [(productComponent)]="record" *ngIf="record?.id !== undefined"></app-products-components-versions>
+<div class="row">
+  <br>
+  <div class="col-md-3">
+    <div class="controls">
+      <button class="btn btn-success" (click)="clickSave(record)">Salvar</button>
+      <button class="btn btn-danger" *ngIf="record?.id !== undefined" (click)="clickDelete(record)">Deletar</button>
+      <button class="btn btn-default" routerLink="/componentes">Cancelar</button>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="checkbox">
+      <label>
+      <input type="checkbox" [checked]="saveAndContinue" (change)="saveAndContinue = !saveAndContinue">Continuar após salvar
+    </label>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<!-- NavBar -->
+<eb-nav-bar #navBar (onMenuToggle)="onMenuToggle()"></eb-nav-bar>
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+        <eb-main-menu #mainMenu></eb-main-menu>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+</div>
+<!-- /#wrapper -->

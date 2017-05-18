@@ -1,0 +1,38 @@
+<app-product-tab [product]="record"></app-product-tab>
+<!--
+<div class="row" *ngIf="false">
+  <div class="col-md-12">
+    <br>
+    <ul class="nav nav-tabs">
+  <li role="presentation" [class.active]="selectedTab == 'product'">
+    <a href="javascript:void(0);" (click)="selectTab('product')">Produto</a>
+  </li>
+      <li role="presentation" [class.active]="selectedTab === 'components'">
+        <a href="javascript:void(0);" (click)="selectTab('components')">Componentes</a>
+      </li>
+      <li role="presentation" [class.active]="selectedTab === 'versions'">
+        <a href="javascript:void(0);" (click)="selectTab('versions')">Versões</a>
+      </li>
+      <li role="presentation" [class.active]="selectedTab === 'builds'">
+        <a href="javascript:void(0);" (click)="selectTab('builds')">Builds</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="row" *ngIf="false">
+  <div class="col-md-12">
+    <br>
+    <app-product-components-tab [hidden]="selectedTab !== 'components'" [productComponents]="record.components"></app-product-components-tab>
+  </div>
+</div>
+-->
+<div class="row">
+  <br>
+  <div class="col-md-6">
+    <div class="controls">
+      <button class="btn btn-success" (click)="clickSave(record)">Salvar</button>
+      <button class="btn btn-danger" *ngIf="record?.id !== undefined" (click)="clickDelete(record)">Deletar</button>
+      <button class="btn btn-default" routerLink="/produtos">Cancelar</button>
+    </div>
+  </div>
+</div>

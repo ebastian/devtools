@@ -1,0 +1,57 @@
+<div class="checkbox">
+  <label>
+      <input type="checkbox" [checked]="filterActives" (change)="filterActives = !filterActives" (change)="toggleFilterActives()"> Apenas versões ativas
+    </label>
+</div>
+<table class="table table-hover table-striped">
+  <tr>
+    <th>ID</th>
+    <th>Major</th>
+    <th>Minor</th>
+    <th>Release</th>
+    <th>Criação</th>
+    <th>Desativação</th>
+    <th>Situação</th>
+    <th>Ações</th>
+  </tr>
+  <tr *ngFor="let version of versions" [class.danger]="version.death !== null &amp;&amp; version.death !== undefined">
+    <td>{{version.id}}</td>
+    <td>{{version.major}}</td>
+    <td>{{version.minor}}</td>
+    <td>{{version.release}}</td>
+    <td>{{version.creation}}</td>
+    <td>{{version.death}}</td>
+    <td>{{version.death === null || version.death === undefined ? 'Ativo' : 'Inativo'}}</td>
+    <td>
+      <button type="button" class="btn btn-default btn-xs" (click)="toggleVersionActive(version)">
+       {{version.death === null || version.death === undefined ? 'Desativar' : 'Ativar'}}
+      </button>
+      <button type="button" class="btn btn-default btn-xs" *ngIf="version.death === null || version.death === undefined">
+       Upload
+      </button>
+    </td>
+  </tr>
+  <tr>
+    <td style="vertical-align: middle">?</td>
+    <td>
+      <input class="form-control" [(ngModel)]="version.major">
+    </td>
+    <td>
+      <input class="form-control" [(ngModel)]="version.minor">
+    </td>
+    <td>
+      <input class="form-control" [(ngModel)]="version.release">
+    </td>
+    <td style="vertical-align: middle">{{version.creation}}</td>
+    <td style="vertical-align: middle">{{version.death}}</td>
+    <td style="vertical-align: middle">Ativo</td>
+    <td>
+      <button type="button" class="btn btn-default" (click)="clickSave(version)">
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+    </button>
+      <button type="button" class="btn btn-default" (click)="clickClear()">
+        <span class="glyphicon glyphicon-erase " aria-hidden="true"></span>
+    </button>
+    </td>
+  </tr>
+</table>
