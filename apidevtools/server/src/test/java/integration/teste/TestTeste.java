@@ -82,7 +82,7 @@ public class TestTeste {
 			byte[] bytes = new byte[fis.available()];
 			fis.read(bytes);
 			
-			String res = ClientBuilder.newClient().target(url+"bytes").request().post(Entity.entity(bytes, MediaType.APPLICATION_JSON), String.class);
+			String res = ClientBuilder.newClient().target(url+"bytes").request().post(Entity.entity(bytes, MediaType.APPLICATION_OCTET_STREAM), String.class);
 			assertEquals(new String(bytes), res);
 
 		} catch (IOException e) {

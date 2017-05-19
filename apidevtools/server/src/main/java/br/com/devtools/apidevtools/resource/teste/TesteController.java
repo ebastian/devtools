@@ -46,8 +46,8 @@ public class TesteController {
 	
 	@GET
 	@Path("bytes")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
 	public byte[] bytesGet() {
 		byte[] bytes = "Teste".getBytes();
 		return bytes;
@@ -55,8 +55,8 @@ public class TesteController {
 	
 	@POST
 	@Path("bytes")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
 	public String bytesPos(byte[] bytes) {
 		String teste = new String(bytes);
 		return teste;
