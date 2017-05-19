@@ -23,16 +23,15 @@
   <br>
   <div class="col-md-3">
     <div class="controls">
+      <button class="btn btn-default" (click)="clickClear()">Novo</button>
       <button class="btn btn-success" (click)="clickSave(record)">Salvar</button>
       <button class="btn btn-danger" *ngIf="record?.id !== undefined" (click)="clickDelete(record)">Deletar</button>
       <button class="btn btn-default" routerLink="/componentes">Cancelar</button>
-    </div>
-  </div>
-  <div class="col-md-4">
     <div class="checkbox">
       <label>
       <input type="checkbox" [checked]="saveAndContinue" (change)="saveAndContinue = !saveAndContinue">Continuar após salvar
     </label>
+    </div>
     </div>
   </div>
 </div>

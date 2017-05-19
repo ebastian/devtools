@@ -58,4 +58,6 @@ export class UploadBuildComponent implements OnInit {
     }
   );
 
+  //clickRemove = (obj:[]) => this.buildsUpload.findIndex(obj).; 
+
 }

@@ -60,6 +60,7 @@ export class ProductsComponentsFormComponent implements OnInit {
     }
   };
   clickDelete = (record: ProductComponent): void => { this.service.remove(record.id); this.showProductList(); };
+  clickClear = () => this.record = new ProductComponent();
 
   showProductList = (): Promise<boolean> => this.router.navigate(["./componentes"]);
 
