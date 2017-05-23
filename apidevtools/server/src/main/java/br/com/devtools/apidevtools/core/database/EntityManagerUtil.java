@@ -29,7 +29,7 @@ public class EntityManagerUtil {
 			
 			.setProperty("hibernate.hbm2ddl.auto", "update")
 			.setProperty("hibernate.format_sql", "true")
-			.setProperty("hibernate.show_sql", "true");
+			.setProperty("hibernate.show_sql", "false");
 		
 		cfg.addAnnotatedClass(Component.class);
 		//cfg.addAnnotatedClass(Sessao.class);

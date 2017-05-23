@@ -12,6 +12,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import br.com.devtools.apidevtools.core.rest.RestException;
+
 @Path("teste")
 public class TesteController {
 
@@ -60,7 +62,7 @@ public class TesteController {
 	@Path("bytes/{nome}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
-	public byte[] bytesGet(@PathParam("nome") String nome) {
+	public byte[] bytesGet(@PathParam("nome") String nome) throws Exception {
 		
 		File file = new File("C:/Users/lrmar/Downloads/" + nome);
 		
@@ -73,8 +75,8 @@ public class TesteController {
 				bytes = new byte[fis.available()];
 				fis.read(bytes);
 				
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (Throwable e) {
+				throw new RestException(e);
 			}
 			
 		} else {
@@ -82,6 +84,27 @@ public class TesteController {
 		}
 		
 		return bytes;
+		
+	}
+	
+	@GET
+	@Path("error")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public boolean error() throws RestException {
+		
+		try {
+			
+			int a = 0;
+			int b = 2;
+			
+			int c = b/a;
+			
+			return c==0;
+			
+		} catch (Exception e) {
+			throw new RestException("Teste de Erro");
+		}
 		
 	}
 	

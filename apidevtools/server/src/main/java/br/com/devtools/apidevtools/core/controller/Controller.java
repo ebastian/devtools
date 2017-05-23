@@ -2,6 +2,7 @@ package br.com.devtools.apidevtools.core.controller;
 
 import java.lang.reflect.Field;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Id;
 import javax.servlet.ServletContext;
@@ -17,7 +18,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import br.com.devtools.apidevtools.core.database.EntityManagerUtil;
+import br.com.devtools.apidevtools.core.rest.RestException;
+import br.com.devtools.apidevtools.core.rest.RestSessao;
 
 @Produces("application/json;charset=UTF-8")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -27,6 +29,13 @@ public abstract class Controller<Model> {
 	
 	@Context
 	ServletContext context;
+	
+	@Inject
+	RestSessao sessao;
+	
+	private EntityManager getEm() {
+		return this.sessao.getEm();
+	}
 	
 	private void setId(Model entidade, Long id) throws Exception {
 		
@@ -45,46 +54,30 @@ public abstract class Controller<Model> {
 	
 	@GET
 	@Path("{id}")
-	public Model get(@PathParam("id") Long id) {
-		
-		EntityManager em = null;
+	public Model get(@PathParam("id") Long id) throws RestException {
 		
 		try {
 			
-			em = EntityManagerUtil.getEntityManager();
-			Model obj = em.find(this.getClasse(), id);
-			em.close();
-			
+			Model obj = this.getEm().find(this.getClasse(), id);
 			return obj;
 			
 		} catch (Exception e) {
-			if (em!=null) {
-				em.close();
-			}
-			throw e;
+			throw new RestException(e);
 		}
 		
 		
 	}
 	
 	@POST
-	public Model post(Model obj) {
-		
-		EntityManager em = null;
+	public Model post(Model obj) throws RestException {
 		
 		try {
 			
-			em = EntityManagerUtil.getEntityManager();
-			em.getTransaction().begin();
-			em.persist(obj);
-			em.getTransaction().commit();
-			em.close();
+			this.getEm().persist(obj);
+			this.sessao.commit();
 			
 		} catch (Exception e) {
-			if (em!=null) {
-				em.close();
-			}
-			throw e;
+			throw new RestException(e);
 		}
 		
 		return obj;
@@ -93,24 +86,16 @@ public abstract class Controller<Model> {
 	
 	@PUT
 	@Path("{id}")
-	public Model put(@PathParam("id") Long id, Model obj) throws Exception {
-		
-		EntityManager em = null;
+	public Model put(@PathParam("id") Long id, Model obj) throws RestException {
 		
 		try {
 			
-			em = EntityManagerUtil.getEntityManager();
-			em.getTransaction().begin();
 			this.setId(obj, id);
-			em.merge(obj);
-			em.getTransaction().commit();
-			em.close();
+			this.getEm().merge(obj);
+			this.sessao.commit();
 			
 		} catch (Exception e) {
-			if (em!=null) {
-				em.close();
-			}
-			throw e;
+			throw new RestException(e);
 		}
 		
 		return obj;
@@ -119,26 +104,18 @@ public abstract class Controller<Model> {
 	
 	@DELETE
 	@Path("{id}")
-	public Response delete(@PathParam("id") Long id) {
-		
-		EntityManager em = null;
+	public Response delete(@PathParam("id") Long id) throws RestException {
 		
 		try {
 			
-			em = EntityManagerUtil.getEntityManager();
-			em.getTransaction().begin();
-			Model obj = em.find(this.getClasse(), id);
-			em.remove(obj);
-			em.getTransaction().commit();
-			em.close();
+			Model obj = this.getEm().find(this.getClasse(), id);
+			this.getEm().remove(obj);
+			this.sessao.commit();
 			
 			return Response.ok().build();
 			
 		} catch (Exception e) {
-			if (em!=null) {
-				em.close();
-			}
-			throw e;
+			throw new RestException(e);
 		}
 		
 	}
