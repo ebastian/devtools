@@ -1,6 +1,6 @@
 package br.com.devtools.apidevtools.resource.component;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import br.com.devtools.apidevtools.core.adapters.LocalDateAdapter;
+import br.com.devtools.apidevtools.core.adapters.LocalDateTimerAdapter;
 
 @Entity
 @Table
@@ -27,12 +27,12 @@ public class Component {
 	private String description;
 	
 	@Column(nullable=false)
-	@XmlJavaTypeAdapter(value=LocalDateAdapter.class)
-	private LocalDate creation;
+	@XmlJavaTypeAdapter(value=LocalDateTimerAdapter.class)
+	private LocalDateTime creation;
 	
 	@Column
-	@XmlJavaTypeAdapter(value=LocalDateAdapter.class)
-	private LocalDate death;
+	@XmlJavaTypeAdapter(value=LocalDateTimerAdapter.class)
+	private LocalDateTime death;
 
 	public Long getId() {
 		return id;
@@ -58,19 +58,19 @@ public class Component {
 		this.description = description;
 	}
 
-	public LocalDate getCreation() {
+	public LocalDateTime getCreation() {
 		return creation;
 	}
 
-	public void setCreation(LocalDate creation) {
+	public void setCreation(LocalDateTime creation) {
 		this.creation = creation;
 	}
 
-	public LocalDate getDeath() {
+	public LocalDateTime getDeath() {
 		return death;
 	}
 
-	public void setDeath(LocalDate death) {
+	public void setDeath(LocalDateTime death) {
 		this.death = death;
 	}
 	

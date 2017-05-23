@@ -1,6 +1,6 @@
 package br.com.devtools.apidevtools.resource.component;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -24,7 +24,7 @@ public class ComponentController extends Controller<Component> {
 		try {
 			
 			Component component = this.get(id);
-			component.setDeath(LocalDate.now());
+			component.setDeath(LocalDateTime.now());
 			this.put(id, component);
 			
 		} catch (Exception e) {
