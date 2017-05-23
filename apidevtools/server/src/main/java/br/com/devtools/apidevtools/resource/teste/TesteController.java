@@ -1,11 +1,14 @@
 package br.com.devtools.apidevtools.resource.teste;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.time.LocalDateTime;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -51,6 +54,35 @@ public class TesteController {
 	public byte[] bytesGet() {
 		byte[] bytes = "Teste".getBytes();
 		return bytes;
+	}
+	
+	@GET
+	@Path("bytes/{nome}")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
+	public byte[] bytesGet(@PathParam("nome") String nome) {
+		
+		File file = new File("C:/Users/lrmar/Downloads/" + nome);
+		
+		byte[] bytes = null;
+		
+		if (file.exists()) {
+			
+			try (FileInputStream fis = new FileInputStream(file)) {
+				
+				bytes = new byte[fis.available()];
+				fis.read(bytes);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		} else {
+			bytes = "Teste".getBytes();
+		}
+		
+		return bytes;
+		
 	}
 	
 	@POST

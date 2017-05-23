@@ -5,6 +5,8 @@ import javax.persistence.EntityManager;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import br.com.devtools.apidevtools.resource.component.Component;
+
 public class EntityManagerUtil {
 
 	private static SessionFactory sessions = null;
@@ -29,7 +31,7 @@ public class EntityManagerUtil {
 			.setProperty("hibernate.format_sql", "true")
 			.setProperty("hibernate.show_sql", "true");
 		
-		//cfg.addAnnotatedClass(Acesso.class);
+		cfg.addAnnotatedClass(Component.class);
 		//cfg.addAnnotatedClass(Sessao.class);
 		
 		sessions = cfg.buildSessionFactory();
