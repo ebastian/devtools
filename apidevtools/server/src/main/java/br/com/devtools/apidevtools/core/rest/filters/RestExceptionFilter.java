@@ -13,7 +13,7 @@ public class RestExceptionFilter implements ExceptionMapper<RestException> {
 	@Override
 	public Response toResponse(RestException e) {
 		
-		System.out.println("ExceptionFilter");
+		//System.out.println("ExceptionFilter");
 		return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
 		
 	}

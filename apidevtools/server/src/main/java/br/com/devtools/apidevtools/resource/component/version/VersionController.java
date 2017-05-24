@@ -1,8 +1,10 @@
 package br.com.devtools.apidevtools.resource.component.version;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
@@ -15,10 +17,13 @@ import br.com.devtools.apidevtools.resource.component.ComponentController;
 @Path("component/{componentId}/version")
 public class VersionController extends Controller<Version> {
 
-	@PathParam("componentId")
-	Long componentId;
+	@PathParam("componentId") Long componentId;
 	
 	private Component component = null;
+	
+	public void setComponentId(Long componentId) {
+		this.componentId = componentId;
+	}
 	
 	public Component getComponent() throws RestException {
 		
@@ -78,6 +83,44 @@ public class VersionController extends Controller<Version> {
 		if (!this.getComponent().getId().equals(model.getComponent().getId())) {
 			throw new RestException("Esta Version não pertence ao Component "+this.getComponent().getId()+" - "+this.getComponent().getName()+".");
 		}
+	}
+	
+	@PUT
+	@Path("{id}/kill")
+	public boolean kill(@PathParam("id") Long id) throws Exception {
+		
+		try {
+			
+			Version version = this.get(id);
+			this.beforeRemove(version);
+			version.setDeath(LocalDateTime.now());
+			this.put(id, version);
+			
+		} catch (Exception e) {
+			throw new RestException(e);
+		}
+		
+		return true;
+		
+	}
+	
+	@PUT
+	@Path("{id}/revive")
+	public boolean revive(@PathParam("id") Long id) throws Exception {
+		
+		try {
+			
+			Version version = this.get(id);
+			this.beforeRemove(version);
+			version.setDeath(null);
+			this.put(id, version);
+			
+		} catch (Exception e) {
+			throw new RestException(e);
+		}
+		
+		return true;
+		
 	}
 	
 }

@@ -31,7 +31,7 @@ public class ResponseFilter implements ContainerResponseFilter {
 		cres.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
 		cres.getHeaders().add("Access-Control-Max-Age", "1209600");
 		
-		System.out.println("ResponseFilter");
+		//System.out.println("ResponseFilter");
 		
 	}
 

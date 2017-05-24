@@ -7,6 +7,8 @@ import org.hibernate.cfg.Configuration;
 
 import br.com.devtools.apidevtools.resource.component.Component;
 import br.com.devtools.apidevtools.resource.component.version.Version;
+import br.com.devtools.apidevtools.resource.component.version.build.Build;
+import br.com.devtools.apidevtools.resource.component.version.build.Upload;
 
 public class EntityManagerUtil {
 
@@ -34,6 +36,8 @@ public class EntityManagerUtil {
 		
 		cfg.addAnnotatedClass(Component.class);
 		cfg.addAnnotatedClass(Version.class);
+		cfg.addAnnotatedClass(Build.class);
+		cfg.addAnnotatedClass(Upload.class);
 		
 		sessions = cfg.buildSessionFactory();
 		
