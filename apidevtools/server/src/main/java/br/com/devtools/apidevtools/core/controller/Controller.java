@@ -18,14 +18,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
 
 @Produces("application/json;charset=UTF-8")
-@Consumes(MediaType.APPLICATION_JSON)
+@Consumes("application/json;charset=UTF-8")
 public abstract class Controller<Model> {
 	
 	protected abstract Class<Model> getClasse();
@@ -37,7 +36,7 @@ public abstract class Controller<Model> {
 	RestSessao sessao;
 	
 	private EntityManager getEm() {
-		return this.sessao.getEm();
+		return this.getSessao().getEm();
 	}
 	
 	private void setId(Model entidade, Long id) throws Exception {
@@ -55,6 +54,8 @@ public abstract class Controller<Model> {
 		
 	}
 	
+	private String sql;
+	
 	@GET
 	public FormGet<Model> get() throws RestException {
 		
@@ -63,8 +64,8 @@ public abstract class Controller<Model> {
 			Integer page = null;
 			Integer numberRecords = null;
 			
-			String strPage = context.getParameter("page");
-			String strNumberRecords = context.getParameter("numberRecords");
+			String strPage = getContext().getParameter("page");
+			String strNumberRecords = getContext().getParameter("numberRecords");
 			
 			try {
 				page = Integer.valueOf(strPage);
@@ -96,7 +97,28 @@ public abstract class Controller<Model> {
 			form.setLastPage(lastPage);
 			form.setNumberRecords(numberRecords);
 			
-			TypedQuery<Model> query = this.getEm().createQuery("select m from "+name+" m order by id", this.getClasse());
+			this.sql = "from "+name + " m ";
+			
+			if (this.getFilters()!=null && this.getFilters().size()>0) {
+				
+				sql += " where ";
+				
+				this.getFilters().forEach(filtro -> {
+					this.sql += ("m."+filtro.getName()+" = :"+filtro.getName());
+				});
+				
+			}
+			
+			this.sql += " order by id";
+			
+			TypedQuery<Model> query = this.getEm().createQuery(this.sql, this.getClasse());
+			
+			if (this.getFilters()!=null && this.getFilters().size()>0) {
+				this.getFilters().forEach(filtro -> {
+					query.setParameter(filtro.getName(), filtro.getValue());
+				});
+			}
+			
 			query.setFirstResult((page-1)*numberRecords);
 			query.setMaxResults(numberRecords);
 			List<Model> list = query.getResultList();
@@ -116,9 +138,9 @@ public abstract class Controller<Model> {
 	public Model get(@PathParam("id") Long id) throws RestException {
 		
 		try {
-			
-			Model obj = this.getEm().find(this.getClasse(), id);
-			return obj;
+			this.beforeGet(id);
+			Model model = this.getEm().find(this.getClasse(), id);
+			return this.afterGet(model);
 			
 		} catch (Exception e) {
 			throw new RestException(e);
@@ -127,36 +149,38 @@ public abstract class Controller<Model> {
 	}
 	
 	@POST
-	public Model post(Model obj) throws RestException {
+	public Model post(Model model) throws RestException {
 		
 		try {
 			
-			this.getEm().persist(obj);
-			this.sessao.commit();
+			this.beforePost(model);
+			this.getEm().persist(model);
+			this.getSessao().commit();
 			
 		} catch (Exception e) {
 			throw new RestException(e);
 		}
 		
-		return obj;
+		return this.afterPost(model);
 		
 	}
 	
 	@PUT
 	@Path("{id}")
-	public Model put(@PathParam("id") Long id, Model obj) throws RestException {
+	public Model put(@PathParam("id") Long id, Model model) throws RestException {
 		
 		try {
 			
-			this.setId(obj, id);
-			this.getEm().merge(obj);
-			this.sessao.commit();
+			this.setId(model, id);
+			this.beforePut(model);
+			this.getEm().merge(model);
+			this.getSessao().commit();
 			
 		} catch (Exception e) {
 			throw new RestException(e);
 		}
 		
-		return obj;
+		return this.afterPut(model);
 		
 	}
 	
@@ -166,9 +190,11 @@ public abstract class Controller<Model> {
 		
 		try {
 			
-			Model obj = this.getEm().find(this.getClasse(), id);
-			this.getEm().remove(obj);
-			this.sessao.commit();
+			Model model = this.get(id);
+			this.beforeRemove(model);
+			this.getEm().remove(model);
+			this.getSessao().commit();
+			this.afterRemove(model);
 			
 			return Response.ok().build();
 			
@@ -176,6 +202,50 @@ public abstract class Controller<Model> {
 			throw new RestException(e);
 		}
 		
+	}
+	
+	protected List<Filter> getFilters() throws RestException {
+		return null;
+	}
+	
+	protected void beforeGet(Long id) throws RestException {
+	}
+	protected Model afterGet(Model model) throws RestException {
+		return model;
+	}
+	
+	protected void beforePost(Model model) throws RestException {
+	}
+	protected Model afterPost(Model model) throws RestException {
+		return model;
+	}
+	
+	protected void beforePut(Model model) throws RestException {
+	}
+	protected Model afterPut(Model model) throws RestException {
+		return model;
+	}
+	
+	protected void beforeRemove(Model model) throws RestException {
+	}
+	protected Model afterRemove(Model model) throws RestException {
+		return model;
+	}
+
+	public RestSessao getSessao() {
+		return sessao;
+	}
+
+	public void setSessao(RestSessao sessao) {
+		this.sessao = sessao;
+	}
+
+	public HttpServletRequest getContext() {
+		return context;
+	}
+
+	public void setContext(HttpServletRequest context) {
+		this.context = context;
 	}
 	
 }

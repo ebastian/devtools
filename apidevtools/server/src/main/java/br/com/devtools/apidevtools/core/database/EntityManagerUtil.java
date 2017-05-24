@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import br.com.devtools.apidevtools.resource.component.Component;
+import br.com.devtools.apidevtools.resource.component.version.Version;
 
 public class EntityManagerUtil {
 
@@ -32,7 +33,7 @@ public class EntityManagerUtil {
 			.setProperty("hibernate.show_sql", "false");
 		
 		cfg.addAnnotatedClass(Component.class);
-		//cfg.addAnnotatedClass(Sessao.class);
+		cfg.addAnnotatedClass(Version.class);
 		
 		sessions = cfg.buildSessionFactory();
 		
