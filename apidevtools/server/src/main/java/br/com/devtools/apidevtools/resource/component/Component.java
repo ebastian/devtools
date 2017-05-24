@@ -26,11 +26,11 @@ public class Component {
 	@Column(columnDefinition="text")
 	private String description;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, updatable=false)
 	@XmlJavaTypeAdapter(value=LocalDateTimerAdapter.class)
 	private LocalDateTime creation;
 	
-	@Column
+	@Column(insertable=false)
 	@XmlJavaTypeAdapter(value=LocalDateTimerAdapter.class)
 	private LocalDateTime death;
 

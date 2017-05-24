@@ -1,11 +1,14 @@
 package br.com.devtools.apidevtools.core.controller;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Id;
-import javax.servlet.ServletContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -28,7 +31,7 @@ public abstract class Controller<Model> {
 	protected abstract Class<Model> getClasse();
 	
 	@Context
-	ServletContext context;
+	HttpServletRequest context;
 	
 	@Inject
 	RestSessao sessao;
@@ -53,6 +56,62 @@ public abstract class Controller<Model> {
 	}
 	
 	@GET
+	public FormGet<Model> get() throws RestException {
+		
+		try {
+			
+			Integer page = null;
+			Integer numberRecords = null;
+			
+			String strPage = context.getParameter("page");
+			String strNumberRecords = context.getParameter("numberRecords");
+			
+			try {
+				page = Integer.valueOf(strPage);
+			} catch (Exception e) {}
+			try {
+				numberRecords = Integer.valueOf(strNumberRecords);
+			} catch (Exception e) {}
+			
+			if (page==null || page<=0) {
+				page = 1;
+			}
+			
+			if (numberRecords==null || numberRecords<=0) {
+				numberRecords = 20;
+			}
+			
+			FormGet<Model> form = new FormGet<>();
+			String name = this.getClasse().getSimpleName();
+			
+			String jpql = "SELECT count(m) FROM "+name+" m";
+			Query q = this.getEm().createQuery(jpql);
+			Long totalRecords = (Long) q.getSingleResult();
+			form.setTotalRecords(totalRecords);
+			
+			Long lastPage = totalRecords/numberRecords;
+			if (totalRecords%numberRecords!=0) {
+				lastPage++;
+			}
+			form.setLastPage(lastPage);
+			form.setNumberRecords(numberRecords);
+			
+			TypedQuery<Model> query = this.getEm().createQuery("select m from "+name+" m order by id", this.getClasse());
+			query.setFirstResult((page-1)*numberRecords);
+			query.setMaxResults(numberRecords);
+			List<Model> list = query.getResultList();
+			
+			form.setList(list);
+			
+			return form;
+			
+		} catch (Exception e) {
+			throw new RestException(e);
+		}
+		
+	}
+	
+	@GET
 	@Path("{id}")
 	public Model get(@PathParam("id") Long id) throws RestException {
 		
@@ -64,7 +123,6 @@ public abstract class Controller<Model> {
 		} catch (Exception e) {
 			throw new RestException(e);
 		}
-		
 		
 	}
 	
