@@ -12,6 +12,10 @@ import br.com.devtools.apidevtools.core.rest.RestException;
 @Path("component")
 public class ComponentController extends Controller<Component> {
 
+	public ComponentController() {
+		System.out.println("ComponentController");
+	}
+	
 	@Override
 	protected Class<Component> getClasse() {
 		return Component.class;

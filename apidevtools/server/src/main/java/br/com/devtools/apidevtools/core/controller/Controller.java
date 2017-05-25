@@ -1,6 +1,9 @@
 package br.com.devtools.apidevtools.core.controller;
 
+import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,10 +21,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
+import br.com.devtools.apidevtools.resource.help.HelpController;
 
 @Produces("application/json;charset=UTF-8")
 @Consumes("application/json;charset=UTF-8")
@@ -55,6 +62,81 @@ public abstract class Controller<Model> {
 	}
 	
 	private String sql;
+	
+	@GET
+	@Path("help")
+	@Produces(MediaType.TEXT_HTML)
+	public String help() {
+		
+		String html = "";
+		html += "-- " + this.getClass().getSimpleName() + " --<br><br>";
+		
+		Path annotation = this.getClass().getAnnotation(Path.class);
+		
+		String url = HelpController.baseUrl + annotation.value();
+		
+		html += url + "<br><br>";
+		
+		
+		Method[] methods = this.getClass().getMethods();
+		for (Method method : methods) {
+			
+			GET get = method.getAnnotation(GET.class);
+			POST post = method.getAnnotation(POST.class);
+			PUT put = method.getAnnotation(PUT.class);
+			DELETE delete = method.getAnnotation(DELETE.class);
+			
+			if (get!=null) {
+				html += "GET &emsp;&emsp;&emsp;";
+			}
+			if (post!=null) {
+				html += "POST &emsp;&emsp; ";
+			}
+			if (put!=null) {
+				html += "PUT &emsp;&emsp;&emsp;";
+			}
+			if (delete!=null) {
+				html += "DELETE &emsp;";
+			}
+			
+			if (get!=null || post!=null || put!=null || delete!=null) {
+					
+				if (method.isAnnotationPresent(Path.class)) {
+					Path path = method.getAnnotation(Path.class);
+					html += url +"/"+ path.value() + "<br>";
+				} else {
+					html += url + "<br>";
+				}
+				
+				Parameter[] parameters = method.getParameters();
+				if (parameters!=null && parameters.length>0) {				
+					for (Parameter param : parameters) {
+						PathParam pathParam = param.getAnnotation(PathParam.class);
+						if (pathParam!=null) {
+							html += "&emsp;" + pathParam.value() + ":" + param.getType().getSimpleName()+"<br>";
+						} else if (param.getParameterizedType()!=null && param.getParameterizedType().getTypeName().equals("Model")) {
+							html += "&emsp;" + this.getClasse().getSimpleName() + " : ";
+							
+							try {
+								
+								ObjectMapper mapper = new ObjectMapper();
+								Object obj = this.getClasse().newInstance();
+								String jsonInString = mapper.writeValueAsString(obj);
+								html += jsonInString;
+							} catch (Exception e) {
+							}
+							html += "<br>";
+							
+						}
+					}
+				}
+				html += "<br>";
+				
+			}
+		}
+		
+		return "<div>" + html + "</div>";
+	}
 	
 	@GET
 	public FormGet<Model> get() throws RestException {

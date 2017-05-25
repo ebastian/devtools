@@ -1,3 +1,5 @@
 # apidevtools
 API for Tools for Developers
-Primeiro Commit Leandro
+
+#help
+http://localhost:8080/apidevtools/api/help

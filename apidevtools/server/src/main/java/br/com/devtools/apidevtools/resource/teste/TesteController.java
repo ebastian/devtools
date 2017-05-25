@@ -20,6 +20,12 @@ import br.com.devtools.apidevtools.core.rest.RestException;
 public class TesteController {
 
 	@GET
+	@Path("help")
+	public String help() {
+		return "->" + this.getClass().getSimpleName();
+	}
+	
+	@GET
 	@Path("helloworld")
 	public String helloWorld() {
 		return new Teste().msgHelloWorld;
