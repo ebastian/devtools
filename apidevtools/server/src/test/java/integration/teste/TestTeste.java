@@ -12,6 +12,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.junit.Test;
 
@@ -96,7 +97,8 @@ public class TestTeste {
 	public void bytesGetErro() {
 		
 		Response response = ClientBuilder.newClient().target(url+"error").request().get();
-		assertTrue(true);
+		assertNotNull(response);
+		assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 		
 	}
 	

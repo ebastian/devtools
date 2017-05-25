@@ -2,6 +2,7 @@ package br.com.devtools.apidevtools.resource.teste;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 
 import javax.ws.rs.Consumes;
@@ -11,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import br.com.devtools.apidevtools.core.rest.RestException;
 
@@ -62,28 +64,22 @@ public class TesteController {
 	@Path("bytes/{nome}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
-	public byte[] bytesGet(@PathParam("nome") String nome) throws Exception {
+	public Response bytesGet(@PathParam("nome") String nome) throws Exception {
 		
+		InputStream is = null;
 		File file = new File("C:/Users/lrmar/Downloads/" + nome);
-		
-		byte[] bytes = null;
 		
 		if (file.exists()) {
 			
-			try (FileInputStream fis = new FileInputStream(file)) {
-				
-				bytes = new byte[fis.available()];
-				fis.read(bytes);
-				
-			} catch (Throwable e) {
-				throw new RestException(e);
-			}
+			is = new FileInputStream(file);
+			return Response.ok().entity(is).build();
 			
 		} else {
-			bytes = "Teste".getBytes();
+			
+			byte[] bytes = "Teste".getBytes();
+			return Response.ok().entity(bytes).build();
+			
 		}
-		
-		return bytes;
 		
 	}
 	

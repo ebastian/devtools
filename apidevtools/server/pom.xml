@@ -130,6 +130,15 @@
 			<version>1.0.0.Final</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-multipart-provider -->
+		<dependency>
+		    <groupId>org.jboss.resteasy</groupId>
+		    <artifactId>resteasy-multipart-provider</artifactId>
+		    <version>3.0.8.Final</version>
+		    <scope>provided</scope>
+		</dependency>
+				
 
 
 		<!-- Import the EJB API, we use provided scope as the API is included in 

@@ -4,8 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -18,23 +16,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Upload {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long buildId;
 	
 	@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="buildId", nullable=false, foreignKey=@ForeignKey(name="fk_Upload_Build"))
+	@JoinColumn(name="buildId", foreignKey=@ForeignKey(name="fk_Upload_Build"), insertable=false, updatable=false)
 	private Build build;
 	
 	@Column(nullable=false, updatable=false)
 	private byte[] bytes;
 
 	public Long getId() {
-		return id;
+		return buildId;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.buildId = id;
 	}
 
 	public Build getBuild() {

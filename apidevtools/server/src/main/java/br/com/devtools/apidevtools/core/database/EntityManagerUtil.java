@@ -18,17 +18,18 @@ public class EntityManagerUtil {
 		
 		Configuration cfg = new Configuration()
 			    
-			.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect")
+			.setProperty("hibernate.connection.datasource", "java:jboss/datasources/ApiDevTools")
 			
-			.setProperty("hibernate.connection.driver_class", "org.postgresql.Driver")
-			.setProperty("hibernate.connection.username", "postgres")
-			.setProperty("hibernate.connection.password", "ids0207")
-			.setProperty("hibernate.connection.url", "jdbc:postgresql://localhost:5432/devtools")
+			//.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect")
+			//.setProperty("hibernate.connection.driver_class", "org.postgresql.Driver")
+			//.setProperty("hibernate.connection.username", "postgres")
+			//.setProperty("hibernate.connection.password", "ids0207")
+			//.setProperty("hibernate.connection.url", "jdbc:postgresql://localhost:5432/devtools")
 			
-			.setProperty("hibernate.c3p0.min_size", "5")
-			.setProperty("hibernate.c3p0.max_size", "20")
-			.setProperty("hibernate.c3p0.timeout", "1800")
-			.setProperty("hibernate.c3p0.max_statements", "50")
+			//.setProperty("hibernate.c3p0.min_size", "5")
+			//.setProperty("hibernate.c3p0.max_size", "20")
+			//.setProperty("hibernate.c3p0.timeout", "1800")
+			//.setProperty("hibernate.c3p0.max_statements", "50")
 			
 			.setProperty("hibernate.hbm2ddl.auto", "update")
 			.setProperty("hibernate.format_sql", "true")

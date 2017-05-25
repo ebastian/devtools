@@ -1,0 +1,2 @@
+standalone.xml ->
+<http-listener name="default" socket-binding="http" redirect-socket="https" enable-http2="true" max-post-size="3000000000"/>
