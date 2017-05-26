@@ -1,6 +1,5 @@
 package br.com.devtools.apidevtools.core.controller;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -20,6 +19,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -70,6 +70,7 @@ public abstract class Controller<Model> {
 		
 		String html = "";
 		html += "-- " + this.getClass().getSimpleName() + " --<br><br>";
+		html += "<a href=\"http://localhost:8080/apidevtools/api/help\">Voltar</a><br><br>";
 		
 		Path annotation = this.getClass().getAnnotation(Path.class);
 		
@@ -81,42 +82,64 @@ public abstract class Controller<Model> {
 		Method[] methods = this.getClass().getMethods();
 		for (Method method : methods) {
 			
+			String methodName = "";
+			
+			if (method.isAnnotationPresent(Path.class)) {
+				Path path = method.getAnnotation(Path.class);
+				
+				if (path.value().indexOf("help")>=0) {
+					continue;
+				}
+				
+				methodName = url +"/"+ path.value() + "<br>";
+			} else {
+				methodName = url + "<br>";
+			}
+			
 			GET get = method.getAnnotation(GET.class);
 			POST post = method.getAnnotation(POST.class);
 			PUT put = method.getAnnotation(PUT.class);
 			DELETE delete = method.getAnnotation(DELETE.class);
 			
-			if (get!=null) {
-				html += "GET &emsp;&emsp;&emsp;";
-			}
-			if (post!=null) {
-				html += "POST &emsp;&emsp; ";
-			}
-			if (put!=null) {
-				html += "PUT &emsp;&emsp;&emsp;";
-			}
-			if (delete!=null) {
-				html += "DELETE &emsp;";
-			}
-			
 			if (get!=null || post!=null || put!=null || delete!=null) {
 					
-				if (method.isAnnotationPresent(Path.class)) {
-					Path path = method.getAnnotation(Path.class);
-					html += url +"/"+ path.value() + "<br>";
-				} else {
-					html += url + "<br>";
+
+				if (get!=null) {
+					html += "GET &emsp;&emsp;&emsp;";
+				}
+				if (post!=null) {
+					html += "POST &emsp;&emsp; ";
+				}
+				if (put!=null) {
+					html += "PUT &emsp;&emsp;&emsp;";
+				}
+				if (delete!=null) {
+					html += "DELETE &emsp;";
 				}
 				
+				html += methodName;
+				
+				
 				Parameter[] parameters = method.getParameters();
-				if (parameters!=null && parameters.length>0) {				
+				if (parameters!=null && parameters.length>0) {
+					
+					html += "&emsp;Request:<br>";
+					
 					for (Parameter param : parameters) {
+						
+						
 						PathParam pathParam = param.getAnnotation(PathParam.class);
+						QueryParam queryParam = param.getAnnotation(QueryParam.class);
 						if (pathParam!=null) {
-							html += "&emsp;" + pathParam.value() + ":" + param.getType().getSimpleName()+"<br>";
-						} else if (param.getParameterizedType()!=null && param.getParameterizedType().getTypeName().equals("Model")) {
-							html += "&emsp;" + this.getClasse().getSimpleName() + " : ";
+							//html += "&emsp;" + pathParam.value() + ":" + param.getType().getSimpleName()+"<br>";
+						}
+						if (queryParam!=null) {
+							html += "&emsp;&emsp;" + queryParam.value() + ":" + param.getType().getSimpleName()+"<br>";
+						}
+						
+						if (param.getParameterizedType()!=null && param.getParameterizedType().getTypeName().equals("Model")) {
 							
+							html += "&emsp;&emsp;" + this.getClasse().getSimpleName() + " : ";
 							try {
 								
 								ObjectMapper mapper = new ObjectMapper();
@@ -130,31 +153,50 @@ public abstract class Controller<Model> {
 						}
 					}
 				}
+				
+				html += "&emsp;Response:<br>";
+				
+				if (method.getGenericReturnType()!=null && method.getGenericReturnType().getTypeName().equals("Model")) {
+					html += "&emsp;&emsp;" + this.getClasse().getSimpleName() + " : ";
+					try {
+						
+						ObjectMapper mapper = new ObjectMapper();
+						Object obj = this.getClasse().newInstance();
+						String jsonInString = mapper.writeValueAsString(obj);
+						html += jsonInString;
+					} catch (Exception e) {
+					}
+				} else {
+					html += "&emsp;&emsp;"+method.getReturnType().getSimpleName();
+					if (method.getReturnType().equals(FormGet.class)) {
+						html += "&lt;"+this.getClasse().getSimpleName()+"&gt;";
+					}
+					
+					try {
+						
+						ObjectMapper mapper = new ObjectMapper();
+						Object obj = method.getReturnType().newInstance();
+						String jsonInString = mapper.writeValueAsString(obj);
+						html += " :"+jsonInString;
+					} catch (Exception e) {
+					}
+					
+				}
+				
+				html += "<br>";
 				html += "<br>";
 				
 			}
+				
 		}
 		
 		return "<div>" + html + "</div>";
 	}
 	
 	@GET
-	public FormGet<Model> get() throws RestException {
+	public FormGet<Model> get(@QueryParam("page") Integer page, @QueryParam("numberRecords") Integer numberRecords) throws RestException {
 		
 		try {
-			
-			Integer page = null;
-			Integer numberRecords = null;
-			
-			String strPage = getContext().getParameter("page");
-			String strNumberRecords = getContext().getParameter("numberRecords");
-			
-			try {
-				page = Integer.valueOf(strPage);
-			} catch (Exception e) {}
-			try {
-				numberRecords = Integer.valueOf(strNumberRecords);
-			} catch (Exception e) {}
 			
 			if (page==null || page<=0) {
 				page = 1;
