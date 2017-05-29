@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
+import { APPCONFIG, AppConfig } from './app.config';
+
 import { AlertModule } from 'ng2-bootstrap';
 
 import { EbAppCore } from './shared/eb-app-core.module';
@@ -35,7 +37,9 @@ import { routes } from './app.routes';
     UploadModule,
     EbAppCore
   ],
-  providers: [],
+  providers: [
+     { provide: APPCONFIG, useValue: AppConfig }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

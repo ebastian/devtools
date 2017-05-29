@@ -11,19 +11,20 @@
     <a routerLink="/componentes" class="list-group-item" [class.active]="routePrefix === 'componentes'">Componentes</a>
   </li>
   <li class="list-group-item">
+    <a routerLink="/upload" class="list-group-item">Upload</a>
+  </li>
+  <!--
+  <li class="list-group-item">
     <a routerLink="/builds/gerar" class="list-group-item disabled" [class.active]="routePrefix === 'builds/gerar'">
       <span class="badge">1</span>
       Gerar Build
     </a>
   </li>
+  -->
   <li class="list-group-item">
     <a routerLink="/builds/validar" class="list-group-item disabled">
-      <span class="badge">2</span>
       Validar Build
     </a>
-  </li>
-  <li class="list-group-item">
-    <a routerLink="/upload" class="list-group-item">Upload</a>
   </li>
   <li class="list-group-item">
     <a routerLink="/download" class="list-group-item disabled">Downloads</a>

@@ -26,7 +26,7 @@ export class ProductsComponentsListComponent implements OnInit {
   }
 
   ngAfterContentInit():void {
-    this.service.getItens().then(data => this.data = (data !== null ? data as ProductComponent[] : new Array<ProductComponent>())).then(() => this.busy = false);
+    this.getComponents();
     /*
     this.route.params.forEach((params: Params) => {
       let id = +params['id'];
@@ -38,13 +38,25 @@ export class ProductsComponentsListComponent implements OnInit {
     */
   }
 
+  getComponents = (): Promise<ProductComponent[]> => this.service.getItens().then(data => this.data = (data !== null ? data as ProductComponent[] : new Array<ProductComponent>()));
   selectRecord = (record): ProductComponent => this.selectedRecord = record;
-  clickEdit = (eventw: Event, record: ProductComponent) => { event.stopPropagation(); this.openRecord(record) };
-  clickDelete = (event: Event, record: ProductComponent) => { event.stopPropagation(); this.service.remove(record.id) };
-
+  clickEdit = (event: Event, record: ProductComponent) => { 
+    console.log("click edit: " + event);
+    event.stopImmediatePropagation(); 
+    this.openRecord(record) 
+  };
+  clickDelete = (event: Event, record: ProductComponent) => { 
+    console.log("click delete: " + event);
+    event.stopImmediatePropagation(); 
+    this.service.remove(record.id).then(
+      () => this.getComponents()
+    )
+  };
   openRecord(record): void {
+    console.log(JSON.stringify(record));
     this.selectRecord(record);
     this.router.navigate(["componentes/componente/", this.selectedRecord.id]);
   }
+
 
 }

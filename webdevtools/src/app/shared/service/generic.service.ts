@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 
 import { Entity } from '../entity/entity';
 
@@ -8,6 +8,10 @@ export class GenericService {
   public id: string = 'GenericService';
 
   protected data:Array<any> = [];
+
+  constructor() {
+
+  }
 
   public getItensFast(): Promise<Entity[]> {
     return Promise.resolve(this.data);
