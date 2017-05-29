@@ -10,6 +10,8 @@ import javax.ws.rs.core.Context;
 @ApplicationPath("/api")
 public class App extends Application {
 	
+	private static int count = 0;
+	
 	@Context
 	public static ServletContext context;
 	

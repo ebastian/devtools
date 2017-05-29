@@ -52,6 +52,8 @@ public class UserController extends Controller<User>{
 				new Crypto().criptografar(acess.getPassword()+";"+acess.getDeath().toString())
 			);
 			
+			this.getSessao().getEm().persist(acess);
+			
 			this.getSessao().commit();
 			
 		} catch (Exception e) {

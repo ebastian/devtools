@@ -132,18 +132,28 @@ public abstract class Controller<Model> {
 						QueryParam queryParam = param.getAnnotation(QueryParam.class);
 						if (pathParam!=null) {
 							//html += "&emsp;" + pathParam.value() + ":" + param.getType().getSimpleName()+"<br>";
-						}
-						if (queryParam!=null) {
+						} else  if (queryParam!=null) {
 							html += "&emsp;&emsp;" + queryParam.value() + ":" + param.getType().getSimpleName()+"<br>";
-						}
-						
-						if (param.getParameterizedType()!=null && param.getParameterizedType().getTypeName().equals("Model")) {
+						} else if (param.getParameterizedType()!=null && param.getParameterizedType().getTypeName().equals("Model")) {
 							
 							html += "&emsp;&emsp;" + this.getClasse().getSimpleName() + " : ";
 							try {
 								
 								ObjectMapper mapper = new ObjectMapper();
 								Object obj = this.getClasse().newInstance();
+								String jsonInString = mapper.writeValueAsString(obj);
+								html += jsonInString;
+							} catch (Exception e) {
+							}
+							html += "<br>";
+							
+						} else {
+							
+							html += "&emsp;&emsp;" + param.getType().getSimpleName() + " : ";
+							try {
+								
+								ObjectMapper mapper = new ObjectMapper();
+								Object obj = param.getType().newInstance();
 								String jsonInString = mapper.writeValueAsString(obj);
 								html += jsonInString;
 							} catch (Exception e) {
