@@ -1,4 +1,4 @@
-package br.com.devtools.apidevtools.resource.user.acess;
+package br.com.devtools.apidevtools.resource.person.acess.artifact;
 
 import java.time.LocalDateTime;
 
@@ -14,12 +14,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.devtools.apidevtools.core.adapters.LocalDateTimerAdapter;
-import br.com.devtools.apidevtools.resource.user.User;
+import br.com.devtools.apidevtools.resource.person.Person;
 
 @Entity
 @Table
@@ -31,8 +32,8 @@ public class Acess {
 	
 	@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="userId", nullable=false, foreignKey=@ForeignKey(name="fk_Acess_User"))
-	private User user;
+	@JoinColumn(name="personId", nullable=false, foreignKey=@ForeignKey(name="fk_Acess_Person"))
+	private Person person;
 	
 	@Column(length=40, nullable=false)
 	private String name;
@@ -45,7 +46,7 @@ public class Acess {
 	@XmlJavaTypeAdapter(value=LocalDateTimerAdapter.class)
 	private LocalDateTime death;
 	
-	@Column(length=64, nullable=false)
+	@Transient
 	private String password;
 	
 	@Column(length=128, nullable=false)
@@ -63,12 +64,12 @@ public class Acess {
 		this.id = id;
 	}
 
-	public User getUser() {
-		return user;
+	public Person getPerson() {
+		return person;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 
 	public String getName() {

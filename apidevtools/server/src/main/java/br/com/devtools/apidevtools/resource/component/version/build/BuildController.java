@@ -32,7 +32,7 @@ public class BuildController extends Controller<Build> {
 	@PathParam("versionId") Long versionId;
 
 	@Override
-	protected Class<Build> getClasse() {
+	public Class<Build> getClasse() {
 		return Build.class;
 	}
 

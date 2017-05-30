@@ -1,4 +1,4 @@
-package br.com.devtools.apidevtools.resource.user;
+package br.com.devtools.apidevtools.resource.person;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table
-public class User {
+public class Person {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
