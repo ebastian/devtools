@@ -17,7 +17,7 @@ public class ComponentController extends Controller<Component> {
 	}
 	
 	@Override
-	protected Class<Component> getClasse() {
+	public Class<Component> getClasse() {
 		return Component.class;
 	}
 	
