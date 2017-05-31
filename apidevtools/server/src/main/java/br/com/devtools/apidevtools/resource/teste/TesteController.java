@@ -14,6 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import br.com.devtools.apidevtools.core.help.HelpGenerator;
 import br.com.devtools.apidevtools.core.rest.RestException;
 
 @Path("teste")
@@ -21,8 +22,9 @@ public class TesteController {
 
 	@GET
 	@Path("help")
+	@Produces(MediaType.TEXT_HTML)
 	public String help() {
-		return "->" + this.getClass().getSimpleName();
+		return new HelpGenerator().help(this.getClass(), Teste.class);
 	}
 	
 	@GET

@@ -46,7 +46,7 @@ public class VersionController extends Controller<Version> {
 	
 	
 	@Override
-	protected Class<Version> getClasse() {
+	public Class<Version> getClasse() {
 		return Version.class;
 	}
 	

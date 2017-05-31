@@ -6,22 +6,34 @@ import java.sql.SQLException;
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 
-import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 
 import br.com.devtools.apidevtools.core.database.EntityManagerUtil;
+import br.com.devtools.apidevtools.resource.person.acess.artifact.Session;
 
 @RequestScoped
 public class RestSessao {
-
+	
 	private EntityManager em = null;
-
+	private Session session;
+	private String nameAcess;
+	private String password;
+	
+	
 	public EntityManager getEm() {
 		if (this.em == null) {
 			this.em = EntityManagerUtil.getEntityManager();
 			this.em.getTransaction().begin();
 		}
 		return em;
+	}
+
+	public Session getSession() {
+		return session;
+	}
+
+	public void setSession(Session session) {
+		this.session = session;
 	}
 
 	public void commit() {
@@ -47,11 +59,27 @@ public class RestSessao {
 
 	public Connection getConnection() {
 		
-        Session session = this.getEm().unwrap(Session.class);
+		org.hibernate.Session session = this.getEm().unwrap(org.hibernate.Session.class);
         MyWork myWork = new MyWork();
         session.doWork(myWork);
         return myWork.getConnection();
         
+	}
+
+	public String getNameAcess() {
+		return nameAcess;
+	}
+
+	public void setNameAcess(String nameAcess) {
+		this.nameAcess = nameAcess;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }
