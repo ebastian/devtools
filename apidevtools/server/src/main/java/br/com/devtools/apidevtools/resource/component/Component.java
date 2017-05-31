@@ -10,8 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.hibernate.envers.Audited;
+
 import br.com.devtools.apidevtools.core.adapters.LocalDateTimerAdapter;
 
+@Audited
 @Entity
 @Table
 public class Component {

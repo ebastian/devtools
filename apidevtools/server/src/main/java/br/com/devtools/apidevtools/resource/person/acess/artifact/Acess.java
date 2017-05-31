@@ -17,11 +17,14 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.hibernate.envers.Audited;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.devtools.apidevtools.core.adapters.LocalDateTimerAdapter;
 import br.com.devtools.apidevtools.resource.person.Person;
 
+@Audited
 @Entity
 @Table
 public class Acess {

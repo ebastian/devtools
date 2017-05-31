@@ -20,7 +20,7 @@ import br.com.devtools.apidevtools.resource.person.rules.UserToken;
 public class RequestFilter implements ContainerRequestFilter {
 
 	@Inject
-	RestSessao sessao;
+	public static RestSessao sessao;
 	
 	@Context
 	HttpServletRequest context;
