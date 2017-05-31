@@ -16,7 +16,10 @@ public class RestSessao {
 	
 	private EntityManager em = null;
 	private Session session;
-
+	private String nameAcess;
+	private String password;
+	
+	
 	public EntityManager getEm() {
 		if (this.em == null) {
 			this.em = EntityManagerUtil.getEntityManager();
@@ -61,6 +64,22 @@ public class RestSessao {
         session.doWork(myWork);
         return myWork.getConnection();
         
+	}
+
+	public String getNameAcess() {
+		return nameAcess;
+	}
+
+	public void setNameAcess(String nameAcess) {
+		this.nameAcess = nameAcess;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }

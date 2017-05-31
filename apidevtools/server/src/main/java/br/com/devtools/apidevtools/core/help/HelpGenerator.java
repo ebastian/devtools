@@ -5,6 +5,7 @@ import java.lang.reflect.Parameter;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -19,10 +20,17 @@ import br.com.devtools.apidevtools.resource.help.HelpController;
 public class HelpGenerator {
 
 	public String help(Class<?> classe, Class<?> classModel) {
+		return this.help(classe, classModel, null);
+	}
+	
+	public String help(Class<?> classe, Class<?> classModel, String description) {
 		
 		String html = "";
 		html += "-- " + classe.getSimpleName() + " --<br><br>";
 		html += "<a href=\"http://localhost:8080/apidevtools/api/help\">Voltar</a><br><br>";
+		if (description!=null) {
+			html += description+"<br><br>";
+		}
 		
 		Path annotation = classe.getAnnotation(Path.class);
 		
@@ -80,12 +88,15 @@ public class HelpGenerator {
 					for (Parameter param : parameters) {
 						
 						
+						HeaderParam headerParam = param.getAnnotation(HeaderParam.class);
 						PathParam pathParam = param.getAnnotation(PathParam.class);
 						QueryParam queryParam = param.getAnnotation(QueryParam.class);
 						if (pathParam!=null) {
 							//html += "&emsp;" + pathParam.value() + ":" + param.getType().getSimpleName()+"<br>";
 						} else  if (queryParam!=null) {
-							html += "&emsp;&emsp;" + queryParam.value() + ":" + param.getType().getSimpleName()+"<br>";
+							html += "&emsp;&emsp; Param " + queryParam.value() + ":" + param.getType().getSimpleName()+"<br>";
+						} else  if (headerParam!=null) {
+							html += "&emsp;&emsp; Header " + headerParam.value() + ":" + param.getType().getSimpleName()+"<br>";
 						} else if (classModel!=null && param.getParameterizedType()!=null && param.getParameterizedType().getTypeName().equals("Model")) {
 							
 							html += "&emsp;&emsp;" + classModel.getSimpleName() + " : ";

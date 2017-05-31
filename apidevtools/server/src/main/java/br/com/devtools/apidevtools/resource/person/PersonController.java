@@ -48,10 +48,7 @@ public class PersonController extends Controller<Person>{
 			acess.setPerson(person);
 			acess.setCreation(now);
 			acess.setStatus(AcessStatus.ACTIVE);
-			acess.setHash(
-				crypto.criptografar(acess.getName() + acess.getPassword())+
-				crypto.criptografar(acess.getPassword() + acess.getName())
-			);
+			acess.setHash(crypto.criptografar(acess.getName())+crypto.criptografar(acess.getPassword()));
 			
 			this.getSessao().getEm().persist(acess);
 			

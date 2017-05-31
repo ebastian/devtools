@@ -1,11 +1,10 @@
 package br.com.devtools.apidevtools.resource.person.acess;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -17,8 +16,8 @@ import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
 import br.com.devtools.apidevtools.resource.person.acess.artifact.Acess;
 import br.com.devtools.apidevtools.resource.person.acess.artifact.AcessStatus;
-import br.com.devtools.apidevtools.resource.person.acess.artifact.Login;
 import br.com.devtools.apidevtools.resource.person.acess.artifact.Session;
+import br.com.devtools.apidevtools.resource.person.rules.UserToken;
 
 @Path("acess")
 @Produces("application/json;charset=UTF-8")
@@ -39,28 +38,30 @@ public class AcessController {
 	
 	@GET
 	@Path("help")
-	@Produces(MediaType.TEXT_HTML)
+	@Produces(MediaType.TEXT_HTML+";charset=UTF-8")
 	public String help() {
-		return new HelpGenerator().help(this.getClass(), Acess.class);
+		
+		String description = 
+				"Utilizar NomeDeAcesso e Senha concatenado com um ponto e virgula(;) e convertido para Base64:<br>" +
+				"Ex.:admin;admin <br> convertendo para Base64 fica \"YWRtaW47YWRtaW4=\"<br><br>"+
+				"Enviar-lo como Header da requisição com o nome user-token.<br><br>" +
+				"O Método ira devolver o session-token.<br>" +
+				"Ambos os dados devem ser enviados em todos os métodos como Header:<br>" +
+				"Ex.:<br>" +
+				"user-token : YWRtaW47YWRtaW4=<br>"+
+				"session-token : e23ece7940281f4c79d81c1568ee713cd263731850948a9e90d3e5943c79690c8663c442639a514b9341523b834ffe383ad5eb8aeecb22b87e707cb9f1b5f155";
+		
+		return new HelpGenerator().help(this.getClass(), Acess.class, description);
 	}
 
 	@POST
 	@Path("login")
-	public String login(Login login) throws RestException {
+	public String login(@HeaderParam("user-token") String token) throws RestException {
 		
 		try {
 			
-			/*
-			System.out.println("Session: " + sessao.getSession());
-			if (sessao.getSession()!=null) {
-				System.out.println("getCreation: "+sessao.getSession().getCreation());
-				System.out.println("getUseragent: "+sessao.getSession().getUseragent());
-				System.out.println("getIp: "+sessao.getSession().getIp());
-			}
-			*/
-			
 			Crypto crypto = new Crypto();
-			String hash = crypto.criptografar(login.getLogin() + login.getPassword()) + crypto.criptografar(login.getPassword() + login.getLogin());
+			String hash = new UserToken().userCrypto(this.getSessao());
 			
 			TypedQuery<Acess> query = this.getSessao().getEm().createQuery(
 					" select a from Acess a " +
@@ -83,6 +84,7 @@ public class AcessController {
 			session.setAcess(acess);
 			
 			this.getSessao().getEm().persist(session);
+			this.getSessao().commit();
 			
 			return session.getHash();
 			
