@@ -20,6 +20,8 @@ export class AuthService {
   authUrl: string = this.config.apiEndpoint + "acess/login";
 
   isLoggedIn: boolean = false;
+  userToken: string = 'YWRtaW47YWRtaW4';
+  sessionToken: string;
 
   // store the URL so we can redirect after logging in
   redirectUrl: string;
@@ -29,34 +31,20 @@ export class AuthService {
   }
 
   login(): Observable<boolean> {
-    //return Observable.of(true).delay(1000).do(val => this.isLoggedIn = true);
-     return this.http.post(this.authUrl, null, { headers: this.headers })
-                      .map(res => res.json())
+     window.localStorage.setItem('user-token', this.userToken);
+    return this.http.post(this.authUrl, null, { headers: this.headers })
+      .map(res => {
+        this.sessionToken = res.json().hash;
+        window.localStorage.setItem('session-token', this.sessionToken)
+        this.isLoggedIn = true;
+        return true
+      })
   }
 
   logout(): void {
+    window.localStorage.remove('user-token');
+    window.localStorage.remove('session-token');
     this.isLoggedIn = false;
   }
-
-  private extractData(res: any) {
-    console.log('>>>>>>>>>>>>>>' + res);
-    let body = res.json();
-    return body.data || {};
-  }
-
-  private handleError(error: Response | any) {
-    // In a real world app, we might use a remote logging infrastructure
-    let errMsg: string;
-    /*
-    if (error instanceof Response) {
-      const body = error.json() || '';
-      const err = body.error || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    } else {
-      errMsg = error.message ? error.message : error.toString();
-    }
-    */
-    console.error(errMsg);
-    return Promise.reject(errMsg);
-  }
+    
 }

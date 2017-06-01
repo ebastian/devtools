@@ -6,28 +6,35 @@ import 'rxjs/add/operator/toPromise';
 import { APPCONFIG } from '../../app.config';
 import { IAppConfig } from '../../iapp.config';
 
+import { AuthService } from '../../shared/auth/auth.service';
+
 import { ProductComponent } from './product-component';
 import { PRODUCTS_COMPONENTS } from './products-components.mock';
 
 @Injectable()
 export class ProductComponentService {
 
-  private headers = new Headers({
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  });
+  headers: Headers;
 
-  private headers2 = new Headers({
-    'Content-Type': 'application/json'
-  });
+  constructor( @Inject(APPCONFIG) private config: IAppConfig, 
+                private http: Http,
+                private authService: AuthService) {
 
-  constructor( @Inject(APPCONFIG) private config: IAppConfig, private http: Http) {
+
+    this.headers = new Headers({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'user-token': authService.userToken,
+      'session-token': authService.sessionToken
+    });
+
     console.log(config);
   }
 
   public getItens(): Promise<ProductComponent[]> {
+    console.log(">>> " + JSON.stringify(this.headers));
     const url = this.config.apiEndpoint + "component";
-    return this.http.get(url)
+    return this.http.get(url, { headers: this.headers })
       .toPromise()
       .then(this.castResults)
       .catch(this.handleError);
@@ -66,7 +73,7 @@ export class ProductComponentService {
   public remove(id: number): Promise<void> {
     const url = this.config.apiEndpoint + "component/" + id;
     console.log('delete ' + id);
-    return this.http.delete(url, { headers: this.headers2 })
+    return this.http.delete(url, { headers: this.headers })
       .toPromise()
       .then((res) => JSON.stringify(res))
       .catch(this.handleError);

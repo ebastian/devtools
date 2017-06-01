@@ -25,6 +25,6 @@ import { ProductComponent } from './service/product-component';
   ],
   exports: [ 
     ProductsComponentsComponent 
-  ],
+  ]
 })
 export class ProductsComponentsModule { }
