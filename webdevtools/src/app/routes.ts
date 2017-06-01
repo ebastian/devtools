@@ -22,7 +22,7 @@ import { UploadAppComponent } from './upload/upload-app/upload-app.component';
 export const routes: Route[] = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'login', component: LoginComponent},
-  { path: 'dashboard', component: DashboardComponent, canActivate: [ AuthGuard ]},
+  { path: 'dashboard', component: DashboardComponent },
   { path: 'produtos', component: ProductsComponent, canActivate: [ AuthGuard ],
     children: [
       {

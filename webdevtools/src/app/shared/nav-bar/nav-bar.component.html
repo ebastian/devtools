@@ -55,8 +55,13 @@
           </a>
         </li>
         <li>
-          <a href="" routerLink="/produtos">
+          <a href="javascript:void(0)">
             <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+          </a>
+        </li>
+        <li *ngIf="authService.isLoggedIn()">
+          <a href="javascript:void(0)" (click)="logout()">
+            Sair
           </a>
         </li>
 
@@ -73,6 +78,8 @@
         </li>
         -->
       </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container-fluid -->
 </nav>

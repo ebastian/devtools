@@ -1,9 +1,13 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'eb-nav-bar',
   templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.css']
+  styleUrls: ['./nav-bar.component.css'],
+  providers: [
+    AuthService
+  ]
 })
 export class NavBarComponent implements OnInit {
 
@@ -12,7 +16,8 @@ export class NavBarComponent implements OnInit {
   @Output()
   onMenuToggle = new EventEmitter();
 
-  constructor() { }
+  constructor(public authService: AuthService) {  
+  }
 
   ngOnInit() {
   }
@@ -20,6 +25,10 @@ export class NavBarComponent implements OnInit {
   toggleMenu(event): void {
     this.opened = !this.opened;
     this.onMenuToggle.next(this.opened);
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 
 }

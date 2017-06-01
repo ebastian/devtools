@@ -1,4 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Headers, Http } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
@@ -19,32 +20,35 @@ export class AuthService {
 
   authUrl: string = this.config.apiEndpoint + "acess/login";
 
-  isLoggedIn: boolean = false;
   userToken: string = 'YWRtaW47YWRtaW4';
   sessionToken: string;
 
   // store the URL so we can redirect after logging in
   redirectUrl: string;
 
-  constructor( @Inject(APPCONFIG) private config: IAppConfig, private http: Http) {
+  constructor( @Inject(APPCONFIG) private config: IAppConfig, private http: Http, private router: Router) {
     console.log(config);
+    this.sessionToken = window.localStorage.getItem('session-token');
+  }
+
+  isLoggedIn(): boolean {
+    return window.localStorage.getItem('session-token') !== null;
   }
 
   login(): Observable<boolean> {
-     window.localStorage.setItem('user-token', this.userToken);
+    window.localStorage.setItem('user-token', this.userToken);
     return this.http.post(this.authUrl, null, { headers: this.headers })
       .map(res => {
         this.sessionToken = res.json().hash;
         window.localStorage.setItem('session-token', this.sessionToken)
-        this.isLoggedIn = true;
         return true
       })
   }
 
   logout(): void {
-    window.localStorage.remove('user-token');
-    window.localStorage.remove('session-token');
-    this.isLoggedIn = false;
+    window.localStorage.removeItem('user-token');
+    window.localStorage.removeItem('session-token');
+    this.router.navigate(['/dashboard']);
   }
-    
+
 }
