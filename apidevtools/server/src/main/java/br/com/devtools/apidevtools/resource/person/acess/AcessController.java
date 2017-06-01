@@ -61,8 +61,12 @@ public class AcessController {
 		
 		try {
 			
+			UserToken userToken = new UserToken();
+			
 			Crypto crypto = new Crypto();
-			String hash = new UserToken().userCrypto(this.getSessao());
+			userToken.split(token, this.getSessao());
+			
+			String hash = userToken.userCrypto(this.getSessao());
 			
 			TypedQuery<Acess> query = this.getSessao().getEm().createQuery(
 					" select a from Acess a " +
