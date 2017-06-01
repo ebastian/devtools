@@ -88,7 +88,7 @@ public class AcessController {
 			this.getSessao().getEm().persist(session);
 			this.getSessao().commit();
 			
-			return new LoginToken(acess.getHash());
+			return new LoginToken(session.getHash());
 			
 		} catch (Exception e) {
 			throw new RestException("Nome ou Senha inválidos");
