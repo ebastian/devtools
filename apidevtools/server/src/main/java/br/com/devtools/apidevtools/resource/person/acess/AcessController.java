@@ -16,6 +16,8 @@ import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
 import br.com.devtools.apidevtools.resource.person.acess.artifact.Acess;
 import br.com.devtools.apidevtools.resource.person.acess.artifact.AcessStatus;
+import br.com.devtools.apidevtools.resource.person.acess.artifact.Login;
+import br.com.devtools.apidevtools.resource.person.acess.artifact.LoginToken;
 import br.com.devtools.apidevtools.resource.person.acess.artifact.Session;
 import br.com.devtools.apidevtools.resource.person.rules.UserToken;
 
@@ -56,7 +58,7 @@ public class AcessController {
 
 	@POST
 	@Path("login")
-	public String login(@HeaderParam("user-token") String token) throws RestException {
+	public LoginToken login(@HeaderParam("user-token") String token) throws RestException {
 		
 		try {
 			
@@ -86,7 +88,7 @@ public class AcessController {
 			this.getSessao().getEm().persist(session);
 			this.getSessao().commit();
 			
-			return session.getHash();
+			return new LoginToken(acess.getHash());
 			
 		} catch (Exception e) {
 			throw new RestException("Nome ou Senha inválidos");
