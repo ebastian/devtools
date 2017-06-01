@@ -5,7 +5,7 @@ import java.util.List;
 public class FormGet<Model> {
 
 	private List<Model> list;
-	private Long page;
+	private Integer page;
 	private Long lastPage;
 	private Integer numberRecords;
 	private Long totalRecords;
@@ -18,11 +18,11 @@ public class FormGet<Model> {
 		this.list = list;
 	}
 
-	public Long getPage() {
+	public Integer getPage() {
 		return page;
 	}
 
-	public void setPage(Long page) {
+	public void setPage(Integer page) {
 		this.page = page;
 	}
 

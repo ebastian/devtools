@@ -142,6 +142,7 @@ public abstract class Controller<Model> {
 				lastPage++;
 			}
 			form.setLastPage(lastPage);
+			form.setPage(page);
 			form.setNumberRecords(numberRecords);
 			
 			this.sql = "from "+name + " m ";
