@@ -1,16 +1,18 @@
-package br.com.devtools.apidevtools.resource;
+package br.com.devtools.apidevtools.resource.revinfo;
 
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionEntity;
 
 @Entity
-@RevisionEntity(UserRevisionListener.class)
-public class ZaudAcessRev extends DefaultRevisionEntity {
+@Table(schema="aud")
+@RevisionEntity(RevInfoListener.class)
+public class RevInfo extends DefaultRevisionEntity {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -20,8 +22,8 @@ public class ZaudAcessRev extends DefaultRevisionEntity {
 	@Column(length=50)
 	private String ip;
 	
-	private LocalDateTime date;
-
+	private LocalDateTime alteration;
+	
 	public Long getPersonId() {
 		return personId;
 	}
@@ -42,11 +44,11 @@ public class ZaudAcessRev extends DefaultRevisionEntity {
 	public void setAcessId(Long acessId) {
 		this.acessId = acessId;
 	}
-	public LocalDateTime getDate() {
-		return date;
+	public LocalDateTime getAlteration() {
+		return alteration;
 	}
-	public void setDate(LocalDateTime date) {
-		this.date = date;
+	public void setAlteration(LocalDateTime date) {
+		this.alteration = date;
 	}
 	
 }

@@ -20,10 +20,9 @@ public class EntityManagerUtil {
 			    
 			.setProperty("hibernate.connection.datasource", "java:jboss/datasources/ApiDevTools")
 			
-			//.setProperty("org.hibernate.envers.default_schema", "aud")
-			.setProperty("org.hibernate.envers.store_data_at_delete", "true")
-			.setProperty("org.hibernate.envers.audit_table_prefix", "zaud_")
-			.setProperty("org.hibernate.envers.audit_table_suffix", "")
+			.setProperty("org.hibernate.envers.default_schema", "aud")
+			//.setProperty("org.hibernate.envers.store_data_at_delete", "true")
+			.setProperty("org.hibernate.envers.audit_table_suffix", "_aud")
 			
 			
 			.setProperty("hibernate.hbm2ddl.auto", "update")

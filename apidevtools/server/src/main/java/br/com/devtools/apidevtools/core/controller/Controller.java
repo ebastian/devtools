@@ -1,6 +1,7 @@
 package br.com.devtools.apidevtools.core.controller;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,9 +23,16 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.RevisionType;
+import org.hibernate.envers.query.AuditEntity;
+
 import br.com.devtools.apidevtools.core.help.HelpGenerator;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
+import br.com.devtools.apidevtools.resource.revinfo.RevInfo;
+import br.com.devtools.apidevtools.resource.revinfo.RevInfoResult;
 
 @Produces("application/json;charset=UTF-8")
 @Consumes("application/json;charset=UTF-8")
@@ -63,6 +71,49 @@ public abstract class Controller<Model> {
 	@Produces(MediaType.TEXT_HTML)
 	public String help() {
 		return new HelpGenerator().help(this.getClass(), this.getClasse());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@GET
+	@Path("{id}/revision")
+	public List<RevInfoResult<Model>> audited(@PathParam("id") Long id) {
+	
+		AuditReader reader = AuditReaderFactory.get(this.getSessao().getEm());
+
+        List<Object[]> list = reader.createQuery()
+                .forRevisionsOfEntity(this.getClasse(), false, true)
+                .add(AuditEntity.id().eq(id))
+                .getResultList();
+        
+        List<RevInfoResult<Model>> revisions = new ArrayList<>();
+        
+        for (Object[] list2 : list) {
+        	
+        	RevInfoResult<Model> rev = new RevInfoResult<>();
+        	
+			for (Object object : list2) {
+				if (this.getClasse().equals(object.getClass())) {
+					Model o = (Model) object;
+					rev.setObject(o);
+				} else if (object instanceof RevInfo) {
+					RevInfo info = (RevInfo) object;
+					rev.setAcessId(info.getAcessId());
+					rev.setAlteration(info.getAlteration());
+					rev.setIp(info.getIp());
+					rev.setPersonId(info.getPersonId());
+				} else if (object instanceof RevisionType) {
+					RevisionType type = (RevisionType) object;
+					rev.setRevtype(type);
+				}
+				
+			}
+			
+			revisions.add(rev);
+			
+		}
+        
+		return revisions;
+		
 	}
 	
 	@GET
