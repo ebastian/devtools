@@ -37,21 +37,33 @@ export const routes: Route[] = [
     ]
   },
   { path: 'componentes', component: ProductsComponentsComponent, canActivate: [ AuthGuard ],
-      children: [
-        { path: '', component: ProductsComponentsListComponent},
-        { path: ':id', component: ProductsComponentsListComponent},
-        { path: 'componente', redirectTo: 'componente/', pathMatch: 'full'},
-        { path: 'componente/:id', component: ProductsComponentsFormComponent},
-        { path: 'componente/incluir', component: ProductsComponentsFormComponent}
-      ]
+    children: [
+      {
+        path: '',
+        canActivateChild: [ AuthGuard ],
+        children: [
+          { path: '', component: ProductsComponentsListComponent},
+          { path: ':id', component: ProductsComponentsListComponent},
+          { path: 'componente', redirectTo: 'componente/', pathMatch: 'full'},
+          { path: 'componente/:id', component: ProductsComponentsFormComponent},
+          { path: 'componente/incluir', component: ProductsComponentsFormComponent}
+        ]
+      }
+    ]
   },
   { path: 'upload', component: UploadComponent, canActivate: [ AuthGuard ], 
-      children: [
-      { path: '', redirectTo: 'build', pathMatch: 'full'},
-      { path: 'build', component: UploadBuildComponent},
-      { path: 'documento', component: UploadDocumentComponent},
-      { path: 'aplicativo', component: UploadAppComponent}
-   ]
+    children: [
+      {
+        path: '',
+        canActivateChild: [ AuthGuard ],
+        children: [
+          { path: '', redirectTo: 'build', pathMatch: 'full'},
+          { path: 'build', component: UploadBuildComponent},
+          { path: 'documento', component: UploadDocumentComponent},
+          { path: 'aplicativo', component: UploadAppComponent}
+        ]
+      }
+    ]
   },
   { path: '**', component: PageNotFoundComponent }
 ];

@@ -64,7 +64,7 @@ export class ProductComponentService {
   public getItem(id: number): Promise<ProductComponent> {
     console.log('getItem ' + id);
     const url = this.config.apiEndpoint + "component/" + id;
-    return this.http.get(url)
+    return this.http.get(url, { headers: this.headers })
       .toPromise()
       .then(response => response.json() as ProductComponent)
       .catch(this.handleError);
