@@ -15,11 +15,14 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.hibernate.envers.Audited;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.devtools.apidevtools.core.adapters.LocalDateTimerAdapter;
 import br.com.devtools.apidevtools.resource.component.version.Version;
 
+@Audited
 @Entity
 @Table(uniqueConstraints=@UniqueConstraint(name="unique_Build_on_Version", columnNames = {"versionId", "build"}))
 public class Build {

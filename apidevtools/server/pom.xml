@@ -130,7 +130,19 @@
 			<version>1.0.0.Final</version>
 			<scope>provided</scope>
 		</dependency>
+<<<<<<< HEAD
 
+=======
+		
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-envers -->
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-envers</artifactId>
+		    <version>5.2.10.Final</version>
+		</dependency>
+				
+		
+>>>>>>> 0499ca66db45ac000b22355a6d35b96bd0e382bc
 		<!-- https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-multipart-provider -->
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>

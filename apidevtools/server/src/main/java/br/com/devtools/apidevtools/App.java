@@ -1,5 +1,7 @@
 package br.com.devtools.apidevtools;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
@@ -8,6 +10,7 @@ import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 
+import br.com.devtools.apidevtools.core.database.EntityManagerUtilNoUpdate;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
 import br.com.devtools.apidevtools.resource.person.Person;
 import br.com.devtools.apidevtools.resource.person.PersonController;
@@ -33,7 +36,21 @@ public class App extends Application {
 			
 			if (count==1) {
 				
+				try (Connection connection = EntityManagerUtilNoUpdate.getConnection();) {
+					
+					connection.setAutoCommit(true);
+					connection.prepareStatement("CREATE SCHEMA aud").executeUpdate();
+					
+				} catch (SQLException e) {
+					if (!"42P06".equals(e.getSQLState())) {
+						throw e;
+					}
+				} catch (Exception e) {
+					throw e;
+				}
+				
 				RestSessao s = new RestSessao();
+				
 				PersonController pc = new PersonController();
 				pc.setContext(context2);
 				pc.setSessao(s);
@@ -57,23 +74,14 @@ public class App extends Application {
 					}
 					
 				} catch (Exception e) {
+					throw e;
+				} finally {
 					try {
 						s.close();
 					} catch (Exception e2) {
 					}
 				}
-				
-				
-				//EntityManager em = EntityManagerUtil.getEntityManager();
-				
-				
-				
-				//em.close();
-				
 			}
-			
-			
-			System.out.println("ApiDevTools");
 			
 		} catch (Exception e) {
 			e.printStackTrace();

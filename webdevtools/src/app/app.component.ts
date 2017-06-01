@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, AfterContentInit, EventEmitter, Input, Output  }      from '@angular/core';
+import { Component, ViewChild, OnInit, AfterContentInit, EventEmitter, Input, Output } from '@angular/core';
 
 import { MainMenuComponent } from './shared/main-menu/main-menu.component'
 import { NavBarComponent } from './shared/nav-bar/nav-bar.component' //eb-app-core.module ??
@@ -8,9 +8,10 @@ import { NavBarComponent } from './shared/nav-bar/nav-bar.component' //eb-app-co
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent implements OnInit, AfterContentInit {
 
-  title: string = 'app works!';
+  title: string = 'DevTools!';
   menuVisible: boolean = true;
 
   @ViewChild('mainMenu')
@@ -18,7 +19,7 @@ export class AppComponent implements OnInit, AfterContentInit {
 
   @ViewChild('navBar')
   protected navBar: NavBarComponent;
- 
+
   constructor() {
 
   }
@@ -36,7 +37,7 @@ export class AppComponent implements OnInit, AfterContentInit {
   }
 
   renderMenu() {
-    if(this.menuVisible) {
+    if (this.menuVisible) {
       document.getElementById("wrapper").style.paddingLeft = '250px';
       //document.getElementById("wrapper").style.marginRight = '250px';
       document.getElementById("sidebar-wrapper").style.width = '250px';

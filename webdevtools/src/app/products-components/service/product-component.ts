@@ -4,17 +4,11 @@ export class ProductComponent extends Entity {
   
   name: string;
   description: string;
-  creation: string;
-  death: string;
+  creation: Date;
+  death: Date;
   //components: ProductComponent[];
 
   constructor() { 
     super();
-    /*
-    this.name = "";
-    this.description = "";
-    this.creation = "";
-    this.death = "";
-    */
   };
 }

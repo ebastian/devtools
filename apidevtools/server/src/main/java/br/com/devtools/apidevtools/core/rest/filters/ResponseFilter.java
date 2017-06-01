@@ -26,7 +26,7 @@ public class ResponseFilter implements ContainerResponseFilter {
 		}
 		
 		cres.getHeaders().add("Access-Control-Allow-Origin", "*");
-		cres.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept"); //authorization, user-token, session-token
+		cres.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, user-token, session-token"); //authorization, user-token, session-token
 		cres.getHeaders().add("Access-Control-Allow-Credentials", "true");
 		cres.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
 		cres.getHeaders().add("Access-Control-Max-Age", "1209600");

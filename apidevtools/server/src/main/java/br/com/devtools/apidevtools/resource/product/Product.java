@@ -1,6 +1,4 @@
-package br.com.devtools.apidevtools.resource.component;
-
-import java.time.LocalDateTime;
+package br.com.devtools.apidevtools.resource.product;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,16 +6,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.hibernate.envers.Audited;
-
-import br.com.devtools.apidevtools.core.adapters.LocalDateTimerAdapter;
 
 @Audited
 @Entity
 @Table
-public class Component {
+public class Product {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,14 +23,6 @@ public class Component {
 	
 	@Column(columnDefinition="text")
 	private String description;
-	
-	@Column(nullable=false, updatable=false)
-	@XmlJavaTypeAdapter(value=LocalDateTimerAdapter.class)
-	private LocalDateTime creation;
-	
-	@Column(insertable=false)
-	@XmlJavaTypeAdapter(value=LocalDateTimerAdapter.class)
-	private LocalDateTime death;
 
 	public Long getId() {
 		return id;
@@ -59,22 +46,6 @@ public class Component {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public LocalDateTime getCreation() {
-		return creation;
-	}
-
-	public void setCreation(LocalDateTime creation) {
-		this.creation = creation;
-	}
-
-	public LocalDateTime getDeath() {
-		return death;
-	}
-
-	public void setDeath(LocalDateTime death) {
-		this.death = death;
 	}
 	
 }

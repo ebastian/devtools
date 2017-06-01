@@ -20,25 +20,15 @@ public class EntityManagerUtil {
 			    
 			.setProperty("hibernate.connection.datasource", "java:jboss/datasources/ApiDevTools")
 			
-			//.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect")
-			//.setProperty("hibernate.connection.driver_class", "org.postgresql.Driver")
-			//.setProperty("hibernate.connection.username", "postgres")
-			//.setProperty("hibernate.connection.password", "ids0207")
-			//.setProperty("hibernate.connection.url", "jdbc:postgresql://localhost:5432/devtools")
+			.setProperty("org.hibernate.envers.default_schema", "aud")
+			//.setProperty("org.hibernate.envers.store_data_at_delete", "true")
+			.setProperty("org.hibernate.envers.audit_table_suffix", "_aud")
 			
-			//.setProperty("hibernate.c3p0.min_size", "5")
-			//.setProperty("hibernate.c3p0.max_size", "20")
-			//.setProperty("hibernate.c3p0.timeout", "1800")
-			//.setProperty("hibernate.c3p0.max_statements", "50")
 			
 			.setProperty("hibernate.hbm2ddl.auto", "update")
 			.setProperty("hibernate.format_sql", "true")
 			.setProperty("hibernate.show_sql", "false");
 		
-		//cfg.addAnnotatedClass(Component.class);
-		//cfg.addAnnotatedClass(Version.class);
-		//cfg.addAnnotatedClass(Build.class);
-		//cfg.addAnnotatedClass(Upload.class);
 		try {
 			List<Class<?>> entitys = new SearchClass("br.com.devtools.apidevtools.resource").byAnnotation(Entity.class);
 			for (Class<?> entity : entitys) {

@@ -4,38 +4,38 @@ export const PRODUCTS_COMPONENTS: Array<ProductComponent> = [{
   'id': 1,
   'name': 'Base de Dados Saúde',
   'description': 'Base de informações dos sistemas Saúde.',
-  'creation': '27/08/2000',
+  'creation': new Date(),
   'death': null
 }, {
   'id': 2,
   'name': 'WinSaúde',
   'description': 'Sistema Saúde para desktop.',
-  'creation': '29/08/2000',
+  'creation': new Date(),
   'death': null
 }, {
   'id': 3,
   'name': 'IDSSaúde',
   'description': 'Sistema Saúde para Web.',
-  'creation': '03/11/2016',
+  'creation': new Date(),
   'death': null
 }, {
   'id': 4,
   'name': 'IDS Esf',
   'description': 'Aplicativo para Estratégia de Saúde da Família. Controle de Visitas domiciliares via tablet.',
-  'creation': '09/06/2016',
+  'creation': new Date(),
   'death': null
 }, {
   'id': 5,
   'name': 'IDSSaudeWS',
   'description': 'API Rest com métodos para: App IDS Esf, App IDS Endemias, Integração de Agendamento de Consultas, Integração de Estoque com Farmácias Particulares.',
-  'creation': '09/06/2016',
+  'creation': new Date(),
   'death': null
 }, {
   'id': 6,
   'name': 'NetSaúde',
   'description': 'Portal de Agendamento de Consultas WEB.',
-  'creation': '19/06/2011',
-  'death': '01/01/2015'
+  'creation': new Date(),
+  'death': new Date()
 }]
 /*
 , {

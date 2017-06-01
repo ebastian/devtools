@@ -19,6 +19,6 @@ export class ProductsComponentsTabComponent implements OnInit {
   ngAfterContentInit(): void { }
 
   clickActive = () => this.productComponent.death = null;
-  clickDesactive = () => this.productComponent.death = '09/06/1986';
+  clickDesactive = () => this.productComponent.death = new Date();
 
 }

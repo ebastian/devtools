@@ -44,7 +44,7 @@ export class ProductsComponentsFormComponent implements OnInit {
   logProductLoaded = () => console.log("ProductComponent loaded: " + JSON.stringify(this.record));
   openComponents = () => this.record.id !== undefined ? this.selectTab('components') : '';
 
-  setCreation = (creationDate: Date) => (record: ProductComponent) => record.creation = (record.creation === undefined ? ("0" + creationDate.getDate()).slice(-2) + "/" + ("0" + (creationDate.getMonth() + 1)).slice(-2) + "/" + creationDate.getFullYear() : record.creation);
+  setCreation = (creationDate: Date) => (record: ProductComponent) => record.creation = (record.creation === undefined ? new Date() : record.creation);
 
   setBusy = (busy: boolean) => this.busy = busy;
   unBusy = () => this.setBusy(false);
@@ -54,11 +54,13 @@ export class ProductsComponentsFormComponent implements OnInit {
   //this.openComponents()
   clickSave = (record: ProductComponent): void => {
     this.setCreation(new Date())(record);
-    this.service.save(record);
-    if (!this.saveAndContinue) {
-      this.showProductList();
-    }
+    this.service.save(record).then(this.saveResponse);
   };
+
+  saveResponse = (comp:ProductComponent) => {
+    this.saveAndContinue ? this.assignProduct(comp) : this.showProductList();
+  }
+
   clickDelete = (record: ProductComponent): void => { this.service.remove(record.id); this.showProductList(); };
   clickClear = () => this.record = new ProductComponent();
 
