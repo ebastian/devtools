@@ -8,10 +8,9 @@ import { AuthService } from '../auth/auth.service';
 
 export class LoginComponent {
   
-  constructor(public authService: AuthService, public router: Router) {  
-  }
+  constructor(public authService: AuthService, public router: Router) { }
   
-  login() {
+  login = () => {
     this.authService.login().subscribe(() => {
       if (this.authService.isLoggedIn()) {
         // Get the redirect URL from our auth service
@@ -23,7 +22,5 @@ export class LoginComponent {
     });
   }
   
-  logout() {
-    this.authService.logout();
-  }
+  logout = () => this.authService.logout;
 }

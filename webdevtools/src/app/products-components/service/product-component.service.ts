@@ -9,17 +9,16 @@ import { IAppConfig } from '../../iapp.config';
 import { AuthService } from '../../shared/auth/auth.service';
 
 import { ProductComponent } from './product-component';
-import { PRODUCTS_COMPONENTS } from './products-components.mock';
 
 @Injectable()
 export class ProductComponentService {
 
+  baseUrl: string;
   headers: Headers;
 
-  constructor( @Inject(APPCONFIG) private config: IAppConfig, 
+  constructor(@Inject(APPCONFIG) private config: IAppConfig, 
                 private http: Http,
                 private authService: AuthService) {
-
 
     this.headers = new Headers({
       'Content-Type': 'application/json',
@@ -28,13 +27,11 @@ export class ProductComponentService {
       'session-token': authService.sessionToken
     });
 
-    console.log(config);
+    this.baseUrl = config.apiEndpoint + "component";
   }
 
   public getItens(): Promise<ProductComponent[]> {
-    console.log(">>> " + JSON.stringify(this.headers));
-    const url = this.config.apiEndpoint + "component";
-    return this.http.get(url, { headers: this.headers })
+    return this.http.get(this.baseUrl, { headers: this.headers })
       .toPromise()
       .then(this.castResults)
       .catch(this.handleError);
@@ -42,18 +39,13 @@ export class ProductComponentService {
 
   public save(item: ProductComponent): Promise<ProductComponent> {
     this.setCreation(new Date())(item);
-    
-    //item.creation = '2017-05-28T23:47:01.278579';
-    
-    console.log('save ' + JSON.stringify(item));
+    const url = this.baseUrl;
     if(item.id != undefined && item.id !== null) {
-      const url = this.config.apiEndpoint + "component/" + item.id;
-      return this.http.put(url, JSON.stringify(item), { headers: this.headers })
+      return this.http.put(url + "/" + item.id, JSON.stringify(item), { headers: this.headers })
         .toPromise()
         .then(this.castResult)
         .catch(this.handleError);
     } else {
-      const url = this.config.apiEndpoint + "component";
       return this.http.post(url, JSON.stringify(item), { headers: this.headers })
         .toPromise()
         .then(this.castResult)
@@ -62,8 +54,7 @@ export class ProductComponentService {
   }
 
   public getItem(id: number): Promise<ProductComponent> {
-    console.log('getItem ' + id);
-    const url = this.config.apiEndpoint + "component/" + id;
+    const url = this.baseUrl + "/" + id;
     return this.http.get(url, { headers: this.headers })
       .toPromise()
       .then(response => response.json() as ProductComponent)
@@ -71,8 +62,7 @@ export class ProductComponentService {
   }
 
   public remove(id: number): Promise<void> {
-    const url = this.config.apiEndpoint + "component/" + id;
-    console.log('delete ' + id);
+    const url = this.baseUrl + "/" + id;
     return this.http.delete(url, { headers: this.headers })
       .toPromise()
       .then((res) => JSON.stringify(res))
