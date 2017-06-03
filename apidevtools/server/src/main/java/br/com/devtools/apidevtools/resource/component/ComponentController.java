@@ -13,7 +13,6 @@ import br.com.devtools.apidevtools.core.rest.RestException;
 public class ComponentController extends Controller<Component> {
 
 	public ComponentController() {
-		System.out.println("ComponentController");
 	}
 	
 	@Override

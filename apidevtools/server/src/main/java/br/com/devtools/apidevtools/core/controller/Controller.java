@@ -2,6 +2,7 @@ package br.com.devtools.apidevtools.core.controller;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -116,10 +117,36 @@ public abstract class Controller<Model> {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	@GET
 	public FormGet<Model> get(@QueryParam("page") Integer page, @QueryParam("numberRecords") Integer numberRecords) throws RestException {
 		
 		try {
+			
+			List<String> filterGet = new ArrayList<>();
+			
+			Collections.list(this.getContext().getParameterNames()).forEach(item -> {
+				
+				if (!"page".equalsIgnoreCase(""+item) && !"numberRecords".equalsIgnoreCase(""+item)) {
+					
+					String filter = " ";
+					String valor = this.getContext().getParameter(""+item);
+					String[] split = valor.split("\\|");
+					if (split.length>1) {
+						if ("like".equalsIgnoreCase(split[0])) {
+							filter += "lower(" + item + ") " + split[0] + " '%" + split[1].toLowerCase()+"%' ";
+						} else {
+							filter += item + " " + split[0] + " '" + split[1]+"' ";
+						}
+					} else {
+						filter += item + " = '" + valor + "' ";
+					}
+					
+					filterGet.add(filter);
+					
+				}
+				
+			});
 			
 			if (page==null || page<=0) {
 				page = 1;
@@ -131,19 +158,7 @@ public abstract class Controller<Model> {
 			
 			FormGet<Model> form = new FormGet<>();
 			String name = this.getClasse().getSimpleName();
-			
-			String jpql = "SELECT count(m) FROM "+name+" m";
-			Query q = this.getEm().createQuery(jpql);
-			Long totalRecords = (Long) q.getSingleResult();
-			form.setTotalRecords(totalRecords);
-			
-			Long lastPage = totalRecords/numberRecords;
-			if (totalRecords%numberRecords!=0) {
-				lastPage++;
-			}
-			form.setLastPage(lastPage);
-			form.setNumberRecords(numberRecords);
-			
+						
 			this.sql = "from "+name + " m ";
 			
 			if (this.getFilters()!=null && this.getFilters().size()>0) {
@@ -154,8 +169,52 @@ public abstract class Controller<Model> {
 					this.sql += ("m."+filtro.getName()+" = :"+filtro.getName());
 				});
 				
+				if (filterGet!=null && filterGet.size()>0) {
+					filterGet.forEach(item -> {
+						this.sql += " and " + item;
+					});
+				}
+			
+				
+			} else {
+				
+				if (filterGet!=null && filterGet.size()>0) {
+					
+					boolean first = true;
+					for (String item : filterGet) {
+						if (first) {
+							first = false;
+							sql += " where ";
+						} else {
+							sql += " and ";
+						}
+						this.sql += item;
+					}
+					
+				}
+			
 			}
 			
+			String jpql = "SELECT count(m) " + this.sql;
+			Query q = this.getEm().createQuery(jpql);
+			
+			if (this.getFilters()!=null && this.getFilters().size()>0) {
+				this.getFilters().forEach(filtro -> {
+					q.setParameter(filtro.getName(), filtro.getValue());
+				});
+			}
+			
+			Long totalRecords = (Long) q.getSingleResult();
+			form.setTotalRecords(totalRecords);
+			
+			Long lastPage = totalRecords/numberRecords;
+			if (totalRecords%numberRecords!=0) {
+				lastPage++;
+			}
+			form.setLastPage(lastPage);
+			form.setPage(page);
+			form.setNumberRecords(numberRecords);
+				
 			this.sql += " order by id";
 			
 			TypedQuery<Model> query = this.getEm().createQuery(this.sql, this.getClasse());

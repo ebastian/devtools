@@ -16,7 +16,6 @@ import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
 import br.com.devtools.apidevtools.resource.person.acess.artifact.Acess;
 import br.com.devtools.apidevtools.resource.person.acess.artifact.AcessStatus;
-import br.com.devtools.apidevtools.resource.person.acess.artifact.Login;
 import br.com.devtools.apidevtools.resource.person.acess.artifact.LoginToken;
 import br.com.devtools.apidevtools.resource.person.acess.artifact.Session;
 import br.com.devtools.apidevtools.resource.person.rules.UserToken;
@@ -62,8 +61,12 @@ public class AcessController {
 		
 		try {
 			
+			UserToken userToken = new UserToken();
+			
 			Crypto crypto = new Crypto();
-			String hash = new UserToken().userCrypto(this.getSessao());
+			userToken.split(token, this.getSessao());
+			
+			String hash = userToken.userCrypto(this.getSessao());
 			
 			TypedQuery<Acess> query = this.getSessao().getEm().createQuery(
 					" select a from Acess a " +

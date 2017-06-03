@@ -14,7 +14,6 @@ import javax.ws.rs.ext.Provider;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
 import br.com.devtools.apidevtools.resource.person.acess.artifact.AcessStatus;
 import br.com.devtools.apidevtools.resource.person.acess.artifact.Session;
-import br.com.devtools.apidevtools.resource.person.rules.UserToken;
 
 @Provider
 public class RequestFilter implements ContainerRequestFilter {
@@ -37,15 +36,15 @@ public class RequestFilter implements ContainerRequestFilter {
 				return;
 			}
 			
-			String userToken = context.getHeader("user-token");
+			//String userToken = context.getHeader("user-token");
 			
 			Session session = new Session();
 			session.setCreation(LocalDateTime.now());
 			session.setIp(context.getRemoteHost()+"-"+context.getRemoteAddr());
 			session.setUseragent(context.getHeader("User-Agent"));
 			
-			UserToken token = new UserToken();
-			token.split(userToken, sessao);
+			//UserToken token = new UserToken();
+			//token.split(userToken, sessao);
 			
 			sessao.setSession(session);
 			
@@ -58,15 +57,18 @@ public class RequestFilter implements ContainerRequestFilter {
 			TypedQuery<Session> query = sessao.getEm().createQuery(
 					" select s from Session s " +
 					" inner join s.acess a " +
-					" where a.hash = :userhash " +
-					" and a.status = :status " +
-					" and s.hash = :sessionhash "
+					" where a.status = :status " +
+					" and s.hash = :hash " +
+					" and s.ip = :ip " +
+					" and s.useragent = :useragent "
 					, Session.class);
 			
 			try {
 				query.setParameter("status", AcessStatus.ACTIVE);
-				query.setParameter("userhash", token.userCrypto(sessao));
-				query.setParameter("sessionhash", sessionToken);
+				//query.setParameter("userhash", token.userCrypto(sessao));
+				query.setParameter("hash", sessionToken);
+				query.setParameter("ip", session.getIp());
+				query.setParameter("useragent", session.getUseragent());
 			} catch (Exception e) {
 				throw new IOException(e);
 			}
