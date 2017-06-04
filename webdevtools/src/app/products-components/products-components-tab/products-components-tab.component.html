@@ -13,7 +13,7 @@
   </div>
   <div class="col-md-3">
     <label>Criação</label>
-    <input class="form-control" disabled value="{{productComponent.creation | date2}}">
+    <input class="form-control" value="{{productComponent.creation | date2}}" readonly>
   </div>
 </div>
 <div class="row">
@@ -23,6 +23,6 @@
   </div>
   <div class="col-md-3">
     <label>Desativação</label>
-    <input class="form-control" value="{{productComponent.death | date2}}" disabled>
+    <input class="form-control" value="{{productComponent.death | date2}}" readonly>
   </div>
 </div>

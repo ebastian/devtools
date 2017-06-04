@@ -34,18 +34,21 @@
       <button type="button" class="btn btn-default btn-xs" *ngIf="version.death === null || version.death === undefined" routerLink="/upload/build">
             <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
         </button>
+      <button type="button" class="btn btn-default btn-xs" (click)="clickDelete(version)">
+        <span class="glyphicon glyphicon-remove " aria-hidden="true"></span>
+      </button>
     </td>
   </tr>
   <tr>
     <td style="vertical-align: middle">?</td>
     <td>
-      <input class="form-control versionPart" [(ngModel)]="version.major">
+      <input type="number" pattern="\d*" class="form-control versionPart" [(ngModel)]="version.major">
     </td>
     <td>
-      <input class="form-control versionPart" [(ngModel)]="version.minor">
+      <input type="number" pattern="\d*" class="form-control versionPart" [(ngModel)]="version.minor">
     </td>
     <td>
-      <input class="form-control versionPart" [(ngModel)]="version.release">
+      <input type="number" pattern="\d*" class="form-control versionPart" [(ngModel)]="version.release">
     </td>
     <td style="vertical-align: middle">{{version.creation}}</td>
     <td style="vertical-align: middle">{{version.death}}</td>
@@ -53,10 +56,10 @@
     <td>
       <button type="button" class="btn btn-default" (click)="clickSave(version)">
         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-    </button>
+      </button>
       <button type="button" class="btn btn-default" (click)="clickClear()">
         <span class="glyphicon glyphicon-erase " aria-hidden="true"></span>
-    </button>
+      </button>
     </td>
   </tr>
 </table>

@@ -44,6 +44,14 @@ export class ProductsComponentsVersionsComponent implements OnInit {
     });
   }
 
+  clickDelete = (version: ComponentVersion) => { 
+    this.version.creation =new Date();
+    this.service.remove(this.productComponent.id, version.id).then(() => {
+      this.version = new ComponentVersion(this.productComponent);
+      this.loadItens();
+    });
+  }
+
   clickClear = () => this.version = new ComponentVersion(this.productComponent);
 
   loadItens():void {
@@ -55,7 +63,14 @@ export class ProductsComponentsVersionsComponent implements OnInit {
   }
 
   toggleFilterActives = () => this.loadItens();
-  assignVersions = data => this.versions = (data !== null ? data as ComponentVersion[] : new Array<ComponentVersion>());
+  assignVersions = data => {
+    this.versions = (data !== null ? data as ComponentVersion[] : new Array<ComponentVersion>());
+    if(this.versions.length > 0) {
+      this.version.major = this.versions[this.versions.length-1].major;
+      this.version.minor = this.versions[this.versions.length-1].minor;
+      this.version.release = this.versions[this.versions.length-1].release;
+    }
+  }
   toggleVersionActive = (version:ComponentVersion) => {
     if(version.death === undefined || version.death === null) {
       this.service.kill(this.productComponent.id, version.id).then(this.toggleActiveResponse('kill'));
