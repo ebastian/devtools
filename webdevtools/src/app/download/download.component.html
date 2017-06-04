@@ -1,0 +1,64 @@
+<div class="panel panel-default">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <div class="navbar-brand">Downloads</div>
+      </div>
+    </div>
+  </nav>
+  <div class="panel-body">
+    <div class="panel-body">
+      Você pode efetuar upload de builds, arquivos, bases de dados. Selecione o tipo de conteúdo você deseja publicar.
+      <br>
+      <div class="container-fluid">
+        <br>
+        <div class="row">
+          <div class="col-md-4">
+            <label>Componente</label>
+            <select class="form-control" (change)="componentSelect($event.target.value)">
+              <option selected disabled *ngIf="selectedComponent?.id === null || selectedComponent?.id === undefined">Selecione um componente</option>
+              <option *ngFor="let comp of components" [value]="comp.id">{{comp.id + ' - ' + comp.name}}</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label>Versão</label>
+            <select class="form-control" (change)="versionSelect($event.target.value)">
+              <option selected disabled *ngIf="versions === null || versions === undefined || versions?.length === 0">Nenhuma versão ativa</option>
+              <option *ngFor="let version of versions" [value]="version.id">{{version.major + '.' + version.minor + '.' + version.release}}</option>
+            </select>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <table class="table table-hover table-striped table-compact">
+            <tr class="tabheader">
+              <th>ID</th>
+              <th>Componente</th>
+              <th>Versão</th>
+              <th>Build</th>
+              <th>Arquivo</th>
+              <th>Tamanho</th>
+              <th>Ações</th>
+            </tr>
+            <tr *ngFor="let b of builds">
+              <td>{{b.id}}</td>
+              <td>nome do componente</td>
+              <td>versao</td>
+              <td>{{b.id}}</td>
+              <td>nome do arquivo.war</td>
+              <td>438924 kbytes</td>
+              <td>
+                <button type="button" class="btn btn-default btn-xs">
+                  <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-default btn-xs">
+                  <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
+                </button>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

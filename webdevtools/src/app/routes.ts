@@ -19,6 +19,8 @@ import { UploadBuildComponent } from './upload/upload-build/upload-build.compone
 import { UploadDocumentComponent } from './upload/upload-document/upload-document.component';
 import { UploadAppComponent } from './upload/upload-app/upload-app.component';
 
+import { DownloadComponent } from './download/download.component';
+
 export const routes: Route[] = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'login', component: LoginComponent},
@@ -51,6 +53,7 @@ export const routes: Route[] = [
       }
     ]
   },
+  { path: 'download', component: DownloadComponent, canActivate: [ AuthGuard ]}, 
   { path: 'upload', component: UploadComponent, canActivate: [ AuthGuard ], 
     children: [
       {

@@ -9,12 +9,14 @@ import { ProductsComponentsTabComponent } from './products-components-tab/produc
 import { ProductsComponentsVersionsComponent } from './products-components-versions/products-components-versions.component';
 import { ComponentVersion } from './service/component-version';
 import { ProductComponent } from './service/product-component';
+import { EbAppCore } from '../shared/eb-app-core.module';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    EbAppCore
   ],
   declarations: [
     ProductsComponentsComponent, 
@@ -24,7 +26,7 @@ import { ProductComponent } from './service/product-component';
     ProductsComponentsVersionsComponent
   ],
   exports: [ 
-    ProductsComponentsComponent 
+    ProductsComponentsComponent
   ]
 })
 export class ProductsComponentsModule { }

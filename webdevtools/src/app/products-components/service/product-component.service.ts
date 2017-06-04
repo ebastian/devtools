@@ -16,9 +16,9 @@ export class ProductComponentService {
   baseUrl: string;
   headers: Headers;
 
-  constructor(@Inject(APPCONFIG) private config: IAppConfig, 
-                private http: Http,
-                private authService: AuthService) {
+  constructor( @Inject(APPCONFIG) private config: IAppConfig,
+    private http: Http,
+    private authService: AuthService) {
 
     this.headers = new Headers({
       'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ export class ProductComponentService {
   public save(item: ProductComponent): Promise<ProductComponent> {
     this.setCreation(new Date())(item);
     const url = this.baseUrl;
-    if(item.id != undefined && item.id !== null) {
+    if (item.id != undefined && item.id !== null) {
       return this.http.put(url + "/" + item.id, JSON.stringify(item), { headers: this.headers })
         .toPromise()
         .then(this.castResult)
@@ -66,6 +66,22 @@ export class ProductComponentService {
     return this.http.delete(url, { headers: this.headers })
       .toPromise()
       .then((res) => JSON.stringify(res))
+      .catch(this.handleError);
+  }
+
+  public kill(item: ProductComponent): Promise<boolean> {
+    const url = this.baseUrl + "/" + item.id + "/kill";
+    return this.http.put(url, null, { headers: this.headers })
+      .toPromise()
+      .then(this.castResult)
+      .catch(this.handleError);
+  }
+
+  public revive(item: ProductComponent): Promise<boolean> {
+    const url = this.baseUrl + "/" + item.id + "/revive";
+    return this.http.put(url, null, { headers: this.headers })
+      .toPromise()
+      .then(this.castResult)
       .catch(this.handleError);
   }
 

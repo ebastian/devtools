@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { LoginComponent } from './login/login.component';
+import { DatePipe } from './pipes/date.pipe';
 
 @NgModule({
   imports: [
@@ -13,12 +14,14 @@ import { LoginComponent } from './login/login.component';
   exports: [
     MainMenuComponent, 
     NavBarComponent,
-    LoginComponent
+    LoginComponent,
+    DatePipe
   ],
   declarations: [
     MainMenuComponent, 
     NavBarComponent,
-    LoginComponent
+    LoginComponent,
+    DatePipe
   ]
 })
 export class EbAppCore { }

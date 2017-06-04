@@ -46,6 +46,10 @@ export class UploadBuildComponent implements OnInit {
     this.versionService.getActivesItensByComponentId(this.selectedComponentId).then(this.prepareResultVersions).then(this.sortVersions);
   }
 
+  versionSelect = (versionId: number) => {
+    this.selectedVersionId = versionId;
+  }
+
   prepareResultVersions = data => this.versions = (data !== null ? data as ComponentVersion[] : new Array<ComponentVersion>());
   sortVersions = () => this.versions.sort((item1, item2) => item2.id - item1.id);
 
@@ -57,7 +61,5 @@ export class UploadBuildComponent implements OnInit {
       "file": this.buildFile
     }
   );
-
-  //clickRemove = (obj:[]) => this.buildsUpload.findIndex(obj).; 
 
 }
