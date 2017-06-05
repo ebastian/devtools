@@ -138,6 +138,10 @@ public abstract class Controller<Model> {
 						} else {
 							filter += item + " " + split[0] + " '" + split[1]+"' ";
 						}
+					} else if (valor.equalsIgnoreCase("null")) {
+						filter += item + " is null ";
+					} else if (valor.equalsIgnoreCase("notnull")) {
+						filter += item + " is not null ";
 					} else {
 						filter += item + " = '" + valor + "' ";
 					}
