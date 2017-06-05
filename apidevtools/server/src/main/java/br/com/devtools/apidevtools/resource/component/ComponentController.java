@@ -22,37 +22,33 @@ public class ComponentController extends Controller<Component> {
 	
 	@PUT
 	@Path("{id}/kill")
-	public boolean kill(@PathParam("id") Long id) throws Exception {
+	public Component kill(@PathParam("id") Long id) throws Exception {
 		
 		try {
 			
 			Component component = this.get(id);
 			component.setDeath(LocalDateTime.now());
-			this.put(id, component);
+			return this.put(id, component);
 			
 		} catch (Exception e) {
 			throw new RestException(e);
 		}
-		
-		return true;
 		
 	}
 	
 	@PUT
 	@Path("{id}/revive")
-	public boolean revive(@PathParam("id") Long id) throws Exception {
+	public Component revive(@PathParam("id") Long id) throws Exception {
 		
 		try {
 			
 			Component component = this.get(id);
 			component.setDeath(null);
-			this.put(id, component);
+			return this.put(id, component);
 			
 		} catch (Exception e) {
 			throw new RestException(e);
 		}
-		
-		return true;
 		
 	}
 

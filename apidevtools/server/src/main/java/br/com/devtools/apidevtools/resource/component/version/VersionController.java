@@ -87,39 +87,35 @@ public class VersionController extends Controller<Version> {
 	
 	@PUT
 	@Path("{id}/kill")
-	public boolean kill(@PathParam("id") Long id) throws Exception {
+	public Version kill(@PathParam("id") Long id) throws Exception {
 		
 		try {
 			
 			Version version = this.get(id);
 			this.beforeRemove(version);
 			version.setDeath(LocalDateTime.now());
-			this.put(id, version);
+			return this.put(id, version);
 			
 		} catch (Exception e) {
 			throw new RestException(e);
 		}
 		
-		return true;
-		
 	}
 	
 	@PUT
 	@Path("{id}/revive")
-	public boolean revive(@PathParam("id") Long id) throws Exception {
+	public Version revive(@PathParam("id") Long id) throws Exception {
 		
 		try {
 			
 			Version version = this.get(id);
 			this.beforeRemove(version);
 			version.setDeath(null);
-			this.put(id, version);
+			return this.put(id, version);
 			
 		} catch (Exception e) {
 			throw new RestException(e);
 		}
-		
-		return true;
 		
 	}
 	

@@ -53,6 +53,9 @@ public class Version {
 	@Column(nullable=false)
 	private Integer release;
 
+	@Column(columnDefinition="text")
+	private String description;
+	
 	public Long getId() {
 		return id;
 	}
@@ -107,6 +110,14 @@ public class Version {
 
 	public void setRelease(Integer release) {
 		this.release = release;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 }
