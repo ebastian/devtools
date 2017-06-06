@@ -1,25 +1,38 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+
 import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'eb-nav-bar',
   templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.css'],
-  providers: [
-    AuthService
-  ]
+  styleUrls: ['./nav-bar.component.css']
 })
 export class NavBarComponent implements OnInit {
-
+  
   opened: boolean = false;
+  loggedIn: boolean = false;
 
   @Output()
   onMenuToggle = new EventEmitter();
 
-  constructor(public authService: AuthService) {  
+  @Output()
+  onLogout = new EventEmitter();
+
+  subscription:Subscription;
+
+  constructor(public authService: AuthService) { }
+
+  ngOnInit(): void {
+    this.subscription = this.authService.onToggleLogIn.subscribe(loggedIn => {
+      this.loggedIn = loggedIn;
+      this.opened = loggedIn;
+      this.onMenuToggle.next(this.opened);
+    });
   }
 
-  ngOnInit() {
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   toggleMenu(event): void {
@@ -28,7 +41,9 @@ export class NavBarComponent implements OnInit {
   }
 
   logout(): void {
-    this.authService.logout();
+    this.opened = false;
+    this.onMenuToggle.next(this.opened);
+    this.onLogout.next();
   }
 
 }

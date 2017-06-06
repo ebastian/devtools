@@ -20,6 +20,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { ProductsModule } from './products/products.module';
 import { ProductsComponentsModule } from './products-components/products-components.module';
 import { UploadModule } from './upload/upload.module';
+import { DownloadModule } from './download/download.module';
 
 import { routes } from './routes';
 
@@ -38,6 +39,7 @@ import { routes } from './routes';
     ProductsModule,
     ProductsComponentsModule,
     UploadModule,
+    DownloadModule,
     EbAppCore
   ],
   providers: [

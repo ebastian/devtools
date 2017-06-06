@@ -17,9 +17,7 @@ export class ProductsComponentsListComponent implements OnInit {
   data: ProductComponent[] = [];
 
   selectedRecord: ProductComponent = null;
-
-  busy = false;
-
+  
   constructor(protected service: ProductComponentService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
@@ -27,24 +25,18 @@ export class ProductsComponentsListComponent implements OnInit {
 
   ngAfterContentInit():void {
     this.getComponents();
-    /*
-    this.route.params.forEach((params: Params) => {
-      let id = +params['id'];
-      if(!isNaN(id)) {
-        console.log('SELECT ' + id);
-        this.service.getItem(id).then(registry => this.selectRecord(registry));
-      }
-    });
-    */
   }
 
   getComponents = (): Promise<ProductComponent[]> => this.service.getItens().then(data => this.data = (data !== null ? data as ProductComponent[] : new Array<ProductComponent>()));
   selectRecord = (record): ProductComponent => this.selectedRecord = record;
+  search = (): void => alert('Não implementado.');
+  
   clickEdit = (event: Event, record: ProductComponent) => { 
     console.log("click edit: " + event);
     event.stopImmediatePropagation(); 
     this.openRecord(record) 
   };
+  
   clickDelete = (event: Event, record: ProductComponent) => { 
     console.log("click delete: " + event);
     event.stopImmediatePropagation(); 
@@ -52,11 +44,11 @@ export class ProductsComponentsListComponent implements OnInit {
       () => this.getComponents()
     )
   };
+
   openRecord(record): void {
     console.log(JSON.stringify(record));
     this.selectRecord(record);
     this.router.navigate(["componentes/componente/", this.selectedRecord.id]);
   }
-
 
 }

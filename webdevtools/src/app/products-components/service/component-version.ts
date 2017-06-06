@@ -7,19 +7,13 @@ export class ComponentVersion extends Entity {
   major: string;
   minor: string;
   release: string;
-  creation: string;
-  death: string;
+  creation: Date;
+  death: Date;
   component: ProductComponent;
 
   constructor(component: ProductComponent) { 
     super();
     this.component = component;
     this.death = null;
-    /*
-    this.name = "";
-    this.description = "";
-    this.creation = "";
-    this.death = "";
-    */
   };
 }

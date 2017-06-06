@@ -11,7 +11,7 @@
     <a routerLink="/componentes" class="list-group-item" [class.active]="routePrefix === 'componentes'">Componentes</a>
   </li>
   <li class="list-group-item">
-    <a routerLink="/upload" class="list-group-item">Upload</a>
+    <a routerLink="/upload" class="list-group-item" [class.active]="routePrefix === 'upload'">Upload</a>
   </li>
   <!--
   <li class="list-group-item">
@@ -27,9 +27,9 @@
     </a>
   </li>
   <li class="list-group-item">
-    <a routerLink="/download" class="list-group-item disabled">Downloads</a>
+    <a routerLink="/download" class="list-group-item" [class.active]="routePrefix === 'download'">Downloads</a>
   </li>
   <li class="list-group-item">
-    <a routerLink="/ajuda" class="list-group-item disabled">Ajuda</a>
+    <a href="http://localhost:8080/apidevtools/api/help" target="_blank" class="list-group-item">Ajuda</a>
   </li>
 </ul>

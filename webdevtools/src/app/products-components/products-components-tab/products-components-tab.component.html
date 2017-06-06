@@ -2,8 +2,8 @@
   <div class="col-md-9">
     <label>Id: {{productComponent?.id === undefined ? '?' : productComponent.id}}</label>
   </div>
-  <div class="col-md-2">
-    <label>Situação: {{productComponent?.death === undefined ? 'Ativo' : 'Desativado'}}</label>
+  <div class="col-md-2" *ngIf="productComponent?.id !== undefined">
+    <label>Situação: {{productComponent?.death === null ? 'Ativo' : 'Desativado'}}</label>
   </div>
 </div>
 <div class="row">
@@ -11,9 +11,9 @@
     <label>Nome</label>
     <input class="form-control" [(ngModel)]="productComponent.name" required>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-3">
     <label>Criação</label>
-    <input class="form-control" [(ngModel)]="productComponent.creation" disabled>
+    <input class="form-control" value="{{productComponent.creation | date2}}" readonly>
   </div>
 </div>
 <div class="row">
@@ -21,15 +21,8 @@
     <label>Descrição</label>
     <textarea class="form-control" [(ngModel)]="productComponent.description" required></textarea>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-3">
     <label>Desativação</label>
-    <input class="form-control" [(ngModel)]="productComponent.death" disabled>
-  </div>
-</div>
-<br>
-<div class="row">
-  <div class="col-md-6">
-    <button class="btn btn-default btnAcao" (click)="clickActive()" *ngIf="productComponent.death !== null" [disabled]="productComponent.id === undefined">Ativar</button>
-    <button class="btn btn-default btnAcao" (click)="clickDesactive()" *ngIf="productComponent.death === null" [disabled]="productComponent.id === undefined">Desativar</button>
+    <input class="form-control" value="{{productComponent.death | date2}}" readonly>
   </div>
 </div>

@@ -7,11 +7,10 @@ import { APPCONFIG } from '../../app.config';
 import { IAppConfig } from '../../iapp.config';
 
 import { AuthService } from '../../shared/auth/auth.service';
-
-import { ComponentVersion } from '../service/component-version';
+import { BuildUpload } from './build-upload';
 
 @Injectable()
-export class ComponentVersionService {
+export class UploadService {
 
   baseUrl: string;
   headers: Headers;
@@ -30,17 +29,19 @@ export class ComponentVersionService {
     this.baseUrl = config.apiEndpoint + "component";
   }
 
-  public getItens(componentId: number): Promise<ComponentVersion[]> {
-    const url = this.baseUrl + "/" + componentId + "/version";
+  public getItens(componentId: number, versionId: number): Promise<BuildUpload[]> {
+    const url = this.baseUrl + "/" + componentId + "/version/" + versionId + "/build";
+    console.log(url);
     return this.http.get(url, { headers: this.headers })
       .toPromise()
       .then(this.castResults)
       .catch(this.handleError);
   }
 
-  public save(item: ComponentVersion): Promise<ComponentVersion> {
-    const url = this.baseUrl + "/" + item.component.id + "/version";
+  /*
+  public save(item: BuildUpload): Promise<BuildUpload> {
     this.setCreation(new Date())(item);
+    const url = this.baseUrl;
     if (item.id != undefined && item.id !== null) {
       return this.http.put(url + "/" + item.id, JSON.stringify(item), { headers: this.headers })
         .toPromise()
@@ -53,38 +54,41 @@ export class ComponentVersionService {
         .catch(this.handleError);
     }
   }
-
-  public getItem(componentId: number, id: number): Promise<ComponentVersion> {
-    const url = this.baseUrl + "/" + componentId + "/version/" + id;
+  */
+  
+  /*
+  public getItem(id: number): Promise<ProductComponent> {
+    const url = this.baseUrl + "/" + id;
     return this.http.get(url, { headers: this.headers })
       .toPromise()
-      .then(response => response.json() as ComponentVersion)
+      .then(response => response.json() as ProductComponent)
       .catch(this.handleError);
   }
 
-  public remove(componentId: number, id: number): Promise<void> {
-    const url = this.baseUrl + "/" + componentId + "/version/" + id;
+  public remove(id: number): Promise<void> {
+    const url = this.baseUrl + "/" + id;
     return this.http.delete(url, { headers: this.headers })
       .toPromise()
       .then((res) => JSON.stringify(res))
       .catch(this.handleError);
   }
 
-  public kill(componentId: number, id: number): Promise<boolean> {
-    const url = this.baseUrl + "/" + componentId + "/version/" + id + "/kill";
+  public kill(item: ProductComponent): Promise<boolean> {
+    const url = this.baseUrl + "/" + item.id + "/kill";
     return this.http.put(url, null, { headers: this.headers })
       .toPromise()
       .then(this.castResult)
       .catch(this.handleError);
   }
 
-  public revive(componentId: number, id: number): Promise<boolean> {
-    const url = this.baseUrl + "/" + componentId + "/version/" + id + "/revive";
+  public revive(item: ProductComponent): Promise<boolean> {
+    const url = this.baseUrl + "/" + item.id + "/revive";
     return this.http.put(url, null, { headers: this.headers })
       .toPromise()
       .then(this.castResult)
       .catch(this.handleError);
   }
+  */
 
   private handleError(error: any): Promise<any> {
     alert('Erro: ' + JSON.stringify(error));
@@ -92,16 +96,7 @@ export class ComponentVersionService {
     return Promise.reject(error.message || error);
   }
 
-  applyFilter = filter => itens => itens.filter(filter);
+  castResult = item => item.json() as BuildUpload;
+  castResults = response => response.json().list as BuildUpload[];
 
-  public getActiveItens = (componentId: number): Promise<ComponentVersion[]> => this.getItens(componentId).then(this.applyFilter(this.filterActives));
-  filterActives = (item: ComponentVersion) => item.death === null;
-
-  public getActivesItensByComponentId(componentId: number): Promise<ComponentVersion[]> {
-    return this.getActiveItens(componentId).then(comp => Promise.all(comp));
-  }
-
-  castResult = item => item.json() as ComponentVersion;
-  castResults = response => response.json().list as ComponentVersion[];
-  setCreation = (creationDate: Date) => (record: ComponentVersion) => record.creation = (record.creation === undefined ? new Date() : (record.creation));
 }

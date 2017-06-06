@@ -1,5 +1,26 @@
-<app-products-components-tab [(productComponent)]="record"></app-products-components-tab>
-<div class="row" *ngIf="record?.id !== undefined">
+<app-products-components-tab [(productComponent)]="component"></app-products-components-tab>
+<div class="row">
+  <br>
+  <div class="col-md-12">
+    <div class="controls">
+      <button class="btn btn-default" (click)="clickClear()">Novo</button>
+      <button class="btn btn-success" (click)="clickSave(component)">Salvar</button>
+      <!--
+      <button class="btn btn-danger" *ngIf="component?.id !== undefined" (click)="clickDelete(component)">Deletar</button>
+      -->
+      <button class="btn btn-default" *ngIf="component?.id !== undefined" (click)="clickToggleActive(component)">
+        {{component.death === null || component.death === undefined ? 'Desativar' : 'Ativar'}} 
+      </button>
+      <button class="btn btn-default" routerLink="/componentes">Cancelar</button>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" [checked]="saveAndContinue" (change)="saveAndContinue = !saveAndContinue">Continuar após salvar
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="component?.id !== undefined">
   <div class="col-md-12">
     <br>
     <ul class="nav nav-tabs">
@@ -9,20 +30,4 @@
     </ul>
   </div>
 </div>
-<app-products-components-versions [(productComponent)]="record" *ngIf="record?.id !== undefined"></app-products-components-versions>
-<div class="row">
-  <br>
-  <div class="col-md-3">
-    <div class="controls">
-      <button class="btn btn-default" (click)="clickClear()">Novo</button>
-      <button class="btn btn-success" (click)="clickSave(record)">Salvar</button>
-      <button class="btn btn-danger" *ngIf="record?.id !== undefined" (click)="clickDelete(record)">Deletar</button>
-      <button class="btn btn-default" routerLink="/componentes">Cancelar</button>
-    <div class="checkbox">
-      <label>
-      <input type="checkbox" [checked]="saveAndContinue" (change)="saveAndContinue = !saveAndContinue">Continuar após salvar
-    </label>
-    </div>
-    </div>
-  </div>
-</div>
+<app-products-components-versions [(productComponent)]="component" *ngIf="component?.id !== undefined"></app-products-components-versions>

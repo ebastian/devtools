@@ -11,4 +11,6 @@ export class ProductComponent extends Entity {
   constructor() { 
     super();
   };
+
+  //public isActive = (): boolean => this.death === undefined || this.death === null; how to do it???
 }

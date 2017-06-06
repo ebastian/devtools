@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterContentInit, Input } from '@angular/core';
+import { Component, OnInit, AfterContentInit, Input, Output } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 
 import { ProductComponent } from '../service/product-component';
@@ -17,49 +17,69 @@ export class ProductsComponentsVersionsComponent implements OnInit {
   @Input()
   productComponent: ProductComponent;
 
+  @Output()
   versions: Array<ComponentVersion>;
 
   version: ComponentVersion;
 
-  filterActives: boolean = true;
+  filterActives: boolean = false;
 
   constructor(protected service: ComponentVersionService, private route: ActivatedRoute, private router: Router) {
     this.versions = new Array<ComponentVersion>();
   }
 
   ngOnInit() {
-    console.log(JSON.stringify(this.productComponent));
   }
 
    ngAfterContentInit():void {
-    console.log(">> " + JSON.stringify(this.productComponent));
     this.version = new ComponentVersion(this.productComponent);
     this.loadItens();
   }
 
   clickSave = (version: ComponentVersion) => { 
-    this.version.creation = this.formatDate(new Date());
-    this.service.save(version);
-    this.version = new ComponentVersion(this.productComponent);
-    this.loadItens();
+    this.version.creation =new Date();
+    this.service.save(version).then(() => {
+      this.version = new ComponentVersion(this.productComponent);
+      this.loadItens();
+    });
+  }
+
+  clickDelete = (version: ComponentVersion) => { 
+    this.version.creation =new Date();
+    this.service.remove(this.productComponent.id, version.id).then(() => {
+      this.version = new ComponentVersion(this.productComponent);
+      this.loadItens();
+    });
   }
 
   clickClear = () => this.version = new ComponentVersion(this.productComponent);
 
   loadItens():void {
-    console.log(">> " + this.filterActives);
     if(this.filterActives) {
       this.service.getActivesItensByComponentId(this.productComponent.id).then(this.assignVersions);
     } else {
-      this.service.getItensByComponentId(this.productComponent.id).then(this.assignVersions);
+      this.service.getItens(this.productComponent.id).then(this.assignVersions);
     }
   }
 
-  formatDate = (d:Date):string => ("0" + d.getDate()).slice(-2) + "/" + ("0"+(d.getMonth()+1)).slice(-2) + "/" +d.getFullYear();
-
   toggleFilterActives = () => this.loadItens();
-  
-  assignVersions = data => this.versions = (data !== null ? data as ComponentVersion[] : new Array<ComponentVersion>());
+  assignVersions = data => {
+    this.versions = (data !== null ? data as ComponentVersion[] : new Array<ComponentVersion>());
+    if(this.versions.length > 0) {
+      this.version.major = this.versions[this.versions.length-1].major;
+      this.version.minor = this.versions[this.versions.length-1].minor;
+      this.version.release = this.versions[this.versions.length-1].release;
+    }
+  }
+  toggleVersionActive = (version:ComponentVersion) => {
+    if(version.death === undefined || version.death === null) {
+      this.service.kill(this.productComponent.id, version.id).then(this.toggleActiveResponse('kill'));
+    } else {
+      this.service.revive(this.productComponent.id, version.id).then(this.toggleActiveResponse('revive'));
+    }
+  };
 
-  toggleVersionActive = (version:ComponentVersion) => version.death = (version.death === undefined || version.death === null ? this.formatDate(new Date()) : null);
+  toggleActiveResponse = action => (success: boolean): void => {
+      this.loadItens();
+  }
 }
