@@ -52,39 +52,38 @@ public class SearchClass {
 		
 	}
 	
-	/*
-	public List<Class<?>> getClasses() throws Exception {
 
-		try {
-
-			List<Class<?>> classes = new ArrayList<>();
-
-			String path = this.packageName.replace(".", "/");
-			String prefix = "/WEB-INF/classes/";
-			
-			@SuppressWarnings("unchecked")
-			Set<String> resourcePaths = App.context.getResourcePaths(prefix + path);
-
-			for (String arquivo : resourcePaths) {
-				if (arquivo.lastIndexOf(".class") >= 0) {
-
-					int ini = arquivo.lastIndexOf("/") + 1;
-					int fim = arquivo.lastIndexOf(".");
-
-					String nome = arquivo.substring(ini, fim);
-					Class<?> forName = Class.forName(this.packageName + "." + nome);
-
-					classes.add(forName);
-
+	@SuppressWarnings("unchecked")
+	private <I> void findInterface(Class<I> interfacee, List<I> listClass, String path) throws Exception {
+		
+		Set<String> resourcePaths = App.context.getResourcePaths(path);
+		
+		for (String arquivo : resourcePaths) {
+			if (arquivo.lastIndexOf(".class") >= 0) {
+				
+				String className = arquivo.substring(prefix.length()).replace("/", ".");
+				className = className.substring(0, className.length()-6);
+				
+				Class<?> forName = Class.forName(className);
+				if (forName.isInstance(interfacee)) {
+					listClass.add((I)forName);
 				}
+				
+			} else {
+				
+				this.findInterface(interfacee, listClass, arquivo);
+				
 			}
-
-			return classes;
-
-		} catch (Exception e) {
-			throw e;
 		}
-
+		
 	}
-	*/
+	
+	public <I> List<I> byInterface(Class<I> interfacee) throws Exception {
+		
+		List<I> listClass = new ArrayList<>();
+		this.findInterface(interfacee, listClass, this.packagePath);
+		return listClass;
+		
+	}
+	
 }

@@ -32,6 +32,8 @@ import org.hibernate.envers.query.AuditEntity;
 import br.com.devtools.apidevtools.core.help.HelpGenerator;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
+import br.com.devtools.apidevtools.core.rules.Rule;
+import br.com.devtools.apidevtools.core.rules.RuleManager;
 import br.com.devtools.apidevtools.resource.revinfo.RevInfo;
 import br.com.devtools.apidevtools.resource.revinfo.RevInfoResult;
 
@@ -41,11 +43,17 @@ public abstract class Controller<Model> {
 	
 	public abstract Class<Model> getClasse();
 	
+	public List<Rule<Model>> postRules = new ArrayList<>();
+	
 	@Context
 	HttpServletRequest context;
 	
 	@Inject
 	RestSessao sessao;
+	
+	public Controller() {
+		new RuleManager<>(this);
+	}
 	
 	private EntityManager getEm() {
 		return this.getSessao().getEm();
