@@ -1,7 +1,10 @@
 package br.com.devtools.apidevtools.core.searchclass;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,15 +18,32 @@ public class SearchClass {
 	
 	public SearchClass(String packageName) {
 		
+		if (App.context==null) {
+			this.prefix = this.getClass().getClassLoader().getResource("").getPath().toString().replace("test-classes", "classes");
+			if (this.prefix.indexOf("/")==0) {
+				this.prefix = this.prefix.substring(1);
+			}
+		}
+		
 		String path = packageName.replace(".", "/");
 		this.packagePath = prefix + path;
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void findAnnotation(Class<? extends Annotation> annotation, String path) throws Exception {
 		
-		@SuppressWarnings("unchecked")
-		Set<String> resourcePaths = App.context.getResourcePaths(path);
+		Set<String> resourcePaths = null;
+		
+		if (App.context!=null) {
+			resourcePaths = App.context.getResourcePaths(path);
+		} else {
+			File directory = new File(path);
+			resourcePaths = new HashSet<>();
+			for (File file : directory.listFiles()) {
+				resourcePaths.add(file.getPath());
+			}
+		}
 		
 		for (String arquivo : resourcePaths) {
 			if (arquivo.lastIndexOf(".class") >= 0) {
@@ -54,19 +74,32 @@ public class SearchClass {
 	
 
 	@SuppressWarnings("unchecked")
-	private <I> void findInterface(Class<I> interfacee, List<I> listClass, String path) throws Exception {
+	private <I> void findInterface(Class<I> interfacee, List<Class<I>> listClass, String path) throws Exception {
 		
-		Set<String> resourcePaths = App.context.getResourcePaths(path);
+		Set<String> resourcePaths = null;
 		
+		if (App.context!=null) {
+			resourcePaths = App.context.getResourcePaths(path);
+		} else {
+			File directory = new File(path);
+			resourcePaths = new HashSet<>();
+			for (File file : directory.listFiles()) {
+				resourcePaths.add(file.getPath());
+			}
+		}
+		
+		if (resourcePaths==null) {
+			return;
+		}
 		for (String arquivo : resourcePaths) {
 			if (arquivo.lastIndexOf(".class") >= 0) {
 				
-				String className = arquivo.substring(prefix.length()).replace("/", ".");
+				String className = arquivo.substring(prefix.length()).replace("/", ".").replace("\\", ".");
 				className = className.substring(0, className.length()-6);
 				
 				Class<?> forName = Class.forName(className);
-				if (forName.isInstance(interfacee)) {
-					listClass.add((I)forName);
+				if (Arrays.asList(forName.getInterfaces()).contains(interfacee)) {
+					listClass.add((Class<I>)forName);
 				}
 				
 			} else {
@@ -78,9 +111,9 @@ public class SearchClass {
 		
 	}
 	
-	public <I> List<I> byInterface(Class<I> interfacee) throws Exception {
+	public <I> List<Class<I>> byInterface(Class<I> interfacee) throws Exception {
 		
-		List<I> listClass = new ArrayList<>();
+		List<Class<I>> listClass = new ArrayList<>();
 		this.findInterface(interfacee, listClass, this.packagePath);
 		return listClass;
 		

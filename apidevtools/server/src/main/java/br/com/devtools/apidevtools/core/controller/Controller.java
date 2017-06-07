@@ -32,18 +32,20 @@ import org.hibernate.envers.query.AuditEntity;
 import br.com.devtools.apidevtools.core.help.HelpGenerator;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
-import br.com.devtools.apidevtools.core.rules.Rule;
-import br.com.devtools.apidevtools.core.rules.RuleManager;
+import br.com.devtools.apidevtools.core.rulemanager.RuleManager;
+import br.com.devtools.apidevtools.core.rulemanager.rules.RuleDelete;
+import br.com.devtools.apidevtools.core.rulemanager.rules.RuleGet;
+import br.com.devtools.apidevtools.core.rulemanager.rules.RulePost;
+import br.com.devtools.apidevtools.core.rulemanager.rules.RulePut;
 import br.com.devtools.apidevtools.resource.revinfo.RevInfo;
 import br.com.devtools.apidevtools.resource.revinfo.RevInfoResult;
 
+@SuppressWarnings("unchecked")
 @Produces("application/json;charset=UTF-8")
 @Consumes("application/json;charset=UTF-8")
 public abstract class Controller<Model> {
 	
 	public abstract Class<Model> getClasse();
-	
-	public List<Rule<Model>> postRules = new ArrayList<>();
 	
 	@Context
 	HttpServletRequest context;
@@ -51,12 +53,28 @@ public abstract class Controller<Model> {
 	@Inject
 	RestSessao sessao;
 	
-	public Controller() {
-		new RuleManager<>(this);
-	}
-	
 	private EntityManager getEm() {
 		return this.getSessao().getEm();
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private List<RuleGet> getGetRules() throws Exception {
+		return new RuleManager<>(this).getRules();
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private List<RulePost> getPostRules() throws Exception {
+		return new RuleManager<>(this).postRules();
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private List<RulePut> getPutRules() throws Exception {
+		return new RuleManager<>(this).putRules();
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private List<RuleDelete> getDeleteRules() throws Exception {
+		return new RuleManager<>(this).deleteRules();
 	}
 	
 	private void setId(Model entidade, Long id) throws Exception {
@@ -82,7 +100,6 @@ public abstract class Controller<Model> {
 		return new HelpGenerator().help(this.getClass(), this.getClasse());
 	}
 	
-	@SuppressWarnings("unchecked")
 	@GET
 	@Path("{id}/revision")
 	public List<RevInfoResult<Model>> audited(@PathParam("id") Long id) {
@@ -125,11 +142,14 @@ public abstract class Controller<Model> {
 		
 	}
 	
-	@SuppressWarnings("unchecked")
 	@GET
 	public FormGet<Model> get(@QueryParam("page") Integer page, @QueryParam("numberRecords") Integer numberRecords) throws RestException {
 		
 		try {
+			
+			for (RuleGet<Model> rule : this.getGetRules()) {
+				rule.validate(this, null);
+			}
 			
 			List<String> filterGet = new ArrayList<>();
 			
@@ -256,6 +276,11 @@ public abstract class Controller<Model> {
 	public Model get(@PathParam("id") Long id) throws RestException {
 		
 		try {
+			
+			for (RuleGet<Model> rule : this.getGetRules()) {
+				rule.validate(this, null);
+			}
+			
 			this.beforeGet(id);
 			Model model = this.getEm().find(this.getClasse(), id);
 			return this.afterGet(model);
@@ -270,6 +295,10 @@ public abstract class Controller<Model> {
 	public Model post(Model model) throws RestException {
 		
 		try {
+
+			for (RulePost<Model> rule : this.getPostRules()) {
+				rule.validate(this, model);
+			}
 			
 			this.beforePost(model);
 			this.getEm().persist(model);
@@ -288,6 +317,10 @@ public abstract class Controller<Model> {
 	public Model put(@PathParam("id") Long id, Model model) throws RestException {
 		
 		try {
+
+			for (RulePut<Model> rule : this.getPutRules()) {
+				rule.validate(this, model);
+			}
 			
 			this.setId(model, id);
 			this.beforePut(model);
@@ -309,6 +342,11 @@ public abstract class Controller<Model> {
 		try {
 			
 			Model model = this.get(id);
+			
+			for (RuleDelete<Model> rule : this.getDeleteRules()) {
+				rule.validate(this, model);
+			}
+			
 			this.beforeRemove(model);
 			this.getEm().remove(model);
 			this.getSessao().commit();
