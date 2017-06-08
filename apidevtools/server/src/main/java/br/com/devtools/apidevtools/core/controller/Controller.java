@@ -304,6 +304,8 @@ public abstract class Controller<Model> {
 			this.getEm().persist(model);
 			this.getSessao().commit();
 			
+		} catch (RestException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new RestException(e);
 		}
@@ -327,6 +329,8 @@ public abstract class Controller<Model> {
 			this.getEm().merge(model);
 			this.getSessao().commit();
 			
+		} catch (RestException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new RestException(e);
 		}

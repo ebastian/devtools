@@ -48,7 +48,7 @@ public class SearchClass {
 		for (String arquivo : resourcePaths) {
 			if (arquivo.lastIndexOf(".class") >= 0) {
 				
-				String className = arquivo.substring(prefix.length()).replace("/", ".");
+				String className = arquivo.substring(prefix.length()).replace("/", ".").replace("\\", ".");
 				className = className.substring(0, className.length()-6);
 				
 				Class<?> forName = Class.forName(className);

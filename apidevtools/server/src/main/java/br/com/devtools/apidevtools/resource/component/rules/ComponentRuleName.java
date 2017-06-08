@@ -5,6 +5,9 @@ import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rulemanager.rules.RulePost;
 import br.com.devtools.apidevtools.core.rulemanager.rules.RulePut;
 import br.com.devtools.apidevtools.resource.component.Component;
+import br.com.devtools.apidevtools.resource.component.rules.exception.ComponentNameLargerException;
+import br.com.devtools.apidevtools.resource.component.rules.exception.ComponentNameLessException;
+import br.com.devtools.apidevtools.resource.component.rules.exception.ComponentNameRequiredException;
 
 public class ComponentRuleName implements RulePost<Component>, RulePut<Component> {
 
@@ -12,17 +15,17 @@ public class ComponentRuleName implements RulePost<Component>, RulePut<Component
 	public void validate(Controller<Component> controller, Component model) throws RestException{
 		
 		if (model.getName()==null) {
-			throw new RestException("Nome: campo obrigatório");
+			throw new ComponentNameRequiredException();
 		}
 		
 		model.setName(model.getName().trim());
 		
 		if (model.getName().length()<=3) {
-			throw new RestException("Nome: tamanho deve ser maior que três");
+			throw new ComponentNameLessException();
 		}
 		
 		if (model.getName().length()>100) {
-			throw new RestException("Nome: tamanho deve ser menor que cem");
+			throw new ComponentNameLargerException();
 		}
 
 	}

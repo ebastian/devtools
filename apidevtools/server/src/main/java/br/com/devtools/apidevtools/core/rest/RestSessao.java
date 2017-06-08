@@ -27,6 +27,10 @@ public class RestSessao {
 		}
 		return em;
 	}
+	
+	public void setEm(EntityManager em) {
+		this.em = em;
+	}
 
 	public Session getSession() {
 		return session;
