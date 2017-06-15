@@ -4,9 +4,9 @@ import { ProductComponent } from './product-component';
 
 export class ComponentVersion extends Entity {
   
-  major: string;
-  minor: string;
-  release: string;
+  major: number;
+  minor: number;
+  release: number;
   creation: Date;
   death: Date;
   component: ProductComponent;
@@ -15,5 +15,8 @@ export class ComponentVersion extends Entity {
     super();
     this.component = component;
     this.death = null;
+    this.major = 1;
+    this.minor = 0;
+    this.release = 0;
   };
 }

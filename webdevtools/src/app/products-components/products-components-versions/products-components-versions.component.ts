@@ -37,7 +37,7 @@ export class ProductsComponentsVersionsComponent implements OnInit {
   }
 
   clickSave = (version: ComponentVersion) => { 
-    this.version.creation =new Date();
+    this.version.creation = new Date();
     this.service.save(version).then(() => {
       this.version = new ComponentVersion(this.productComponent);
       this.loadItens();
@@ -45,7 +45,7 @@ export class ProductsComponentsVersionsComponent implements OnInit {
   }
 
   clickDelete = (version: ComponentVersion) => { 
-    this.version.creation =new Date();
+    this.version.creation = new Date();
     this.service.remove(this.productComponent.id, version.id).then(() => {
       this.version = new ComponentVersion(this.productComponent);
       this.loadItens();
@@ -69,6 +69,8 @@ export class ProductsComponentsVersionsComponent implements OnInit {
       this.version.major = this.versions[this.versions.length-1].major;
       this.version.minor = this.versions[this.versions.length-1].minor;
       this.version.release = this.versions[this.versions.length-1].release;
+    } else {
+      this.version = new ComponentVersion(this.productComponent);
     }
   }
   toggleVersionActive = (version:ComponentVersion) => {
