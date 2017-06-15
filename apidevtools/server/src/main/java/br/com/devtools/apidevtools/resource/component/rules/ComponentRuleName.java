@@ -5,9 +5,9 @@ import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rulemanager.rules.RulePost;
 import br.com.devtools.apidevtools.core.rulemanager.rules.RulePut;
 import br.com.devtools.apidevtools.resource.component.Component;
-import br.com.devtools.apidevtools.resource.component.rules.exception.ComponentNameLargerException;
-import br.com.devtools.apidevtools.resource.component.rules.exception.ComponentNameLessException;
-import br.com.devtools.apidevtools.resource.component.rules.exception.ComponentNameRequiredException;
+import br.com.devtools.apidevtools.resource.component.rules.exception.name.ComponentNameLargerException;
+import br.com.devtools.apidevtools.resource.component.rules.exception.name.ComponentNameLessException;
+import br.com.devtools.apidevtools.resource.component.rules.exception.name.ComponentNameRequiredException;
 
 public class ComponentRuleName implements RulePost<Component>, RulePut<Component> {
 

@@ -2,30 +2,35 @@ package br.com.devtools.apidevtools.resource.component.rules;
 
 import br.com.devtools.apidevtools.core.controller.Controller;
 import br.com.devtools.apidevtools.core.rest.RestException;
-import br.com.devtools.apidevtools.core.rulemanager.rules.Rule;
+import br.com.devtools.apidevtools.core.rulemanager.rules.RulePost;
+import br.com.devtools.apidevtools.core.rulemanager.rules.RulePut;
 import br.com.devtools.apidevtools.resource.component.Component;
+import br.com.devtools.apidevtools.resource.component.rules.exception.filename.ComponentFileNameInvalidException;
+import br.com.devtools.apidevtools.resource.component.rules.exception.filename.ComponentFileNameLargerException;
+import br.com.devtools.apidevtools.resource.component.rules.exception.filename.ComponentFileNameLessException;
+import br.com.devtools.apidevtools.resource.component.rules.exception.filename.ComponentFileNameRequiredException;
 
-public class ComponentRuleFileName implements Rule<Component> {
+public class ComponentRuleFileName implements RulePost<Component>, RulePut<Component> {
 
 	@Override
-	public void validate(Controller<Component> controller, Component model) throws RestException{
+	public void validate(Controller<Component> controller, Component model) throws RestException {
 		
 		if (model.getFileName()==null) {
-			throw new RestException("Nome do Arquivo: campo obrigatório");
+			throw new ComponentFileNameRequiredException();
 		}
 		
-		model.setName(model.getName().trim());
+		model.setFileName(model.getFileName().trim());
 		
 		if (model.getFileName().length()<=3) {
-			throw new RestException("Nome do Arquivo: tamanho deve ser maior que três");
+			throw new ComponentFileNameLessException();
 		}
 		
 		if (model.getFileName().length()>100) {
-			throw new RestException("Nome do Arquivo: tamanho deve ser menor que cem");
+			throw new ComponentFileNameLargerException();
 		}
 
 		if (!model.getFileName().matches("^[a-zA-Z0-9]+\\.[a-zA-Z0-9]{1,50}$")) {
-			throw new RestException("Nome do Arquivo: formatação inválida. Ex.: Teste.txt");
+			throw new ComponentFileNameInvalidException();
 		}
 		
 	}

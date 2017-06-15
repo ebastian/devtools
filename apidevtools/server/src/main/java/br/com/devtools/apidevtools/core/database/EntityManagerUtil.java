@@ -10,7 +10,7 @@ import org.hibernate.cfg.Configuration;
 
 import br.com.devtools.apidevtools.core.searchclass.SearchClass;
 
-public class EntityManagerUtil {
+public class EntityManagerUtil implements IEntityMangerUtil {
 
 	private static SessionFactory sessions = null;
 	
@@ -42,7 +42,7 @@ public class EntityManagerUtil {
 		
 	}
 
-	public static EntityManager getEntityManager() {
+	public EntityManager getEntityManager() {
 		return sessions.createEntityManager();
 	}
 	

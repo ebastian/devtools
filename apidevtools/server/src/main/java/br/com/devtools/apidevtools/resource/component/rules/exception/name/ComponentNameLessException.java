@@ -1,4 +1,4 @@
-package br.com.devtools.apidevtools.resource.component.rules.exception;
+package br.com.devtools.apidevtools.resource.component.rules.exception.name;
 
 import br.com.devtools.apidevtools.core.rest.RestException;
 
