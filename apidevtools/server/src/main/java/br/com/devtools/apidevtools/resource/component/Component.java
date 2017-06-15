@@ -26,6 +26,9 @@ public class Component {
 	@Column(length=100, nullable=false)
 	private String name;
 	
+	@Column(length=100)
+	private String fileName;
+	
 	@Column(columnDefinition="text")
 	private String description;
 	
@@ -75,6 +78,14 @@ public class Component {
 
 	public void setDeath(LocalDateTime death) {
 		this.death = death;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 	
 }

@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import org.hibernate.jdbc.Work;
 
 import br.com.devtools.apidevtools.core.database.EntityManagerUtil;
+import br.com.devtools.apidevtools.core.database.IEntityMangerUtil;
 import br.com.devtools.apidevtools.resource.person.acess.artifact.Session;
 
 @RequestScoped
@@ -19,13 +20,18 @@ public class RestSessao {
 	private String nameAcess;
 	private String password;
 	
+	private IEntityMangerUtil entityMangerUtil;
 	
 	public EntityManager getEm() {
 		if (this.em == null) {
-			this.em = EntityManagerUtil.getEntityManager();
+			this.em = this.getEntityMangerUtil().getEntityManager();
 			this.em.getTransaction().begin();
 		}
 		return em;
+	}
+	
+	public void setEm(EntityManager em) {
+		this.em = em;
 	}
 
 	public Session getSession() {
@@ -80,6 +86,17 @@ public class RestSessao {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public IEntityMangerUtil getEntityMangerUtil() {
+		if (this.entityMangerUtil==null) {
+			this.entityMangerUtil = new EntityManagerUtil();
+		}
+		return entityMangerUtil;
+	}
+
+	public void setEntityMangerUtil(IEntityMangerUtil entityMangerUtil) {
+		this.entityMangerUtil = entityMangerUtil;
 	}
 
 }
