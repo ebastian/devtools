@@ -7,6 +7,8 @@ import { ProductComponentService } from '../../products-components/service//prod
 import { ComponentVersion } from '../../products-components/service/component-version';
 import { ComponentVersionService } from '../../products-components/service//component-version.service';
 
+import { BuildUpload } from '../service/build-upload';
+
 @Component({
   selector: 'app-upload-build',
   templateUrl: './upload-build.component.html',
@@ -19,47 +21,46 @@ import { ComponentVersionService } from '../../products-components/service//comp
 export class UploadBuildComponent implements OnInit {
 
   components: Array<ProductComponent>;
-  selectedComponentId:number
+  selectedComponent:ProductComponent
   versions: Array<ComponentVersion>;
   selectedVersionId: number;
-  buildNumber: number = 1;
+
   buildsUpload: Array<any> = [];
-  buildUpload: any = {
-     "component": 0,
-      "version": 0,
-      "build": 0,
-      "file": 'aaa'
-  };
-  buildFile: '';
+  buildUpload: BuildUpload;
 
   constructor(protected componentService: ProductComponentService, protected versionService: ComponentVersionService) { 
     this.components = new Array<ProductComponent>();
+    this.buildUpload = new BuildUpload(new ComponentVersion(new ProductComponent()));
     //seek by products with active versons and builds
-    this.componentService.getItens().then(data => this.components = (data !== null ? data as ProductComponent[] : new Array<ProductComponent>()));
+    this.componentService.getItens().then(data => this.components = (data !== null ? data : new Array<ProductComponent>()));
   }
 
   ngOnInit() {
+    console.clear();
   }
 
   componentSelect = (componentId: number) => {
-    this.selectedComponentId = componentId;
-    this.versionService.getActivesItensByComponentId(this.selectedComponentId).then(this.prepareResultVersions).then(this.sortVersions);
+    var component = this.components.find(c => c.id == componentId);
+    this.buildUpload.version.component = component;
+    if(component !== undefined && component.id !== undefined) {
+      this.versionService.getActivesItensByComponentId(component.id).then(this.prepareResultVersions).then(this.sortVersions);
+    }
   }
 
   versionSelect = (versionId: number) => {
-    this.selectedVersionId = versionId;
+    var version = this.versions.find(v => v.id == versionId);
+    version.component = this.buildUpload.version.component;
+    this.buildUpload.version = version;
+  }
+
+  fileSelect = (a) => {
+    //this.buildUpload.file = File;
+    console.log(JSON.stringify(a));
+    console.log(JSON.stringify(this.buildUpload.file));
   }
 
   prepareResultVersions = data => this.versions = (data !== null ? data as ComponentVersion[] : new Array<ComponentVersion>());
   sortVersions = () => this.versions.sort((item1, item2) => item2.id - item1.id);
 
-  clickSave = () => this.buildsUpload.push(
-    {
-      "component": this.selectedComponentId,
-      "version": 1,
-      "build": this.buildNumber,
-      "file": this.buildFile
-    }
-  );
-
+  clickSave = () => this.buildsUpload.push(this.buildUpload);
 }

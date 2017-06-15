@@ -10,22 +10,25 @@
     </div>
     <div class="col-md-3">
       <label>Versão</label>
-      <select class="form-control">
+      <select class="form-control" (change)="versionSelect($event.target.value)">
       <option selected disabled *ngIf="versions === null || versions === undefined || versions?.length === 0">Nenhuma versão ativa</option>
-      <option *ngFor="let version of versions">{{version.major + '.' + version.minor + '.' + version.release}}</option>
+      <option *ngFor="let version of versions" [value]="version.id">{{version.major + '.' + version.minor + '.' + version.release}}</option>
     </select>
     </div>
     <div class="col-md-1">
       <label>Build</label>
-      <input class="form-control" required [(ngModel)]="buildNumber">
+      <input class="form-control" required [(ngModel)]="buildUpload.build">
+    </div>
+     <div class="col-md-4">
+      <label>Observações</label>
+      <input class="form-control" [(ngModel)]="buildUpload.notes">
     </div>
   </div>
   <div class="row">
     <div class="col-md-12">
       <div class="form-group">
         <label for="exampleInputFile">Arquivo</label>
-        <input type="file" id="exampleInputFile" [(ngModel)]="buildFile">
-        <p class="help-block">Procure o arquivo referente a build.</p>
+        <input type="file" id="exampleInputFile" (change)="fileSelect($event.target)">
       </div>
     </div>
   </div>
@@ -52,10 +55,10 @@
         <th>Ações</th>
       </tr>
       <tr *ngFor="let b of buildsUpload">
-        <td>{{buildUp.component}}</td>
-        <td>{{buildUp.version}}</td>
-        <td>{{buildUp.build}}</td>
-        <td>{{buildUp.file}}</td>
+        <td>{{b.version.component.id}} - {{b.version.component.name}}</td>
+        <td>{{b.version.major}}.{{b.version.minor}}.{{b.version.release}}</td>
+        <td>{{b.build}}</td>
+        <td>{{b.file}}</td>
         <td>
           <div class="progress">
             <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
