@@ -53,7 +53,7 @@ public abstract class Controller<Model> {
 	@Inject
 	RestSessao sessao;
 	
-	private EntityManager getEm() {
+	public EntityManager getEm() {
 		return this.getSessao().getEm();
 	}
 	

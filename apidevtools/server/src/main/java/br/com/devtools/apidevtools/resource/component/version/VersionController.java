@@ -35,7 +35,7 @@ public class VersionController extends Controller<Version> {
 			this.component = componentController.get(this.componentId);
 			
 			if (this.component==null) {
-				throw new RestException("Comnonent com código "+this.componentId+" não encontrado.");
+				throw new RestException("Componente com código "+this.componentId+" não encontrado.");
 			}
 			
 		}
@@ -81,7 +81,7 @@ public class VersionController extends Controller<Version> {
 	@Override
 	protected void beforeRemove(Version model) throws RestException {
 		if (!this.getComponent().getId().equals(model.getComponent().getId())) {
-			throw new RestException("Esta Version não pertence ao Component "+this.getComponent().getId()+" - "+this.getComponent().getName()+".");
+			throw new RestException("Esta Versão não pertence ao Componente "+this.getComponent().getId()+" - "+this.getComponent().getName()+".");
 		}
 	}
 	

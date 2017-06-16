@@ -32,7 +32,7 @@ public class Component {
 	@Column(columnDefinition="text")
 	private String description;
 	
-	@Column(nullable=false, updatable=false)
+	@Column(nullable=false)
 	@XmlJavaTypeAdapter(value=LocalDateTimerAdapter.class)
 	private LocalDateTime creation;
 	

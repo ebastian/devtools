@@ -14,6 +14,7 @@ public class RestExceptionFilter implements ExceptionMapper<RestException> {
 	public Response toResponse(RestException e) {
 		
 		//System.out.println("ExceptionFilter");
+		e.printStackTrace();
 		return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
 		
 	}

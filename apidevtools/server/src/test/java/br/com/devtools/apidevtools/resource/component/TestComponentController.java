@@ -180,8 +180,9 @@ public class TestComponentController {
 		this.controller.put(1l, new TestComponentFactory().createValid().creationGreaterNow().get());
 	}
 	
+	
 	/**********************
-	 * CRUD Compnent
+	 * Rules Component
 	 **********************/
 	@Test
 	public void crud() throws Exception {
@@ -199,19 +200,36 @@ public class TestComponentController {
 		assertNotNull(c3);
 		assertEquals(c2.getName(), c3.getName());
 		
-		Component c4 = this.controller.kill(c1.getId());
-		assertNotNull(c4);
-		assertNotNull(c4.getDeath());
-		
-		Component c5 = this.controller.revive(c1.getId());
-		assertNotNull(c5);
-		assertNull(c5.getDeath());
-		
 		this.controller.delete(c1.getId());
-		Component c6 = this.controller.get(c1.getId());
-		assertNull(c6);
+		Component c4 = this.controller.get(c1.getId());
+		assertNull(c4);
 		
 		assertTrue(true);
+		
+	}
+	
+	@Test
+	public void kill() throws Exception {
+		
+		Component c1 = this.controller.post(new TestComponentFactory().createValid().get());
+		this.controller.kill(c1.getId());
+		
+		Component c2 = this.controller.get(c1.getId());
+		assertNotNull(c2);
+		assertNotNull(c2.getDeath());
+		
+	}
+	
+	@Test
+	public void revive() throws Exception {
+		
+		Component c1 = this.controller.post(new TestComponentFactory().createValid().get());
+		this.controller.kill(c1.getId());
+		this.controller.revive(c1.getId());
+		
+		Component c2 = this.controller.get(c1.getId());
+		assertNotNull(c2);
+		assertNull(c2.getDeath());
 		
 	}
 

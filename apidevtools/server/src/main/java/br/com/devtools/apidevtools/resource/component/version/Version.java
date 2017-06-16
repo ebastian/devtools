@@ -36,7 +36,7 @@ public class Version {
 	@JoinColumn(name="componentId", nullable=false, foreignKey=@ForeignKey(name="fk_Version_Component"))
 	private Component component;
 	
-	@Column(nullable=false, updatable=false)
+	@Column(nullable=false)
 	@XmlJavaTypeAdapter(value=LocalDateTimerAdapter.class)
 	private LocalDateTime creation;
 	
