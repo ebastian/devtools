@@ -38,7 +38,6 @@ export class ProductComponentService {
   }
 
   public save(item: ProductComponent): Promise<ProductComponent> {
-    this.setCreation(new Date())(item);
     const url = this.baseUrl;
     if (item.id != undefined && item.id !== null) {
       return this.http.put(url + "/" + item.id, JSON.stringify(item), { headers: this.headers })
@@ -46,7 +45,11 @@ export class ProductComponentService {
         .then(this.castResult)
         .catch(this.handleError);
     } else {
-      return this.http.post(url, JSON.stringify(item), { headers: this.headers })
+      var d = new Date();
+      d.setHours(d.getHours()-3);
+      item.creation = d;
+      var data = JSON.stringify(item).replace(/Z\"/, "\"");
+      return this.http.post(url, data, { headers: this.headers })
         .toPromise()
         .then(this.castResult)
         .catch(this.handleError);
@@ -93,6 +96,5 @@ export class ProductComponentService {
 
   castResult = item => item.json() as ProductComponent;
   castResults = response => response.json().list as ProductComponent[];
-  setCreation = (creationDate: Date) => (record: ProductComponent) => record.creation = (record.creation === undefined ? new Date() : (record.creation));
-
+  
 }

@@ -47,7 +47,7 @@ export class DownloadComponent implements OnInit {
   versionSelect = (versionId: number) => {
     this.selectedVersionId = versionId;
     console.log(this.selectedComponentId, this.selectedVersionId);
-    this.uploadService.getItens(this.selectedComponentId, this.selectedVersionId).then(
+    this.uploadService.getVersionBuilds(this.selectedComponentId, this.selectedVersionId).then(
       builds => this.builds = builds
     );
   }

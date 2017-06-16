@@ -8,16 +8,19 @@
       <option *ngFor="let comp of components" [value]="comp.id">{{comp.id + ' - ' + comp.name}}</option>
     </select>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
       <label>Versão</label>
       <select class="form-control" (change)="versionSelect($event.target.value)">
       <option selected disabled *ngIf="versions === null || versions === undefined || versions?.length === 0">Nenhuma versão ativa</option>
       <option *ngFor="let version of versions" [value]="version.id">{{version.id + " - " + version.major + '.' + version.minor + '.' + version.release}}</option>
     </select>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-2">
       <label>Build</label>
-      <input class="form-control" required [(ngModel)]="buildUpload.build">
+      <select class="form-control" (change)="buildSelect($event.target.value)">
+      <option selected disabled *ngIf="builds === null || builds === undefined || builds?.length === 0">Sem builds</option>
+      <option *ngFor="let build of builds" [value]="build.build">{{build.build}}</option>
+    </select>
     </div>
     <div class="col-md-4">
       <label>Observações</label>
