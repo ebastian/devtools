@@ -10,41 +10,41 @@ component2.id = 2;
 
 export const COMPONENTS_VERSIONS: ComponentVersion[] = [{
     'id': 1,
-    'major': '1',
-    'minor': '0',
-    'release': '0',
+    'major': 1,
+    'minor': 0,
+    'release': 0,
     'creation': new Date(),
     'death': new Date(),
     'component': component1
 }, {
     'id': 2,
-    'major': '1',
-    'minor': '1',
-    'release': '3',
+    'major': 1,
+    'minor': 1,
+    'release': 3,
     'creation': new Date(),
     'death': new Date(),
     'component': component1
 }, {
     'id': 3,
-    'major': '1',
-    'minor': '2',
-    'release': '0',
+    'major': 1,
+    'minor': 2,
+    'release': 0,
     'creation': new Date(),
     'death': null,
     'component': component1
 }, {
     'id': 4,
-    'major': '2',
-    'minor': '0',
-    'release': '2',
+    'major': 2,
+    'minor': 0,
+    'release': 2,
     'creation': new Date(),
     'death': null,
     'component': component2
 }, {
     'id': 5,
-    'major': '2',
-    'release': '1',
-    'minor': '1',
+    'major': 2,
+    'release': 1,
+    'minor': 1,
     'creation': new Date(),
     'death': null,
     'component': component2

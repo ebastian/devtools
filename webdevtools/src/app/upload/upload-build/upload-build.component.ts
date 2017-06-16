@@ -7,30 +7,36 @@ import { ProductComponentService } from '../../products-components/service//prod
 import { ComponentVersion } from '../../products-components/service/component-version';
 import { ComponentVersionService } from '../../products-components/service//component-version.service';
 
+import { UploadService } from '../service/upload.service';
 import { BuildUpload } from '../service/build-upload';
 
 @Component({
   selector: 'app-upload-build',
   templateUrl: './upload-build.component.html',
   styleUrls: ['./upload-build.component.css'],
-  providers: [ 
+  providers: [
     ProductComponentService,
-    ComponentVersionService 
+    ComponentVersionService,
+    UploadService
   ]
 })
 export class UploadBuildComponent implements OnInit {
 
   components: Array<ProductComponent>;
-  selectedComponent:ProductComponent
+  selectedComponent: ProductComponent
   versions: Array<ComponentVersion>;
   selectedVersionId: number;
 
   buildsUpload: Array<any> = [];
   buildUpload: BuildUpload;
 
-  constructor(protected componentService: ProductComponentService, protected versionService: ComponentVersionService) { 
+  constructor(protected componentService: ProductComponentService, 
+              protected versionService: ComponentVersionService,
+              protected uploadService: UploadService) {
+
     this.components = new Array<ProductComponent>();
     this.buildUpload = new BuildUpload(new ComponentVersion(new ProductComponent()));
+    this.buildUpload.id = 1;
     //seek by products with active versons and builds
     this.componentService.getItens().then(data => this.components = (data !== null ? data : new Array<ProductComponent>()));
   }
@@ -42,7 +48,7 @@ export class UploadBuildComponent implements OnInit {
   componentSelect = (componentId: number) => {
     var component = this.components.find(c => c.id == componentId);
     this.buildUpload.version.component = component;
-    if(component !== undefined && component.id !== undefined) {
+    if (component !== undefined && component.id !== undefined) {
       this.versionService.getActivesItensByComponentId(component.id).then(this.prepareResultVersions).then(this.sortVersions);
     }
   }
@@ -53,14 +59,20 @@ export class UploadBuildComponent implements OnInit {
     this.buildUpload.version = version;
   }
 
-  fileSelect = (a) => {
-    //this.buildUpload.file = File;
-    console.log(JSON.stringify(a));
-    console.log(JSON.stringify(this.buildUpload.file));
+  fileSelect = (event) => {
+    let fileList: FileList = event.target.files;
+    if (fileList.length > 0) {
+      this.buildUpload.file = fileList[0];
+    }
   }
 
   prepareResultVersions = data => this.versions = (data !== null ? data as ComponentVersion[] : new Array<ComponentVersion>());
   sortVersions = () => this.versions.sort((item1, item2) => item2.id - item1.id);
 
-  clickSave = () => this.buildsUpload.push(this.buildUpload);
+  sendBuild = () => {
+    //this.buildsUpload.push(this.buildUpload);
+    this.buildUpload.creation = new Date();
+    this.uploadService.saveBuild(this.buildUpload).then(a => console.log(a));
+    //this.uploadService.uploadBuild(this.buildUpload);
+  }
 }

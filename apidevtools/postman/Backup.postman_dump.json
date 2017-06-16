@@ -110,6 +110,25 @@
 			],
 			"folders": [
 				{
+					"id": "2b18f437-3d62-56c3-15e7-2b503f05682d",
+					"name": "Component Versions",
+					"description": "",
+					"write": true,
+					"order": [
+						"b67541cc-1260-515f-5916-0728f2a764fe",
+						"17373b42-fa8c-9922-68f9-95ceec5826c1",
+						"e746890c-b708-14b4-860b-3427b0e74ad4",
+						"d9a46779-6b7c-71c0-6582-c650806e1617",
+						"4de8e623-9fca-3492-975f-7c1eddf7538e",
+						"30dbe744-7bc2-b6e7-8b7c-36c9fedcb70c",
+						"14cbbca2-52fe-a371-53a3-40c02050ef37",
+						"b95cee59-473c-76c1-4f0d-46f6442c9413"
+					],
+					"collection": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
+					"owner": 0,
+					"collection_id": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48"
+				},
+				{
 					"id": "db697615-86e5-81ec-577f-135c06454bd7",
 					"name": "Components",
 					"description": "",
@@ -119,7 +138,9 @@
 						"a6e22c75-1fa2-6608-b954-2f6b2e7cd006",
 						"8b0045a0-4399-960f-1a7e-9b70d6ea6750",
 						"a33b791a-9689-4cff-86ad-f34487ad3dd4",
-						"e7c0e637-adec-85fb-5c6e-8cf676653e6d"
+						"e7c0e637-adec-85fb-5c6e-8cf676653e6d",
+						"ee7ae08a-7ffd-000b-3433-86588d530472",
+						"32cd254f-4f32-de6f-beee-d10878a44668"
 					],
 					"collection": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
 					"owner": 0,
@@ -143,22 +164,140 @@
 			"synced": true,
 			"remote_id": 0,
 			"owner": 0,
+			"sharedWithTeam": false,
 			"subscribed": false,
+			"remoteLink": "",
+			"remoteLinkUpdatedAt": null,
 			"public": false,
 			"createdAt": 1496351927777,
-			"updatedAt": 1496351927777,
+			"updatedAt": 1497561968491,
 			"write": true,
 			"published": false,
 			"favorite": false,
 			"permissions": {},
 			"syncedPermissions": {},
-			"sharedWithTeam": false,
-			"shared": false,
-			"hasRequests": true,
 			"requests": [
 				{
-					"id": "44d3ea7a-a5da-46ad-71e4-5ea78b6d446b",
-					"headers": "Accept: application/json\nsession-token: {{session-token}}\nuser-token: {{user-token}}\n",
+					"id": "14cbbca2-52fe-a371-53a3-40c02050ef37",
+					"headers": "Accept: application/json\nsession-token: {{session-token}}\n",
+					"headerData": [
+						{
+							"key": "Accept",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "session-token",
+							"value": "{{session-token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{apidevtools}}/component/31/version/20/build",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "GET",
+					"data": null,
+					"dataMode": "params",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1496575219172,
+					"name": "Get Builds",
+					"description": "",
+					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
+					"responses": []
+				},
+				{
+					"id": "17373b42-fa8c-9922-68f9-95ceec5826c1",
+					"headers": "Accept: application/json\nsession-token: {{session-token}}\n",
+					"headerData": [
+						{
+							"key": "Accept",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "session-token",
+							"value": "{{session-token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{apidevtools}}/component/31/version/20",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "GET",
+					"data": null,
+					"dataMode": "params",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1496571939728,
+					"name": "Get Version By Component and Id",
+					"description": "",
+					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
+					"responses": []
+				},
+				{
+					"id": "30dbe744-7bc2-b6e7-8b7c-36c9fedcb70c",
+					"headers": "Accept: application/json\nContent-Type: application/x-www-form-urlencoded\nsession-token: {{session-token}}\n",
+					"headerData": [
+						{
+							"key": "Accept",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/x-www-form-urlencoded",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "session-token",
+							"value": "{{session-token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{apidevtools}}/component/31/version/20/build/1/upload",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "POST",
+					"data": [
+						{
+							"key": "uploadedFile",
+							"value": {
+								"0": {}
+							},
+							"description": "",
+							"type": "file",
+							"enabled": true
+						}
+					],
+					"dataMode": "params",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1497557838716,
+					"name": "Upload Build",
+					"description": "",
+					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
+					"responses": []
+				},
+				{
+					"id": "32cd254f-4f32-de6f-beee-d10878a44668",
+					"headers": "Accept: application/json\nsession-token: {{session-token}}\nContent-Type: application/json\n",
 					"headerData": [
 						{
 							"key": "Accept",
@@ -173,8 +312,42 @@
 							"enabled": true
 						},
 						{
-							"key": "user-token",
-							"value": "{{user-token}}",
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{apidevtools}}/component/10/revive",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "PUT",
+					"data": "",
+					"dataMode": "raw",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1496562340608,
+					"name": "Revive Component",
+					"description": "",
+					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
+					"responses": []
+				},
+				{
+					"id": "44d3ea7a-a5da-46ad-71e4-5ea78b6d446b",
+					"headers": "Accept: application/json\nsession-token: {{session-token}}\n",
+					"headerData": [
+						{
+							"key": "Accept",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "session-token",
+							"value": "{{session-token}}",
 							"description": "",
 							"enabled": true
 						}
@@ -190,8 +363,42 @@
 					"tests": null,
 					"currentHelper": "normal",
 					"helperAttributes": {},
-					"time": 1496352679158,
+					"time": 1496562029254,
 					"name": "Get Components",
+					"description": "",
+					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
+					"responses": []
+				},
+				{
+					"id": "4de8e623-9fca-3492-975f-7c1eddf7538e",
+					"headers": "Accept: application/json\nsession-token: {{session-token}}\n",
+					"headerData": [
+						{
+							"key": "Accept",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "session-token",
+							"value": "{{session-token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{apidevtools}}/component/13",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "DELETE",
+					"data": "",
+					"dataMode": "raw",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1496571928167,
+					"name": "Delete Component",
 					"description": "",
 					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
 					"responses": []
@@ -237,63 +444,195 @@
 				},
 				{
 					"id": "8b0045a0-4399-960f-1a7e-9b70d6ea6750",
-					"headers": "Content-Type: application/json\nAccept: application/json\n",
+					"headers": "Content-Type: application/json\nsession-token: {{session-token}}\n",
+					"headerData": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "session-token",
+							"value": "{{session-token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
 					"url": "{{apidevtools}}/component",
+					"queryParams": [],
 					"preRequestScript": null,
 					"pathVariables": {},
+					"pathVariableData": [],
 					"method": "POST",
-					"data": "{\n  \"name\": \"Component 20\",\n  \"description\": \"Description of Component 20\",\n  \"creation\": \"2017-05-28T23:47:01.278579\",\n  \"death\": null\n}",
+					"data": "{\n  \"name\": \"WinSaúde - Executável\",\n  \"filename\": \"WinSaude.exe\",\n  \"description\": \"Description of Component 20\",\n  \"creation\": \"2017-05-28T23:47:01.278579\"\n}",
 					"dataMode": "raw",
 					"tests": null,
 					"currentHelper": "normal",
 					"helperAttributes": {},
-					"time": 1496026579746,
+					"time": 1497576348109,
 					"name": "Include Component",
 					"description": "",
 					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
-					"responses": [],
-					"owner": 0,
-					"folder": "db697615-86e5-81ec-577f-135c06454bd7"
+					"responses": []
 				},
 				{
 					"id": "a33b791a-9689-4cff-86ad-f34487ad3dd4",
-					"headers": "Content-Type: application/json\nAccept: application/json\n",
+					"headers": "Accept: application/json\nsession-token: {{session-token}}\nContent-Type: application/json\n",
+					"headerData": [
+						{
+							"key": "Accept",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "session-token",
+							"value": "{{session-token}}",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						}
+					],
 					"url": "{{apidevtools}}/component/10",
+					"queryParams": [],
 					"preRequestScript": null,
 					"pathVariables": {},
+					"pathVariableData": [],
 					"method": "PUT",
-					"data": "{\n  \"name\": \"Component 20\",\n  \"description\": \"Description of Component 20\",\n  \"creation\": \"2017-05-28T23:47:01.278579\",\n  \"death\": null\n}",
+					"data": "{\n  \"name\": \"Component alterado\",\n  \"description\": \"Description of Component 20\",\n  \"creation\": \"2017-05-28T23:47:01.278579\"\n}",
 					"dataMode": "raw",
 					"tests": null,
 					"currentHelper": "normal",
 					"helperAttributes": {},
-					"time": 1496028034291,
+					"time": 1496562269197,
 					"name": "Edit Component",
 					"description": "",
 					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
-					"responses": [],
-					"owner": 0,
-					"folder": "db697615-86e5-81ec-577f-135c06454bd7"
+					"responses": []
 				},
 				{
 					"id": "a6e22c75-1fa2-6608-b954-2f6b2e7cd006",
-					"headers": "",
-					"url": "{{apidevtools}}/component/1",
+					"headers": "Accept: application/json\nsession-token: {{session-token}}\n",
+					"headerData": [
+						{
+							"key": "Accept",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "session-token",
+							"value": "{{session-token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{apidevtools}}/component/9",
+					"queryParams": [],
 					"preRequestScript": null,
 					"pathVariables": {},
+					"pathVariableData": [],
 					"method": "GET",
 					"data": null,
 					"dataMode": "params",
 					"tests": null,
 					"currentHelper": "normal",
 					"helperAttributes": {},
-					"time": 1496024174175,
+					"time": 1496562025170,
 					"name": "Get Component By Id",
 					"description": "",
 					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
-					"responses": [],
-					"owner": 0,
-					"folder": "db697615-86e5-81ec-577f-135c06454bd7"
+					"responses": []
+				},
+				{
+					"id": "b67541cc-1260-515f-5916-0728f2a764fe",
+					"headers": "Accept: application/json\nsession-token: {{session-token}}\n",
+					"headerData": [
+						{
+							"key": "Accept",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "session-token",
+							"value": "{{session-token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{apidevtools}}/component/31/version",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "GET",
+					"data": null,
+					"dataMode": "params",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1496571846409,
+					"name": "Get Versions",
+					"description": "",
+					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
+					"responses": []
+				},
+				{
+					"id": "b95cee59-473c-76c1-4f0d-46f6442c9413",
+					"headers": "Accept: application/json\nContent-Type: application/x-www-form-urlencoded\nsession-token: {{session-token}}\n",
+					"headerData": [
+						{
+							"key": "Accept",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/x-www-form-urlencoded",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "session-token",
+							"value": "{{session-token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{apidevtools}}/component/31/version/20/build/1/upload",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "POST",
+					"data": [
+						{
+							"key": "uploadedFile",
+							"value": {
+								"0": {}
+							},
+							"description": "",
+							"type": "file",
+							"enabled": true
+						}
+					],
+					"dataMode": "params",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1497561981205,
+					"name": "Save Build",
+					"description": "",
+					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
+					"responses": []
 				},
 				{
 					"id": "ba28b165-e113-755c-523b-b68610adeb2d",
@@ -319,6 +658,80 @@
 					"helperAttributes": {},
 					"time": 1496352216040,
 					"name": "Login",
+					"description": "",
+					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
+					"responses": []
+				},
+				{
+					"id": "d9a46779-6b7c-71c0-6582-c650806e1617",
+					"headers": "Accept: application/json\nsession-token: {{session-token}}\n",
+					"headerData": [
+						{
+							"key": "Accept",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "session-token",
+							"value": "{{session-token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{apidevtools}}/component/10",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "PUT",
+					"data": "{\n  \"name\": \"Component 20\",\n  \"description\": \"Description of Component 20\",\n  \"creation\": \"2017-05-28T23:47:01.278579\",\n  \"death\": null\n}",
+					"dataMode": "raw",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1496572216919,
+					"name": "Edit Component",
+					"description": "",
+					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
+					"responses": []
+				},
+				{
+					"id": "e746890c-b708-14b4-860b-3427b0e74ad4",
+					"headers": "Accept: application/json\nContent-Type: application/json\nsession-token: {{session-token}}\n",
+					"headerData": [
+						{
+							"key": "Accept",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "session-token",
+							"value": "{{session-token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{apidevtools}}/component/31/version",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "POST",
+					"data": "{\n  \"creation\": \"2017-06-04T09:48:43.882Z\",\n  \"death\": \"2017-06-04T07:06:52.111Z\",\n  \"major\": 4,\n  \"minor\": 2,\n  \"release\": 2\n}",
+					"dataMode": "raw",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1496572122108,
+					"name": "Include Version",
 					"description": "",
 					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
 					"responses": []
@@ -362,6 +775,46 @@
 					"responses": [],
 					"owner": 0,
 					"folder": "20cf0e0c-0fab-e540-de99-c500bb36c81e"
+				},
+				{
+					"id": "ee7ae08a-7ffd-000b-3433-86588d530472",
+					"headers": "Accept: application/json\nsession-token: {{session-token}}\nContent-Type: application/json\n",
+					"headerData": [
+						{
+							"key": "Accept",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "session-token",
+							"value": "{{session-token}}",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{apidevtools}}/component/10/kill",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "PUT",
+					"data": "",
+					"dataMode": "raw",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1496562301337,
+					"name": "Kill Component",
+					"description": "",
+					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
+					"responses": []
 				}
 			]
 		},
@@ -3402,27 +3855,27 @@
 				{
 					"enabled": true,
 					"key": "session-token",
-					"value": "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a9188c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
+					"value": "ab1dc8e9d26be0b58d575e2431e04d612119d95fdf5c70bae0ac366237810d5e5512b4ffadf07ba6f8ddfbacd8ae3d1a4372652fca64e64f466e2c171cabf786",
 					"type": "text"
 				}
 			],
 			"team": null,
-			"timestamp": 1496352516663
+			"timestamp": 1497576355085
 		}
 	],
 	"headerPresets": [],
 	"globals": [
 		{
-			"enabled": true,
 			"key": "host",
 			"value": "http://localhost:8080",
-			"type": "text"
+			"type": "text",
+			"enabled": true
 		},
 		{
-			"enabled": true,
 			"key": "apidevtools",
 			"value": "{{host}}/apidevtools/api",
-			"type": "text"
+			"type": "text",
+			"enabled": true
 		}
 	]
 }

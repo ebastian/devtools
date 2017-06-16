@@ -4,6 +4,7 @@ export class ProductComponent extends Entity {
   
   name: string;
   description: string;
+  filename: string;
   creation: Date;
   death: Date;
   //components: ProductComponent[];

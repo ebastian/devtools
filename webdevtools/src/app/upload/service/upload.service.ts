@@ -38,6 +38,60 @@ export class UploadService {
       .catch(this.handleError);
   }
 
+  public saveBuild(buildUpload: BuildUpload) {
+    const url = this.baseUrl + "/" + buildUpload.version.component.id
+      + "/version/" + buildUpload.version.id
+      + "/build";
+
+    return this.http.post(url, JSON.stringify({
+      versionId: buildUpload.version.id,
+      build: buildUpload.build,
+      notes: buildUpload.notes,
+      creation: buildUpload.creation,
+      file: buildUpload.file,
+    }), { headers: this.headers })
+      .toPromise()
+      .catch(this.handleError);
+  }
+
+  public uploadBuild(buildUpload: BuildUpload) {
+
+    const url = this.baseUrl + "/" + buildUpload.version.component.id
+      + "/version/" + buildUpload.version.id
+      + "/build/" + buildUpload.id
+      + "/upload";
+
+    console.log(url);
+
+    var headersUpload = new Headers({
+      'Content-Type': 'multipart/form-data',
+      'Accept': 'application/json',
+      'user-token': this.authService.userToken,
+      'session-token': this.authService.sessionToken
+    });
+
+    let formData: FormData = new FormData();
+    formData.append('uploadFile', buildUpload.file, buildUpload.file.name);
+
+    return this.http.post(url, formData, { headers: headersUpload })
+      .toPromise()
+      .catch(this.handleError);
+
+    /*
+      let headers = new Headers();
+      headers.append('Content-Type', 'multipart/form-data');
+      headers.append('Accept', 'application/json');
+      let options = new RequestOptions({ headers: headers });
+      this.http.post(url, formData, options)
+        .map(res => res.json())
+        .catch(error => Observable.throw(error))
+        .subscribe(
+        data => console.log('success'),
+        error => console.log(error)
+        )
+    */
+  }
+
   /*
   public save(item: BuildUpload): Promise<BuildUpload> {
     this.setCreation(new Date())(item);
@@ -55,7 +109,7 @@ export class UploadService {
     }
   }
   */
-  
+
   /*
   public getItem(id: number): Promise<ProductComponent> {
     const url = this.baseUrl + "/" + id;
