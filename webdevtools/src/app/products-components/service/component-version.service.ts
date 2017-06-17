@@ -40,14 +40,17 @@ export class ComponentVersionService {
 
   public save(item: ComponentVersion): Promise<ComponentVersion> {
     const url = this.baseUrl + "/" + item.component.id + "/version";
-    this.setCreation(new Date())(item);
     if (item.id != undefined && item.id !== null) {
       return this.http.put(url + "/" + item.id, JSON.stringify(item), { headers: this.headers })
         .toPromise()
         .then(this.castResult)
         .catch(this.handleError);
     } else {
-      return this.http.post(url, JSON.stringify(item), { headers: this.headers })
+      var d = new Date();
+      d.setHours(d.getHours()-3);
+      item.creation = d;
+      var data = JSON.stringify(item).replace(/Z\"/, "\"");
+      return this.http.post(url, data, { headers: this.headers })
         .toPromise()
         .then(this.castResult)
         .catch(this.handleError);
@@ -103,5 +106,4 @@ export class ComponentVersionService {
 
   castResult = item => item.json() as ComponentVersion;
   castResults = response => response.json().list as ComponentVersion[];
-  setCreation = (creationDate: Date) => (record: ComponentVersion) => record.creation = (record.creation === undefined ? new Date() : (record.creation));
 }

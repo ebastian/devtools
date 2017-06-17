@@ -29,7 +29,7 @@ export class UploadService {
     this.baseUrl = config.apiEndpoint + "component";
   }
 
-  public getItens(componentId: number, versionId: number): Promise<BuildUpload[]> {
+  public getVersionBuilds(componentId: number, versionId: number): Promise<BuildUpload[]> {
     const url = this.baseUrl + "/" + componentId + "/version/" + versionId + "/build";
     console.log(url);
     return this.http.get(url, { headers: this.headers })
@@ -43,13 +43,20 @@ export class UploadService {
       + "/version/" + buildUpload.version.id
       + "/build";
 
-    return this.http.post(url, JSON.stringify({
-      versionId: buildUpload.version.id,
-      build: buildUpload.build,
-      notes: buildUpload.notes,
-      creation: buildUpload.creation,
-      file: buildUpload.file,
-    }), { headers: this.headers })
+    var d = new Date();
+    d.setHours(d.getHours() - 3);
+    buildUpload.creation = d;
+
+    var item = { 
+      "build": buildUpload.build,
+      "notes": buildUpload.notes,
+      "creation": d,
+      "file": buildUpload.file,
+    };
+
+    var data = JSON.stringify(item).replace(/Z\"/, "\"");
+
+    return this.http.post(url, data, { headers: this.headers })
       .toPromise()
       .catch(this.handleError);
   }
@@ -60,8 +67,6 @@ export class UploadService {
       + "/version/" + buildUpload.version.id
       + "/build/" + buildUpload.id
       + "/upload";
-
-    console.log(url);
 
     var headersUpload = new Headers({
       'Content-Type': 'multipart/form-data',
