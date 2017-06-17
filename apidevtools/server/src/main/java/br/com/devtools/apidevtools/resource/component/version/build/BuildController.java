@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.TypedQuery;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -27,9 +28,11 @@ import br.com.devtools.apidevtools.resource.component.version.VersionController;
 @Path("component/{componentId}/version/{versionId}/build")
 public class BuildController extends Controller<Build> {
 
-	@PathParam("componentId") Long componentId;
+	@PathParam("componentId")
+	private Long componentId;
 	
-	@PathParam("versionId") Long versionId;
+	@PathParam("versionId")
+	private Long versionId;
 
 	@Override
 	public Class<Build> getClasse() {
@@ -45,11 +48,11 @@ public class BuildController extends Controller<Build> {
 			VersionController versionController = new VersionController();
 			versionController.setSessao(this.getSessao());
 			versionController.setContext(this.getContext());
-			versionController.setComponentId(this.componentId);
-			this.version = versionController.get(this.versionId);
+			versionController.setComponentId(this.getComponentId());
+			this.version = versionController.get(this.getVersionId());
 
 			if (this.version == null) {
-				throw new RestException("Version com código " + this.versionId + " não encontrado.");
+				throw new RestException("Version com código " + this.getVersionId() + " não encontrado.");
 			}
 
 		}
@@ -114,6 +117,15 @@ public class BuildController extends Controller<Build> {
 				
 			}
 			
+			String sql = " select length(u.bytes) from Upload u where u.buildId = :buildId ";
+			TypedQuery<Integer> query = this.getSessao().getEm().createQuery(sql, Integer.class);
+			query.setParameter("buildId", buildId);
+			Integer size = query.getSingleResult();
+			
+			Build build = this.get(buildId);
+			build.setSize(size);
+			this.getSessao().getEm().merge(build);
+			
 			this.getSessao().commit();
 			
 		} catch (Exception e) {
@@ -134,10 +146,14 @@ public class BuildController extends Controller<Build> {
 			Build build = this.get(buildId);
 			
 			Upload upload = new Upload();
+			upload.setId(build.getId());
 			upload.setBuild(build);
 			upload.setBytes(bytes);
 			
+			build.setSize(bytes.length);
+			
 			this.getSessao().getEm().persist(upload);
+			this.getSessao().getEm().merge(build);
 			this.getSessao().commit();
 			
 		} catch (Exception e) {
@@ -167,7 +183,7 @@ public class BuildController extends Controller<Build> {
 	@GET
 	@Path("{id}/download/{nome}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public byte[] downloadComNome(@PathParam("id") Long buildId, @PathParam("nome") String nome) throws RestException {
+	public byte[] download(@PathParam("id") Long buildId, @PathParam("nome") String nome) throws RestException {
 		
 		try {
 			
@@ -178,6 +194,22 @@ public class BuildController extends Controller<Build> {
 			throw new RestException(e);
 		}
 		
+	}
+
+	public Long getComponentId() {
+		return componentId;
+	}
+
+	public void setComponentId(Long componentId) {
+		this.componentId = componentId;
+	}
+
+	public Long getVersionId() {
+		return versionId;
+	}
+
+	public void setVersionId(Long versionId) {
+		this.versionId = versionId;
 	}
 	
 }

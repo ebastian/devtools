@@ -36,7 +36,7 @@ public class Build {
 	@JoinColumn(name="versionId", nullable=false, foreignKey=@ForeignKey(name="fk_Build_Version"))
 	private Version version;
 
-	@Column(nullable=false, updatable=false)
+	@Column(nullable=false)
 	@XmlJavaTypeAdapter(value=LocalDateTimerAdapter.class)
 	private LocalDateTime creation;
 	
@@ -47,6 +47,9 @@ public class Build {
 	@Column(insertable=false)
 	@XmlJavaTypeAdapter(value=LocalDateTimerAdapter.class)
 	private LocalDateTime death;
+
+	@Column
+	private Integer size;
 	
 	@Column(nullable=false)
 	private Integer build;
@@ -108,6 +111,14 @@ public class Build {
 
 	public void setNotes(String notes) {
 		this.notes = notes;
+	}
+
+	public Integer getSize() {
+		return size;
+	}
+
+	public void setSize(Integer size) {
+		this.size = size;
 	}
 	
 }
