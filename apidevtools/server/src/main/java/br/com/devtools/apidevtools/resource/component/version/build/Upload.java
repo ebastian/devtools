@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Upload {
 
 	@Id
+	@JsonIgnore
 	private Long buildId;
 	
 	@JsonIgnore
@@ -26,11 +27,11 @@ public class Upload {
 	@Column(nullable=false, updatable=false)
 	private byte[] bytes;
 
-	public Long getId() {
+	public Long getBuildId() {
 		return buildId;
 	}
 
-	public void setId(Long id) {
+	public void setBuildId(Long id) {
 		this.buildId = id;
 	}
 

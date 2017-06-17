@@ -246,4 +246,37 @@ public class TestBuildController {
 		
 	}
 	
+	@Test
+	public void uploadJson() throws Exception {
+		
+		Build b1 = this.controller.post(new TestBuildFactory().createValid().get());
+		assertNotNull(b1);
+		assertNotNull(b1.getId());
+		
+		String filename = "pom.xml";
+		File file = new File(filename);
+		
+		try (FileInputStream fis = new FileInputStream(file)) {
+			
+			byte[] bytes = new byte[fis.available()];
+			fis.read(bytes);
+			
+			Upload upload = new Upload();
+			upload.setBytes(bytes);
+			
+			Response response = this.controller.upload(upload, b1.getId());
+			
+			assertNotNull(response);
+			assertEquals(Status.OK.getStatusCode(), response.getStatus());
+			
+			byte[] download = this.controller.download(b1.getId());
+			assertNotNull(download);
+			assertEquals(new String(bytes), new String(download));
+			
+		} catch (IOException e) {
+			assertTrue("Erro", false);
+		}
+		
+	}
+	
 }

@@ -146,7 +146,7 @@ public class BuildController extends Controller<Build> {
 			Build build = this.get(buildId);
 			
 			Upload upload = new Upload();
-			upload.setId(build.getId());
+			upload.setBuildId(build.getId());
 			upload.setBuild(build);
 			upload.setBytes(bytes);
 			
@@ -164,20 +164,21 @@ public class BuildController extends Controller<Build> {
 		
 	}
 	
+	@POST
+	@Path("{id}/upload")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response upload(Upload upload, @PathParam("id") Long buildId) throws RestException {
+		
+		return this.upload(upload.getBytes(), buildId);
+		
+	}
+	
+	
 	@GET
 	@Path("{id}/download")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public byte[] download(@PathParam("id") Long buildId) throws RestException {
-		
-		try {
-			
-			Upload upload = this.getSessao().getEm().find(Upload.class, buildId);
-			return upload.getBytes();
-			
-		} catch (Exception e) {
-			throw new RestException(e);
-		}
-		
+		return this.download(buildId, null);
 	}
 	
 	@GET
