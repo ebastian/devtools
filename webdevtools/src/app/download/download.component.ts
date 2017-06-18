@@ -13,24 +13,24 @@ import { UploadService } from '../upload/service/upload.service';
   selector: 'app-download',
   templateUrl: './download.component.html',
   styleUrls: ['./download.component.css'],
-   providers: [ 
+  providers: [
     ProductComponentService,
     ComponentVersionService,
-    UploadService 
+    UploadService
   ]
 })
 export class DownloadComponent implements OnInit {
 
   components: Array<ProductComponent>;
-  selectedComponentId:number
+  selectedComponent: ProductComponent;
   versions: Array<ComponentVersion>;
-  selectedVersionId: number;
+  selectedVersion: ComponentVersion;
 
   builds: Array<BuildUpload>;
 
-  constructor(protected componentService: ProductComponentService, 
-              protected versionService: ComponentVersionService,
-              protected uploadService: UploadService) { 
+  constructor(protected componentService: ProductComponentService,
+    protected versionService: ComponentVersionService,
+    protected uploadService: UploadService) {
     this.components = new Array<ProductComponent>();
     //seek by products with active versons and builds
     this.componentService.getItens().then(data => this.components = (data !== null ? data as ProductComponent[] : new Array<ProductComponent>()));
@@ -40,16 +40,20 @@ export class DownloadComponent implements OnInit {
   }
 
   componentSelect = (componentId: number) => {
-    this.selectedComponentId = componentId;
-    this.versionService.getActivesItensByComponentId(this.selectedComponentId).then(this.prepareResultVersions).then(this.sortVersions);
+    this.selectedComponent = this.components.find(c => c.id == componentId);
+    this.versionService.getActivesItensByComponentId(this.selectedComponent.id)
+      .then(this.prepareResultVersions)
+      .then(this.sortVersions)
+      .then(this.selectLastVersion);
   }
 
+  selectLastVersion = () => this.versions.length > 0 ? this.versionSelect(this.versions[0].id) : false;
   versionSelect = (versionId: number) => {
-    this.selectedVersionId = versionId;
-    console.log(this.selectedComponentId, this.selectedVersionId);
-    this.uploadService.getVersionBuilds(this.selectedComponentId, this.selectedVersionId).then(
-      builds => this.builds = builds
-    );
+    this.selectedVersion = this.versions.find(v => v.id == versionId);
+    this.selectedVersion.component = this.selectedComponent;
+    this.uploadService.getVersionBuilds(this.selectedComponent.id, this.selectedVersion.id)
+      .then(builds => this.builds = builds)
+      .then(() => this.builds.map(b => b.version = this.selectedVersion));
   }
 
   prepareResultVersions = data => this.versions = (data !== null ? data as ComponentVersion[] : new Array<ComponentVersion>());

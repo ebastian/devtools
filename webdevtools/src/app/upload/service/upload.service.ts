@@ -31,7 +31,6 @@ export class UploadService {
 
   public getVersionBuilds(componentId: number, versionId: number): Promise<BuildUpload[]> {
     const url = this.baseUrl + "/" + componentId + "/version/" + versionId + "/build";
-    console.log(url);
     return this.http.get(url, { headers: this.headers })
       .toPromise()
       .then(this.castResults)
@@ -39,7 +38,7 @@ export class UploadService {
   }
 
   public saveBuild(buildUpload: BuildUpload) {
-    const url = this.baseUrl + "/" + buildUpload.version.component.id
+    var url = this.baseUrl + "/" + buildUpload.version.component.id
       + "/version/" + buildUpload.version.id
       + "/build";
 
@@ -47,18 +46,22 @@ export class UploadService {
     d.setHours(d.getHours() - 3);
     buildUpload.creation = d;
 
-    var item = { 
-      "build": buildUpload.build,
-      "notes": buildUpload.notes,
-      "creation": d,
-      "file": buildUpload.file,
-    };
-
+    var item = buildUpload.getBuildInfo();
     var data = JSON.stringify(item).replace(/Z\"/, "\"");
 
-    return this.http.post(url, data, { headers: this.headers })
-      .toPromise()
-      .catch(this.handleError);
+    if (item.id == null || item.id == undefined) {
+      return this.http.post(url, data, { headers: this.headers })
+        .toPromise()
+        .then(this.castResult)
+        .catch(this.handleError);
+
+    } else {
+      url += "/" + item.id
+      return this.http.put(url, data, { headers: this.headers })
+        .toPromise()
+        .then(this.castResult)
+        .catch(this.handleError);
+    }
   }
 
   public uploadBuild(buildUpload: BuildUpload) {
@@ -69,32 +72,29 @@ export class UploadService {
       + "/upload";
 
     var headersUpload = new Headers({
-      'Content-Type': 'multipart/form-data',
-      'Accept': 'application/json',
       'user-token': this.authService.userToken,
       'session-token': this.authService.sessionToken
     });
 
     let formData: FormData = new FormData();
-    formData.append('uploadFile', buildUpload.file, buildUpload.file.name);
+    formData.append('uploadedFile', buildUpload.file, buildUpload.file.name);
 
     return this.http.post(url, formData, { headers: headersUpload })
       .toPromise()
-      .catch(this.handleError);
+      .then(this.castUploadResult(buildUpload.id))
+  }
 
-    /*
-      let headers = new Headers();
-      headers.append('Content-Type', 'multipart/form-data');
-      headers.append('Accept', 'application/json');
-      let options = new RequestOptions({ headers: headers });
-      this.http.post(url, formData, options)
-        .map(res => res.json())
-        .catch(error => Observable.throw(error))
-        .subscribe(
-        data => console.log('success'),
-        error => console.log(error)
-        )
-    */
+  castUploadResult = (buildUploadId: number) => (result: any) => buildUploadId;
+
+  public delete(buildUpload: BuildUpload): Promise<void> {
+    const url = this.baseUrl + "/" + buildUpload.version.component.id
+      + "/version/" + buildUpload.version.id
+      + "/build/" + buildUpload.id;
+
+    return this.http.delete(url, { headers: this.headers })
+      .toPromise()
+      .then((res) => JSON.stringify(res))
+      .catch(this.handleError);
   }
 
   /*

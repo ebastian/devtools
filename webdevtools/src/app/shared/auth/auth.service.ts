@@ -49,7 +49,7 @@ export class AuthService {
         window.localStorage.setItem('session-token', this.sessionToken)
         this.toggleLogin(true);
         return true
-      })
+      });
   }
 
   logout(): void {

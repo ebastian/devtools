@@ -3,7 +3,6 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 
 import { ProductComponent } from '../service/product-component';
 import { ComponentVersion } from '../service/component-version';
-
 import { ComponentVersionService } from '../service/component-version.service';
 
 @Component({
