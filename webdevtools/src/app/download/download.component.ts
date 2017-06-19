@@ -52,11 +52,21 @@ export class DownloadComponent implements OnInit {
     this.selectedVersion = this.versions.find(v => v.id == versionId);
     this.selectedVersion.component = this.selectedComponent;
     this.uploadService.getVersionBuilds(this.selectedComponent.id, this.selectedVersion.id)
-      .then(builds => this.builds = builds)
+      .then(builds => this.builds = builds.filter(b => b.size != undefined))
       .then(() => this.builds.map(b => b.version = this.selectedVersion));
   }
 
   prepareResultVersions = data => this.versions = (data !== null ? data as ComponentVersion[] : new Array<ComponentVersion>());
   sortVersions = () => this.versions.sort((item1, item2) => item2.id - item1.id);
+
+  clickDownload = (build: BuildUpload) => {
+    this.uploadService.downloadBuild(build);
+  }
+
+  clickCopyLink = (build: BuildUpload) => alert(
+    build.version.component.name + " - "
+    + build.version.major + "." + build.version.minor + "." + build.version.release
+    + "\nLink para download com validade de 10 minutos:\n\n"
+    + this.uploadService.getDownloadLink(build));
 
 }

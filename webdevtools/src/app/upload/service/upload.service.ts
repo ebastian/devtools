@@ -17,7 +17,7 @@ export class UploadService {
 
   constructor( @Inject(APPCONFIG) private config: IAppConfig,
     private http: Http,
-    private authService: AuthService) {
+    private authService: AuthService ) {
 
     this.headers = new Headers({
       'Content-Type': 'application/json',
@@ -96,6 +96,38 @@ export class UploadService {
       .then((res) => JSON.stringify(res))
       .catch(this.handleError);
   }
+  
+  public getDownloadLink = (buildUpload: BuildUpload) => {
+    return this.baseUrl + "/" + buildUpload.version.component.id
+      + "/version/" + buildUpload.version.id
+      + "/build/" + buildUpload.id
+      + "/download";
+  }
+
+  public downloadBuild(buildUpload: BuildUpload) {
+
+    const url = this.baseUrl + "/" + buildUpload.version.component.id
+      + "/version/" + buildUpload.version.id
+      + "/build/" + buildUpload.id
+      + "/download";
+
+    var headersUpload = new Headers({
+      'Accept': 'application/octet-stream',
+      'user-token': this.authService.userToken,
+      'session-token': this.authService.sessionToken
+    });
+
+    return this.http.get(url, { headers: headersUpload })
+      .toPromise()
+      .then(data => this.downloadFile(data))
+      .catch(this.handleError);
+  }
+
+  downloadFile(data: Response){
+  var blob = new Blob([data], { type: 'application/octet-binary' });
+  var url= window.URL.createObjectURL(blob);
+  window.open(url);
+}
 
   /*
   public save(item: BuildUpload): Promise<BuildUpload> {
