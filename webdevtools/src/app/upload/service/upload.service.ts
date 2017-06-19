@@ -123,7 +123,7 @@ export class UploadService {
       .catch(this.handleError);
   }
 
-  downloadFile(data: Response){
+  downloadFile(data: any){
   var blob = new Blob([data], { type: 'application/octet-binary' });
   var url= window.URL.createObjectURL(blob);
   window.open(url);
