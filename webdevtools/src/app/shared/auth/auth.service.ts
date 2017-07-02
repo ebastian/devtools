@@ -15,14 +15,9 @@ import { IAppConfig } from '../../iapp.config';
 @Injectable()
 export class AuthService {
 
-  private headers = new Headers({
-    'user-token': 'YWRtaW47YWRtaW4'
-  });
-  
-
   authUrl: string = this.config.apiEndpoint + "acess/login";
 
-  userToken: string = 'YWRtaW47YWRtaW4';
+  userToken: string;
   sessionToken: string;
 
   // store the URL so we can redirect after logging in
@@ -31,7 +26,7 @@ export class AuthService {
 
   // Observable navItem source
   private loginState = new BehaviorSubject<boolean>(false);
-  
+
   public onToggleLogIn = this.loginState.asObservable();
 
   constructor( @Inject(APPCONFIG) private config: IAppConfig, private http: Http, private router: Router) {
@@ -41,15 +36,40 @@ export class AuthService {
 
   isLoggedIn = (): boolean => window.localStorage.getItem('session-token') !== null;
 
-  login(): Observable<boolean> {
+  login(userName: string, password: string) {
+
+    this.userToken = btoa(userName + ";" + password);
     window.localStorage.setItem('user-token', this.userToken);
-    return this.http.post(this.authUrl, null, { headers: this.headers })
-      .map(res => {
-        this.sessionToken = res.json().hash;
-        window.localStorage.setItem('session-token', this.sessionToken)
-        this.toggleLogin(true);
-        return true
-      });
+
+    var headers = new Headers({
+      'user-token': this.userToken
+    });
+
+    return this.http.post(this.authUrl, null, { headers: headers })
+      .toPromise()
+      .then(this.loginResult)
+      .catch(this.loginError);
+
+    /*
+    .map(res => {
+      this.sessionToken = res.json().hash;
+      window.localStorage.setItem('session-token', this.sessionToken)
+      this.toggleLogin(true);
+      return true
+    });
+    */
+  }
+
+  loginResult = res => {
+    this.sessionToken = res.json().hash;
+    window.localStorage.setItem('session-token', this.sessionToken)
+    this.toggleLogin(true);
+    return true
+  };
+
+  private loginError(error: any): Promise<any> {
+    alert(error._body + '\n\nDetalhes: ' + JSON.stringify(error));
+    return Promise.reject(error.message || error);
   }
 
   logout(): void {
@@ -59,7 +79,7 @@ export class AuthService {
     this.toggleLogin(false);
   }
 
-  toggleLogin(loggedIn:boolean) {
+  toggleLogin(loggedIn: boolean) {
     console.log("auth.service.toggleLogin: " + loggedIn);
     this.loginState.next(loggedIn);
   }

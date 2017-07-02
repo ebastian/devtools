@@ -10,6 +10,14 @@
     <div class="panel-body">
       Você pode efetuar upload de builds, arquivos, bases de dados. Selecione o tipo de conteúdo você deseja publicar.
       <br>
+
+      <br>
+      <form action="http://localhost:8080/apidevtools/api/component/1/version/4/build/63/download">
+        <input type="submit" value="Teste Download Form">
+      </form>
+      <br>
+      <br>
+
       <div class="container-fluid">
         <br>
         <div class="row">
@@ -44,7 +52,7 @@
             <tr *ngFor="let b of builds">
               <td>{{b.id}}</td>
               <td>{{b.version.component.id + ' - ' + b.version.component.name}}</td>
-              <td>{{b.version.major + '.' + b.version.minor  + '.' + b.version.release}}</td>
+              <td>{{b.version.major + '.' + b.version.minor + '.' + b.version.release}}</td>
               <td>{{b.build}}</td>
               <td>{{b.creation | date2}}</td>
               <td>{{b.version.component.fileName}}</td>
