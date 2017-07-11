@@ -295,6 +295,18 @@ public abstract class Controller<Model> {
 	public Model post(Model model) throws RestException {
 		
 		try {
+			return this.insert(model);
+		} catch (RestException e) {
+			throw e;
+		} finally {
+			this.getSessao().commit();
+		}
+		
+	}
+	
+	protected Model insert(Model model) throws RestException {
+		
+		try {
 
 			for (RulePost<Model> rule : this.getPostRules()) {
 				rule.validate(this, model);
@@ -302,7 +314,6 @@ public abstract class Controller<Model> {
 			
 			this.beforePost(model);
 			this.getEm().persist(model);
-			this.getSessao().commit();
 			
 		} catch (RestException e) {
 			throw e;

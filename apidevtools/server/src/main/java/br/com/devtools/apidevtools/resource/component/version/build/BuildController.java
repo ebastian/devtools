@@ -141,6 +141,54 @@ public class BuildController extends Controller<Build> {
 	}
 	
 	@POST
+	@Path("upload")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response createBuildAndUpload(MultipartFormDataInput multipartFormDataInput) throws RestException {
+		
+		try {
+			
+			Map<String, List<InputPart>> map = multipartFormDataInput.getFormDataMap();
+			
+			Build build = null;
+			
+			List<InputPart> lstBuild = map.get("build");
+			for (InputPart inputPart : lstBuild) {
+				build = inputPart.getBody(Build.class, null);
+			}
+			
+			this.insert(build);
+			
+			List<InputPart> lstInputPart = map.get("uploadedFile");
+			for (InputPart inputPart : lstInputPart) {
+				
+	        	InputStream inputStream = inputPart.getBody(InputStream.class, null);
+				PreparedStatement ps = this.getSessao().getConnection().prepareStatement("INSERT INTO upload (buildid, bytes) VALUES (?, ?)");
+				ps.setLong(1, build.getId());
+				ps.setBinaryStream(2, inputStream);
+				ps.executeUpdate();
+				ps.close();
+				
+			}
+			
+			String sql = " select length(u.bytes) from Upload u where u.buildId = :buildId ";
+			TypedQuery<Integer> query = this.getSessao().getEm().createQuery(sql, Integer.class);
+			query.setParameter("buildId", build.getId());
+			Integer size = query.getSingleResult();
+			
+			build.setSize(size);
+			this.getSessao().getEm().merge(build);
+			
+			this.getSessao().commit();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RestException(e);
+		}
+		
+		return Response.ok().build();
+	}
+	
+	@POST
 	@Path("{id}/upload")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response upload(byte[] bytes, @PathParam("id") Long buildId) throws RestException {

@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,7 +24,6 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.*;
 
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
@@ -227,6 +228,51 @@ public class TestBuildController {
 	    when(uploadedFile.getBody(InputStream.class, null)).thenReturn(is);
 		
 	    Response upload = this.controller.upload(newForm, b1.getId());
+
+		assertNotNull(upload);
+		assertEquals(Status.OK.getStatusCode(), upload.getStatus());
+		
+		try (FileInputStream fis = new FileInputStream(file)) {
+			
+			byte[] bytes = new byte[fis.available()];
+			fis.read(bytes);
+			
+			byte[] download = this.controller.download(b1.getId(), "Teste.txt");
+			assertNotNull(download);
+			assertEquals(new String(bytes), new String(download));
+			
+		} catch (IOException e) {
+			assertTrue("Erro", false);
+		}
+		
+	}
+	
+	@Test
+	public void uploadMultipartComBuild() throws Exception {
+		
+		//Build b1 = this.controller.post(new TestBuildFactory().createValid().get());
+		//assertNotNull(b1);
+		//assertNotNull(b1.getId());
+		
+		String filename = "pom.xml";
+		File file = new File(filename);
+		InputStream is = new FileInputStream(file);
+		
+		Build b1 = new TestBuildFactory().createValid().get();
+		
+		MultipartFormDataInput newForm = mock(MultipartFormDataInput.class);
+	    InputPart uploadedFile = mock(InputPart.class);
+	    InputPart build = mock(InputPart.class);
+
+	    Map<String, List<InputPart>> paramsMap = new HashMap<>();
+	    paramsMap.put("uploadedFile", Arrays.asList(uploadedFile));        
+	    paramsMap.put("build", Arrays.asList(build));
+
+	    when(newForm.getFormDataMap()).thenReturn(paramsMap);
+	    when(uploadedFile.getBody(InputStream.class, null)).thenReturn(is);
+	    when(build.getBody(Build.class, null)).thenReturn(b1);
+		
+	    Response upload = this.controller.createBuildAndUpload(newForm);
 
 		assertNotNull(upload);
 		assertEquals(Status.OK.getStatusCode(), upload.getStatus());
