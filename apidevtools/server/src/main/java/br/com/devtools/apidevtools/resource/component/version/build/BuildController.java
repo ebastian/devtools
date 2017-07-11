@@ -250,7 +250,8 @@ public class BuildController extends Controller<Build> {
 			buildHash.setStatus(BuildHashStatus.ACTIVE);
 			buildHash.setHash(crypto.criptografar(build.getId().toString())+crypto.criptografar(buildHash.getCreation().toString()));
 			
-			this.getSessao().getEm().persist(buildHash);
+			this.getEm().persist(buildHash);
+			this.getSessao().commit();
 			
 			return buildHash;
 			
