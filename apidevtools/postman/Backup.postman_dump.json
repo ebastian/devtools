@@ -122,7 +122,10 @@
 						"4de8e623-9fca-3492-975f-7c1eddf7538e",
 						"30dbe744-7bc2-b6e7-8b7c-36c9fedcb70c",
 						"14cbbca2-52fe-a371-53a3-40c02050ef37",
-						"b95cee59-473c-76c1-4f0d-46f6442c9413"
+						"b95cee59-473c-76c1-4f0d-46f6442c9413",
+						"71143c28-9b5f-b420-7ae9-132c8612f778",
+						"678cf8b9-3ff2-420b-989f-a924f9ffd20d",
+						"54996fe4-9e1b-fce0-18e3-9630cb14bf91"
 					],
 					"collection": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
 					"owner": 0,
@@ -170,7 +173,7 @@
 			"remoteLinkUpdatedAt": null,
 			"public": false,
 			"createdAt": 1496351927777,
-			"updatedAt": 1497561968491,
+			"updatedAt": 1499741710372,
 			"write": true,
 			"published": false,
 			"favorite": false,
@@ -247,28 +250,34 @@
 				},
 				{
 					"id": "30dbe744-7bc2-b6e7-8b7c-36c9fedcb70c",
-					"headers": "Accept: application/json\nContent-Type: application/x-www-form-urlencoded\nsession-token: {{session-token}}\n",
+					"headers": "//Accept: application/json\n//Content-Type: multipart/form-data\nsession-token: {{session-token}}\nuser-token: {{user-token}}\n",
 					"headerData": [
 						{
 							"key": "Accept",
 							"value": "application/json",
 							"description": "",
-							"enabled": true
+							"enabled": false
 						},
 						{
 							"key": "Content-Type",
-							"value": "application/x-www-form-urlencoded",
+							"value": "multipart/form-data",
 							"description": "",
-							"enabled": true
+							"enabled": false
 						},
 						{
 							"key": "session-token",
 							"value": "{{session-token}}",
 							"description": "",
 							"enabled": true
+						},
+						{
+							"key": "user-token",
+							"value": "{{user-token}}",
+							"description": "",
+							"enabled": true
 						}
 					],
-					"url": "{{apidevtools}}/component/31/version/20/build/1/upload",
+					"url": "{{apidevtools}}/component/1/version/4/build/36/upload",
 					"queryParams": [],
 					"preRequestScript": null,
 					"pathVariables": {},
@@ -289,7 +298,7 @@
 					"tests": null,
 					"currentHelper": "normal",
 					"helperAttributes": {},
-					"time": 1497557838716,
+					"time": 1497836663299,
 					"name": "Upload Build",
 					"description": "",
 					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
@@ -424,6 +433,42 @@
 					"folder": "20cf0e0c-0fab-e540-de99-c500bb36c81e"
 				},
 				{
+					"id": "54996fe4-9e1b-fce0-18e3-9630cb14bf91",
+					"headers": "Accept: application/octet-stream\n",
+					"headerData": [
+						{
+							"key": "Accept",
+							"value": "application/octet-stream",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{apidevtools}}/component/1/version/4/build/63/hash/download/{{download_hash}}/nome",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "GET",
+					"data": [
+						{
+							"key": "uploadedFile",
+							"value": null,
+							"description": "",
+							"type": "file",
+							"enabled": true
+						}
+					],
+					"dataMode": "params",
+					"tests": "",
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1499741929261,
+					"name": "Download With Hash",
+					"description": "",
+					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
+					"responses": []
+				},
+				{
 					"id": "55cc2ce5-056b-d846-f9f9-e7d53e1de41a",
 					"headers": "",
 					"url": "{{apidevtools}}/help",
@@ -441,6 +486,98 @@
 					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
 					"responses": [],
 					"owner": 0
+				},
+				{
+					"id": "678cf8b9-3ff2-420b-989f-a924f9ffd20d",
+					"headers": "session-token: {{session-token}}\nuser-token: {{user-token}}\n",
+					"headerData": [
+						{
+							"key": "session-token",
+							"value": "{{session-token}}",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "user-token",
+							"value": "{{user-token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{apidevtools}}/component/1/version/4/build/63/hash",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "GET",
+					"data": [
+						{
+							"key": "uploadedFile",
+							"value": null,
+							"description": "",
+							"type": "file",
+							"enabled": true
+						}
+					],
+					"dataMode": "params",
+					"tests": "var data = JSON.parse(responseBody);\npostman.setEnvironmentVariable(\"download_hash\", data.hash);",
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1499741905775,
+					"name": "Get Download Hash",
+					"description": "",
+					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
+					"responses": []
+				},
+				{
+					"id": "71143c28-9b5f-b420-7ae9-132c8612f778",
+					"headers": "Accept: application/octet-stream\nsession-token: {{session-token}}\nuser-token: {{user-token}}\n",
+					"headerData": [
+						{
+							"key": "Accept",
+							"value": "application/octet-stream",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "session-token",
+							"value": "{{session-token}}",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "user-token",
+							"value": "{{user-token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{apidevtools}}/component/1/version/4/build/63/download",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "GET",
+					"data": [
+						{
+							"key": "uploadedFile",
+							"value": {
+								"0": {}
+							},
+							"description": "",
+							"type": "file",
+							"enabled": true
+						}
+					],
+					"dataMode": "params",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1498968620298,
+					"name": "Download Build",
+					"description": "",
+					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
+					"responses": []
 				},
 				{
 					"id": "8b0045a0-4399-960f-1a7e-9b70d6ea6750",
@@ -465,12 +602,12 @@
 					"pathVariables": {},
 					"pathVariableData": [],
 					"method": "POST",
-					"data": "{\n  \"name\": \"WinSaúde - Executável\",\n  \"filename\": \"WinSaude.exe\",\n  \"description\": \"Description of Component 20\",\n  \"creation\": \"2017-05-28T23:47:01.278579\"\n}",
+					"data": "{\n  \"name\": \"WinSaúde - Executável\",\n  \"fileName\": \"WinSaude.exe\",\n  \"description\": \"Description of Component 20\",\n  \"creation\": \"2017-05-28T23:47:01.278579\"\n}",
 					"dataMode": "raw",
 					"tests": null,
 					"currentHelper": "normal",
 					"helperAttributes": {},
-					"time": 1497576348109,
+					"time": 1497836494748,
 					"name": "Include Component",
 					"description": "",
 					"collectionId": "ccb3f9f6-484f-7efe-5dbc-6b75b671bc48",
@@ -3855,12 +3992,18 @@
 				{
 					"enabled": true,
 					"key": "session-token",
-					"value": "ab1dc8e9d26be0b58d575e2431e04d612119d95fdf5c70bae0ac366237810d5e5512b4ffadf07ba6f8ddfbacd8ae3d1a4372652fca64e64f466e2c171cabf786",
+					"value": "d3f3269a3c9ceecbe5827d982fa09f79921a4a47b6abd37b24d21b9fffb9f50bc525f03e01020dc865dc97aa0af20be1b248b81e84a485f6503f50fb0b02ae23",
+					"type": "text"
+				},
+				{
+					"enabled": true,
+					"key": "download_hash",
+					"value": "da4ea2a5506f2693eae190d9360a1f31793c98a1adade51d93533a6f520ace1c26f57b7a401f1a485f42f3cb04acfd05ff5896a9e2d0cc8f369b1e8c48a0f05e",
 					"type": "text"
 				}
 			],
 			"team": null,
-			"timestamp": 1497576355085
+			"timestamp": 1499742192746
 		}
 	],
 	"headerPresets": [],
