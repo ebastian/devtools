@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -284,6 +285,8 @@ public class BuildController extends Controller<Build> {
 				throw new Exception("Hash não encontrado");
 			}
 			
+		} catch (NoResultException e) {
+			throw new RestException("Hash para download não encontrado ou encerrado");
 		} catch (Exception e) {
 			throw new RestException(e);
 		}

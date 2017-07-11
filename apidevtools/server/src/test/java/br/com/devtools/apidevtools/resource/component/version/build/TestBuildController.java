@@ -33,6 +33,7 @@ import br.com.devtools.apidevtools.resource.component.TestComponentFactory;
 import br.com.devtools.apidevtools.resource.component.version.TestVersionFactory;
 import br.com.devtools.apidevtools.resource.component.version.Version;
 import br.com.devtools.apidevtools.resource.component.version.VersionController;
+import br.com.devtools.apidevtools.resource.component.version.build.hash.BuildHash;
 import br.com.devtools.apidevtools.resource.component.version.build.rules.exceptions.BuildUniqueException;
 import br.com.devtools.apidevtools.resource.component.version.build.rules.exceptions.build.BuildBuildInvalidException;
 import br.com.devtools.apidevtools.resource.component.version.build.rules.exceptions.build.BuildBuildRequiredException;
@@ -324,5 +325,43 @@ public class TestBuildController {
 		}
 		
 	}
+	
+
+	@Test
+	public void hashForDownload() throws Exception {
+		
+		Build b1 = this.controller.post(new TestBuildFactory().createValid().get());
+		assertNotNull(b1);
+		assertNotNull(b1.getId());
+		
+		String filename = "pom.xml";
+		File file = new File(filename);
+		
+		try (FileInputStream fis = new FileInputStream(file)) {
+			
+			byte[] bytes = new byte[fis.available()];
+			fis.read(bytes);
+			
+			Upload upload = new Upload();
+			upload.setBytes(bytes);
+			
+			Response response = this.controller.upload(upload, b1.getId());
+			
+			assertNotNull(response);
+			assertEquals(Status.OK.getStatusCode(), response.getStatus());
+			
+			BuildHash hashForDownload = this.controller.hashForDownload(b1.getId());
+			assertNotNull(hashForDownload);
+			
+			byte[] download = this.controller.downloadByhash(b1.getId(), hashForDownload.getHash(), "Teste.txt");
+			assertNotNull(download);
+			assertEquals(new String(bytes), new String(download));
+			
+		} catch (IOException e) {
+			assertTrue("Erro", false);
+		}
+		
+	}
+	
 	
 }
