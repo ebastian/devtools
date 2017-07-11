@@ -2,6 +2,7 @@ package br.com.devtools.apidevtools.resource.component.version.build;
 
 import java.io.InputStream;
 import java.sql.PreparedStatement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +22,12 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import br.com.devtools.apidevtools.core.controller.Controller;
 import br.com.devtools.apidevtools.core.controller.Filter;
+import br.com.devtools.apidevtools.core.crypto.Crypto;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.resource.component.version.Version;
 import br.com.devtools.apidevtools.resource.component.version.VersionController;
+import br.com.devtools.apidevtools.resource.component.version.build.hash.BuildHash;
+import br.com.devtools.apidevtools.resource.component.version.build.hash.BuildHashStatus;
 
 @Path("component/{componentId}/version/{versionId}/build")
 public class BuildController extends Controller<Build> {
@@ -179,6 +183,63 @@ public class BuildController extends Controller<Build> {
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public byte[] download(@PathParam("id") Long buildId) throws RestException {
 		return this.download(buildId, null);
+	}
+	
+	@GET
+	@Path("{id}/hash")
+	@Produces(MediaType.APPLICATION_JSON)
+	public BuildHash hashForDownload(@PathParam("id") Long buildId) throws RestException {
+		
+		try {
+			
+			Crypto crypto = new Crypto();
+			
+			BuildHash buildHash =  new BuildHash();
+			Build build = this.getSessao().getEm().find(Build.class, buildId);
+			buildHash.setBuild(build);
+			buildHash.setBuildId(build.getId());
+			buildHash.setCreation(LocalDateTime.now());
+			buildHash.setStatus(BuildHashStatus.ACTIVE);
+			buildHash.setHash(crypto.criptografar(build.getId().toString())+crypto.criptografar(buildHash.getCreation().toString()));
+			
+			this.getSessao().getEm().persist(buildHash);
+			
+			return buildHash;
+			
+		} catch (Exception e) {
+			throw new RestException(e);
+		}
+		
+		
+	}
+	
+	@GET
+	@Path("{id}/hash/download/{hash}/{nome}")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	public  byte[] downloadByhash(@PathParam("id") Long buildId, @PathParam("hash") String hash, @PathParam("nome") String nome) throws RestException {
+		
+		try {
+			
+			String sql = " select bh from BuildHash bh where bh.buildId = :buildId and bh.hash = :hash and bh.status = :status";
+			TypedQuery<BuildHash> query = getEm().createQuery(sql, BuildHash.class);
+			query.setParameter("buildId", buildId);
+			query.setParameter("hash", hash);
+			query.setParameter("status", BuildHashStatus.ACTIVE);
+			BuildHash buildHash = query.getSingleResult();
+			
+			if (buildHash!=null) {
+				buildHash.setStatus(BuildHashStatus.INACTIVE);
+				this.getEm().merge(buildHash);
+				this.getSessao().commit();
+			} else {
+				throw new Exception("Hash não encontrado");
+			}
+			
+		} catch (Exception e) {
+			throw new RestException(e);
+		}
+		return this.download(buildId, nome);
+		
 	}
 	
 	@GET

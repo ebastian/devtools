@@ -40,7 +40,7 @@ public class PersonController extends Controller<Person>{
 			
 			List<Acess> list = query.getResultList();
 			list.forEach(old -> {
-				old.setStatus(AcessStatus.INATIVE);
+				old.setStatus(AcessStatus.INACTIVE);
 				old.setDeath(now);
 				this.getSessao().getEm().merge(old);
 			});
