@@ -219,7 +219,7 @@ public class BuildController extends Controller<Build> {
 	
 	@POST
 	@Path("{id}/upload")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response upload(Upload upload, @PathParam("id") Long buildId) throws RestException {
 		
 		return this.upload(upload.getBytes(), buildId);
