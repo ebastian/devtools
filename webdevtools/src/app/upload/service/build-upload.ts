@@ -14,6 +14,17 @@ export class BuildUpload extends Entity {
   file: File;
   status: number;
 
+  getDownloadLink(hash: String, fileName: String = "") {
+    console.log(this.build);
+    console.log(this.version.creation);
+    console.log(this.version.component.fileName);
+     return this.version.component.id
+      + "/version/" + this.version.id
+      + "/build/" + this.id + "/hash/download/"
+      + hash + "/" 
+      + (fileName !== undefined ? fileName : this.version.component.fileName);
+  }
+
   getBuildInfo() {
     var a = {
       id: this.id,

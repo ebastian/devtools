@@ -60,13 +60,15 @@ export class DownloadComponent implements OnInit {
   sortVersions = () => this.versions.sort((item1, item2) => item2.id - item1.id);
 
   clickDownload = (build: BuildUpload) => {
-    this.uploadService.downloadBuild(build);
+    //this.uploadService.downloadBuild(build);
+    this.uploadService.getDownloadLink(build).then(url => window.open(url));
   }
 
-  clickCopyLink = (build: BuildUpload) => alert(
-    build.version.component.name + " - "
-    + build.version.major + "." + build.version.minor + "." + build.version.release
-    + "\nLink para download com validade de 10 minutos:\n\n"
-    + this.uploadService.getDownloadLink(build));
-
+  clickCopyLink = (build: BuildUpload) => {
+    this.uploadService.getDownloadLink(build).then(url => {
+      alert(//build.version.component.name + " - "
+            //+ build.version.major + "." + build.version.minor + "." + build.version.release + "\n" +
+            url);
+    });
+  }
 }

@@ -97,11 +97,26 @@ export class UploadService {
       .catch(this.handleError);
   }
 
-  public getDownloadLink = (buildUpload: BuildUpload) => {
-    return this.baseUrl + "/" + buildUpload.version.component.id
+  public getDownloadHash = (buildUpload: BuildUpload) => {
+    const url = this.baseUrl + "/" + buildUpload.version.component.id
       + "/version/" + buildUpload.version.id
-      + "/build/" + buildUpload.id
-      + "/download";
+      + "/build/" + buildUpload.id + "/hash";
+    return this.http.get(url, { headers: this.headers })
+      .toPromise()
+      .catch(this.handleError);
+  }
+  
+  public getDownloadLink = (buildUpload: BuildUpload): Promise<string> => {
+    return this.getDownloadHash(buildUpload)
+            .then(this.createDownloadLink(buildUpload))
+            .catch(this.handleError)
+  }
+
+  createDownloadLink = (buildUpload: any) => (hashLink: any): Promise<string> => {
+    hashLink = hashLink.json();
+    const fileName = buildUpload.version.component.fileName;
+    const url = this.baseUrl + "/" + this.getBuildDownloadLink(buildUpload, hashLink.hash, fileName);
+    return Promise.resolve(url);
   }
 
   public downloadBuild(buildUpload: BuildUpload) {
@@ -136,57 +151,13 @@ export class UploadService {
     window.open(url);
   }
 
-  /*
-  public save(item: BuildUpload): Promise<BuildUpload> {
-    this.setCreation(new Date())(item);
-    const url = this.baseUrl;
-    if (item.id != undefined && item.id !== null) {
-      return this.http.put(url + "/" + item.id, JSON.stringify(item), { headers: this.headers })
-        .toPromise()
-        .then(this.castResult)
-        .catch(this.handleError);
-    } else {
-      return this.http.post(url, JSON.stringify(item), { headers: this.headers })
-        .toPromise()
-        .then(this.castResult)
-        .catch(this.handleError);
-    }
+  getBuildDownloadLink(buildUpload: BuildUpload, hash: String, fileName: String = "") {
+     return buildUpload.version.component.id
+      + "/version/" + buildUpload.version.id
+      + "/build/" + buildUpload.id + "/hash/download/"
+      + hash + "/" 
+      + (fileName !== undefined ? fileName : buildUpload.version.component.fileName);
   }
-  */
-
-  /*
-  public getItem(id: number): Promise<ProductComponent> {
-    const url = this.baseUrl + "/" + id;
-    return this.http.get(url, { headers: this.headers })
-      .toPromise()
-      .then(response => response.json() as ProductComponent)
-      .catch(this.handleError);
-  }
-
-  public remove(id: number): Promise<void> {
-    const url = this.baseUrl + "/" + id;
-    return this.http.delete(url, { headers: this.headers })
-      .toPromise()
-      .then((res) => JSON.stringify(res))
-      .catch(this.handleError);
-  }
-
-  public kill(item: ProductComponent): Promise<boolean> {
-    const url = this.baseUrl + "/" + item.id + "/kill";
-    return this.http.put(url, null, { headers: this.headers })
-      .toPromise()
-      .then(this.castResult)
-      .catch(this.handleError);
-  }
-
-  public revive(item: ProductComponent): Promise<boolean> {
-    const url = this.baseUrl + "/" + item.id + "/revive";
-    return this.http.put(url, null, { headers: this.headers })
-      .toPromise()
-      .then(this.castResult)
-      .catch(this.handleError);
-  }
-  */
 
   private handleError(error: any): Promise<any> {
     alert('Erro: ' + JSON.stringify(error));
