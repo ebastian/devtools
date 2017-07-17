@@ -9,12 +9,15 @@ import java.util.Map;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -266,7 +269,7 @@ public class BuildController extends Controller<Build> {
 	@GET
 	@Path("{id}/hash/download/{hash}/{nome}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public  byte[] downloadByhash(@PathParam("id") Long buildId, @PathParam("hash") String hash, @PathParam("nome") String nome) throws RestException {
+	public  byte[] downloadByhashAndName(@PathParam("id") Long buildId, @PathParam("hash") String hash, @PathParam("nome") String nome) throws RestException {
 		
 		try {
 			
@@ -291,6 +294,42 @@ public class BuildController extends Controller<Build> {
 			throw new RestException(e);
 		}
 		return this.download(buildId, nome);
+		
+	}
+	
+	@GET
+	@Path("{id}/hash/download/{hash}")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	public byte[] downloadByhash(@PathParam("id") Long buildId, @PathParam("hash") String hash, @Context HttpServletResponse response) throws RestException {
+		
+		try {
+			
+			
+			String sql = " select bh from BuildHash bh where bh.buildId = :buildId and bh.hash = :hash and bh.status = :status";
+			TypedQuery<BuildHash> query = getEm().createQuery(sql, BuildHash.class);
+			query.setParameter("buildId", buildId);
+			query.setParameter("hash", hash);
+			query.setParameter("status", BuildHashStatus.ACTIVE);
+			BuildHash buildHash = query.getSingleResult();
+			
+			if (buildHash!=null) {
+				buildHash.setStatus(BuildHashStatus.INACTIVE);
+				this.getEm().merge(buildHash);
+				
+				String fileName = buildHash.getBuild().getVersion().getComponent().getFileName();
+				response.addHeader("Content-Disposition", "attachment; filename=\""+fileName+"\"");
+				
+				this.getSessao().commit();
+			} else {
+				throw new Exception("Hash não encontrado");
+			}
+			
+		} catch (NoResultException e) {
+			throw new RestException("Hash para download não encontrado ou encerrado");
+		} catch (Exception e) {
+			throw new RestException(e);
+		}
+		return this.download(buildId, null);
 		
 	}
 	

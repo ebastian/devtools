@@ -14,15 +14,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.junit.Test;
-
 import br.com.devtools.apidevtools.resource.teste.Teste;
 
 public class TestTeste {
 	
 	private final String url = "http://localhost:8080/apidevtools/api/teste/";
 	
-	@Test
+	//@Test
 	public void helloworld() {
 		
 		String helloworld = ClientBuilder.newClient().target(url+"helloworld").request().get(String.class);
@@ -31,7 +29,7 @@ public class TestTeste {
 		
 	}
 	
-	@Test
+	//@Test
 	public void ping() {
 		
 		String ping = ClientBuilder.newClient().target(url+"ping").request().get(String.class);
@@ -40,7 +38,7 @@ public class TestTeste {
 		
 	}
 	
-	@Test
+	//@Test
 	public void objectGet() {
 		
 		Teste teste = ClientBuilder.newClient().target(url+"object").request().get(Teste.class);
@@ -50,7 +48,7 @@ public class TestTeste {
 		
 	}
 
-	@Test
+	//@Test
 	public void objectPost() {
 		
 		Teste req = new Teste();
@@ -63,7 +61,7 @@ public class TestTeste {
 		
 	}
 	
-	@Test
+	//@Test
 	public void bytesGet() {
 		
 		byte[] bytes = ClientBuilder.newClient().target(url+"bytes").request().get(byte[].class);
@@ -72,7 +70,7 @@ public class TestTeste {
 		
 	}
 	
-	@Test
+	//@Test
 	public void fileUpload() {
 		
 		File file = new File("pom.xml");
@@ -93,7 +91,7 @@ public class TestTeste {
 		
 	}
 	
-	@Test
+	//@Test
 	public void bytesGetErro() {
 		
 		Response response = ClientBuilder.newClient().target(url+"error").request().get();

@@ -353,7 +353,7 @@ public class TestBuildController {
 			BuildHash hashForDownload = this.controller.hashForDownload(b1.getId());
 			assertNotNull(hashForDownload);
 			
-			byte[] download = this.controller.downloadByhash(b1.getId(), hashForDownload.getHash(), "Teste.txt");
+			byte[] download = this.controller.downloadByhashAndName(b1.getId(), hashForDownload.getHash(), "Teste.txt");
 			assertNotNull(download);
 			assertEquals(new String(bytes), new String(download));
 			
