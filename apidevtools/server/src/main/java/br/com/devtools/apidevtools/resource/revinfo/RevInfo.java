@@ -17,18 +17,18 @@ public class RevInfo extends DefaultRevisionEntity {
 	private static final long serialVersionUID = 1L;
 	
 	private Long acessId;
-	private Long personId;
+	private Long userId;
 	
 	@Column(length=50)
 	private String ip;
 	
 	private LocalDateTime alteration;
 	
-	public Long getPersonId() {
-		return personId;
+	public Long getUserId() {
+		return userId;
 	}
-	public void setPersonId(Long acessId) {
-		this.personId = acessId;
+	public void setUserId(Long acessId) {
+		this.userId = acessId;
 	}
 
 	public String getIp() {

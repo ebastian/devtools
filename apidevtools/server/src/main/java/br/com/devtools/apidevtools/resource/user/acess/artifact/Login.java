@@ -1,4 +1,4 @@
-package br.com.devtools.apidevtools.resource.person.acess.artifact;
+package br.com.devtools.apidevtools.resource.user.acess.artifact;
 
 public class Login {
 	

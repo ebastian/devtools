@@ -1,4 +1,4 @@
-package br.com.devtools.apidevtools.resource.person.acess.artifact;
+package br.com.devtools.apidevtools.resource.user.acess.artifact;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +22,7 @@ import org.hibernate.envers.Audited;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.devtools.apidevtools.core.adapters.LocalDateTimerAdapter;
-import br.com.devtools.apidevtools.resource.person.Person;
+import br.com.devtools.apidevtools.resource.user.User;
 
 @Audited
 @Entity
@@ -35,8 +35,8 @@ public class Acess {
 	
 	@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="personId", nullable=false, foreignKey=@ForeignKey(name="fk_Acess_Person"))
-	private Person person;
+	@JoinColumn(name="userId", nullable=false, foreignKey=@ForeignKey(name="fk_Acess_User"))
+	private User user;
 	
 	@Column(length=40, nullable=false)
 	private String name;
@@ -67,12 +67,12 @@ public class Acess {
 		this.id = id;
 	}
 
-	public Person getPerson() {
-		return person;
+	public User getUser() {
+		return user;
 	}
 
-	public void setPerson(Person person) {
-		this.person = person;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public String getName() {

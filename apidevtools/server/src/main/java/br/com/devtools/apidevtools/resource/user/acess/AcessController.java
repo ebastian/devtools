@@ -1,4 +1,4 @@
-package br.com.devtools.apidevtools.resource.person.acess;
+package br.com.devtools.apidevtools.resource.user.acess;
 
 import javax.inject.Inject;
 import javax.persistence.TypedQuery;
@@ -14,11 +14,11 @@ import br.com.devtools.apidevtools.core.crypto.Crypto;
 import br.com.devtools.apidevtools.core.help.HelpGenerator;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
-import br.com.devtools.apidevtools.resource.person.acess.artifact.Acess;
-import br.com.devtools.apidevtools.resource.person.acess.artifact.AcessStatus;
-import br.com.devtools.apidevtools.resource.person.acess.artifact.LoginToken;
-import br.com.devtools.apidevtools.resource.person.acess.artifact.Session;
-import br.com.devtools.apidevtools.resource.person.rules.UserToken;
+import br.com.devtools.apidevtools.resource.user.acess.artifact.Acess;
+import br.com.devtools.apidevtools.resource.user.acess.artifact.AcessStatus;
+import br.com.devtools.apidevtools.resource.user.acess.artifact.LoginToken;
+import br.com.devtools.apidevtools.resource.user.acess.artifact.Session;
+import br.com.devtools.apidevtools.resource.user.rules.UserToken;
 
 @Path("acess")
 @Produces("application/json;charset=UTF-8")

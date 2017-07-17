@@ -1,4 +1,4 @@
-package br.com.devtools.apidevtools.resource.person.rules;
+package br.com.devtools.apidevtools.resource.user.rules;
 
 import java.util.Base64;
 

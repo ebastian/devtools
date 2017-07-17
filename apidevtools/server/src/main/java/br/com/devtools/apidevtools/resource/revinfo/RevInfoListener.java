@@ -14,10 +14,10 @@ public class RevInfoListener implements RevisionListener {
 	public void newRevision(Object revisionEntity) {
 		
 		RevInfo exampleRevEntity = (RevInfo) revisionEntity;
-		exampleRevEntity.setPersonId(0l);
+		exampleRevEntity.setUserId(0l);
 		try {
 			RestSessao sessao = CDI.current().select(RestSessao.class).get();
-			exampleRevEntity.setPersonId(sessao.getSession().getAcess().getPerson().getId());
+			exampleRevEntity.setUserId(sessao.getSession().getAcess().getUser().getId());
 			exampleRevEntity.setAcessId(sessao.getSession().getAcess().getId());
 			exampleRevEntity.setIp(sessao.getSession().getIp());
 			exampleRevEntity.setAlteration(LocalDateTime.now());

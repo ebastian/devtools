@@ -1,4 +1,4 @@
-package br.com.devtools.apidevtools.resource.person;
+package br.com.devtools.apidevtools.resource.user;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,15 +11,15 @@ import javax.ws.rs.PathParam;
 import br.com.devtools.apidevtools.core.controller.Controller;
 import br.com.devtools.apidevtools.core.crypto.Crypto;
 import br.com.devtools.apidevtools.core.rest.RestException;
-import br.com.devtools.apidevtools.resource.person.acess.artifact.Acess;
-import br.com.devtools.apidevtools.resource.person.acess.artifact.AcessStatus;
+import br.com.devtools.apidevtools.resource.user.acess.artifact.Acess;
+import br.com.devtools.apidevtools.resource.user.acess.artifact.AcessStatus;
 
-@Path("person")
-public class PersonController extends Controller<Person>{
+@Path("user")
+public class UserController extends Controller<User>{
 
 	@Override
-	public Class<Person> getClasse() {
-		return Person.class;
+	public Class<User> getClasse() {
+		return User.class;
 	}
 	
 	@POST
@@ -29,13 +29,13 @@ public class PersonController extends Controller<Person>{
 			
 			Crypto crypto = new Crypto();
 			LocalDateTime now = LocalDateTime.now();
-			Person person = this.get(id);
+			User user = this.get(id);
 			
 			TypedQuery<Acess> query = this.getSessao().getEm().createQuery(
 					" select a from Acess a " +
-					" where a.person = :person " +
+					" where a.user = :user " +
 					" and a.status = :status ", Acess.class);
-			query.setParameter("person", person);
+			query.setParameter("user", user);
 			query.setParameter("status", AcessStatus.ACTIVE);
 			
 			List<Acess> list = query.getResultList();
@@ -45,7 +45,7 @@ public class PersonController extends Controller<Person>{
 				this.getSessao().getEm().merge(old);
 			});
 			
-			acess.setPerson(person);
+			acess.setUser(user);
 			acess.setCreation(now);
 			acess.setStatus(AcessStatus.ACTIVE);
 			acess.setHash(crypto.criptografar(acess.getName())+crypto.criptografar(acess.getPassword()));

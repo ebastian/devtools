@@ -10,7 +10,7 @@ import org.hibernate.jdbc.Work;
 
 import br.com.devtools.apidevtools.core.database.EntityManagerUtil;
 import br.com.devtools.apidevtools.core.database.IEntityMangerUtil;
-import br.com.devtools.apidevtools.resource.person.acess.artifact.Session;
+import br.com.devtools.apidevtools.resource.user.acess.artifact.Session;
 
 @RequestScoped
 public class RestSessao {

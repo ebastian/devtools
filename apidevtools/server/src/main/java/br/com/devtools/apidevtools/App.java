@@ -12,9 +12,9 @@ import javax.ws.rs.core.Context;
 
 import br.com.devtools.apidevtools.core.database.EntityManagerUtilNoUpdate;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
-import br.com.devtools.apidevtools.resource.person.Person;
-import br.com.devtools.apidevtools.resource.person.PersonController;
-import br.com.devtools.apidevtools.resource.person.acess.artifact.Acess;
+import br.com.devtools.apidevtools.resource.user.User;
+import br.com.devtools.apidevtools.resource.user.UserController;
+import br.com.devtools.apidevtools.resource.user.acess.artifact.Acess;
 
 @ApplicationPath("/api")
 public class App extends Application {
@@ -51,25 +51,25 @@ public class App extends Application {
 				
 				RestSessao s = new RestSessao();
 				
-				PersonController pc = new PersonController();
+				UserController pc = new UserController();
 				pc.setContext(context2);
 				pc.setSessao(s);
 				
 				try {
 					
-					Person person = pc.get(1l);
+					User user = pc.get(1l);
 					
-					if (person==null) {
+					if (user==null) {
 						
-						person = new Person();
-						person.setNome("Admin");
-						person.setEmail("admin@admin.com");
-						pc.post(person);
+						user = new User();
+						user.setNome("Admin");
+						user.setEmail("admin@admin.com");
+						pc.post(user);
 
 						Acess acess = new Acess();
 						acess.setName("admin");
 						acess.setPassword("admin");
-						pc.createAcess(person.getId(), acess);
+						pc.createAcess(user.getId(), acess);
 						
 					}
 					

@@ -1,4 +1,4 @@
-package br.com.devtools.apidevtools.resource.person;
+package br.com.devtools.apidevtools.resource.user;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +11,8 @@ import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
-@Table
-public class Person {
+@Table(name="users")
+public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

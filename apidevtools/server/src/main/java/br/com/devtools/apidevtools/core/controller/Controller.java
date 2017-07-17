@@ -126,7 +126,7 @@ public abstract class Controller<Model> {
 					rev.setAcessId(info.getAcessId());
 					rev.setAlteration(info.getAlteration());
 					rev.setIp(info.getIp());
-					rev.setPersonId(info.getPersonId());
+					rev.setUserId(info.getUserId());
 				} else if (object instanceof RevisionType) {
 					RevisionType type = (RevisionType) object;
 					rev.setRevtype(type);

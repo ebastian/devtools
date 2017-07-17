@@ -14,7 +14,7 @@ public class RevInfoResult<Model> {
 	private RevisionType revtype;
 	
 	private Long acessId;
-	private Long personId;
+	private Long userId;
 	private String ip;
 	@XmlJavaTypeAdapter(value=LocalDateTimerAdapter.class)
 	private LocalDateTime alteration;
@@ -31,11 +31,11 @@ public class RevInfoResult<Model> {
 	public void setAcessId(Long acessId) {
 		this.acessId = acessId;
 	}
-	public Long getPersonId() {
-		return personId;
+	public Long getUserId() {
+		return userId;
 	}
-	public void setPersonId(Long personId) {
-		this.personId = personId;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 	public String getIp() {
 		return ip;
