@@ -3,6 +3,7 @@ package br.com.devtools.apidevtools.resource.user;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -13,6 +14,7 @@ import br.com.devtools.apidevtools.core.crypto.Crypto;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.Acess;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.AcessStatus;
+import br.com.devtools.apidevtools.resource.user.privilege.Privilege;
 
 @Path("user")
 public class UserController extends Controller<User>{
@@ -57,6 +59,36 @@ public class UserController extends Controller<User>{
 		} catch (Exception e) {
 			throw new RestException(e);
 		}
+	}
+	
+	@POST
+	@Path("{id}/privilege")
+	public void createPrivilege(@PathParam("id") Long id, Privilege p) throws RestException {
+		
+		try {
+			
+			Privilege privilege = null;
+			
+			try {
+				privilege = this.getEm().find(Privilege.class, id);
+			} catch (NoResultException e) {
+			}
+			
+			if (privilege==null) {
+				privilege = new Privilege();
+				privilege.setId(id);
+				privilege.setUser(this.get(id));
+			}
+			
+			privilege.setType(p.getType());
+			
+			this.getSessao().getEm().persist(privilege);
+			this.getSessao().commit();
+			
+		} catch (Exception e) {
+			throw new RestException(e);
+		}
+		
 	}
 
 }

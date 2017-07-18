@@ -9,7 +9,6 @@ import java.util.Map;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
