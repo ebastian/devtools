@@ -83,8 +83,11 @@ public class SearchClass {
 		} else {
 			File directory = new File(path);
 			resourcePaths = new HashSet<>();
-			for (File file : directory.listFiles()) {
-				resourcePaths.add(file.getPath());
+			File[] listFiles = directory.listFiles();
+			if (listFiles!=null) {
+				for (File file : directory.listFiles()) {
+					resourcePaths.add(file.getPath());
+				}
 			}
 		}
 		

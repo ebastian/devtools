@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -56,6 +58,10 @@ public class Build {
 	
 	@Column(columnDefinition="text")
 	private String notes;
+	
+	@Column
+	@Enumerated(EnumType.ORDINAL)
+	private BuildStatus status;
 
 	public Long getId() {
 		return id;
@@ -119,6 +125,14 @@ public class Build {
 
 	public void setSize(Integer size) {
 		this.size = size;
+	}
+
+	public BuildStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(BuildStatus status) {
+		this.status = status;
 	}
 	
 }

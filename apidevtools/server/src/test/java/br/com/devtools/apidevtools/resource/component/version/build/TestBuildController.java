@@ -84,7 +84,7 @@ public class TestBuildController {
 	@After
 	public void after() {
 		try {
-			//this.controller.getSessao().close();
+			this.controller.getSessao().close();
 		} catch (Exception e) {
 		}
 	}

@@ -87,7 +87,6 @@ public class HelpGenerator {
 					
 					for (Parameter param : parameters) {
 						
-						
 						HeaderParam headerParam = param.getAnnotation(HeaderParam.class);
 						PathParam pathParam = param.getAnnotation(PathParam.class);
 						QueryParam queryParam = param.getAnnotation(QueryParam.class);

@@ -88,6 +88,7 @@ public class BuildController extends Controller<Build> {
 
 	@Override
 	protected void beforePost(Build model) throws RestException {
+		model.setStatus(BuildStatus.APPROVED);
 		model.setVersion(this.getVersion());
 	}
 
