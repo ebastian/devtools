@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -13,6 +14,8 @@ import br.com.devtools.apidevtools.core.controller.Filter;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.resource.component.Component;
 import br.com.devtools.apidevtools.resource.component.ComponentController;
+import br.com.devtools.apidevtools.resource.componentlast.ComponentLast;
+import br.com.devtools.apidevtools.resource.componentlast.ComponentLastResource;
 
 @Path("component/{componentId}/version")
 public class VersionController extends Controller<Version> {
@@ -117,6 +120,12 @@ public class VersionController extends Controller<Version> {
 			throw new RestException(e);
 		}
 		
+	}
+	
+	@GET
+	@Path("{id}/last")
+	public ComponentLast last(@PathParam("id") Long versionId) throws Exception {
+		return new ComponentLastResource(this.getEm()).last(this.componentId, versionId);
 	}
 	
 }
