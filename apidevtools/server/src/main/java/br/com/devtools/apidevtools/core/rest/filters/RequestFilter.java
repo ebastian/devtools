@@ -12,8 +12,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
 import br.com.devtools.apidevtools.core.rest.RestSessao;
+import br.com.devtools.apidevtools.resource.component.ComponentController;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.AcessStatus;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.Session;
+import br.com.devtools.apidevtools.resource.user.permission.Permission;
+import br.com.devtools.apidevtools.resource.user.privilege.Privilege;
+import br.com.devtools.apidevtools.resource.user.privilege.PrivilegeType;
 
 @Provider
 public class RequestFilter implements ContainerRequestFilter {
@@ -28,7 +32,7 @@ public class RequestFilter implements ContainerRequestFilter {
 	public void filter(ContainerRequestContext requestContext) throws IOException {
 		
 		try {
-				
+			
 			String method = requestContext.getMethod();
 			String path = requestContext.getUriInfo().getAbsolutePath().getPath();
 			
@@ -81,6 +85,38 @@ public class RequestFilter implements ContainerRequestFilter {
 				!s.getIp().equals(session.getIp())
 			) {
 				throw new IOException();
+			}
+			
+			TypedQuery<Privilege> qPrivilege = sessao.getEm().createQuery(
+					" select p from Privilege p " +
+					" where p.user = :user "
+					, Privilege.class);
+			
+			qPrivilege.setParameter("user", s.getAcess().getUser());
+			Privilege privilege = qPrivilege.getSingleResult();
+			
+			if (privilege.getType().equals(PrivilegeType.USER)) {
+				
+				try {
+					String className = requestContext.getUriInfo().getMatchedResources().get(0).getClass().getName();
+					className = className.substring(0, className.indexOf("$"));
+					
+					String sqlPermission =
+						" select p from Permission p " +
+						" where p.user = :user " +
+						" and p.className = :className " +
+						" and p." +method.toLowerCase()+ " = true ";
+					
+					TypedQuery<Permission> qPermission = sessao.getEm().createQuery(sqlPermission, Permission.class);
+					qPermission.setParameter("user", s.getAcess().getUser());
+					qPermission.setParameter("className", className);
+					
+					qPermission.getResultList();
+					
+				} catch (Exception e) {
+					throw new IOException(e);
+				}
+				
 			}
 			
 			sessao.setSession(s);
