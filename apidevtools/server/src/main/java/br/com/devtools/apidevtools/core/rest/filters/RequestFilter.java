@@ -12,7 +12,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
 import br.com.devtools.apidevtools.core.rest.RestSessao;
-import br.com.devtools.apidevtools.resource.component.ComponentController;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.AcessStatus;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.Session;
 import br.com.devtools.apidevtools.resource.user.permission.Permission;
