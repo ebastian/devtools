@@ -12,3 +12,7 @@ TODO
 * Program the release of the versions and block downloads of approved files. Give the option to release versions before its release programmed date
 
 * 
+
+command to workspace:
+* npm install -g angular-cli
+* npm install
