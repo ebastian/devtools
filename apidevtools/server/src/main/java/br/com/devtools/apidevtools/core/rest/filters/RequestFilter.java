@@ -1,6 +1,7 @@
 package br.com.devtools.apidevtools.core.rest.filters;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 
 import javax.inject.Inject;
@@ -10,6 +11,8 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
+
+import org.jboss.resteasy.core.ResourceMethodInvoker;
 
 import br.com.devtools.apidevtools.core.rest.RestSessao;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.AcessStatus;
@@ -32,8 +35,13 @@ public class RequestFilter implements ContainerRequestFilter {
 		
 		try {
 			
+			ResourceMethodInvoker methodInvoker = (ResourceMethodInvoker) 
+		            requestContext.getProperty("org.jboss.resteasy.core.ResourceMethodInvoker");
+			Method method2 = methodInvoker.getMethod();
+			
 			String method = requestContext.getMethod();
 			String path = requestContext.getUriInfo().getAbsolutePath().getPath();
+			requestContext.getUriInfo().getMatchedResources().get(0);
 			
 			if (method.equalsIgnoreCase("GET") && (path.indexOf("api/teste/")>=0 || path.indexOf("/help")>=0 || path.indexOf("/hash/download/")>=0)) {
 				return;
