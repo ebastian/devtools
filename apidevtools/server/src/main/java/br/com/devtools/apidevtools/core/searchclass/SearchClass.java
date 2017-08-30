@@ -20,9 +20,10 @@ public class SearchClass {
 		
 		if (App.context==null) {
 			this.prefix = this.getClass().getClassLoader().getResource("").getPath().toString().replace("test-classes", "classes");
-			if (this.prefix.indexOf("/")==0) {
-				this.prefix = this.prefix.substring(1);
-			}
+			//se remover a primeira barra não funciona no linux
+			//if (this.prefix.indexOf("/")==0) {
+			//	this.prefix = this.prefix.substring(1);
+			//}
 		}
 		
 		String path = packageName.replace(".", "/");

@@ -35,7 +35,7 @@ public class RequestFilter implements ContainerRequestFilter {
 			String method = requestContext.getMethod();
 			String path = requestContext.getUriInfo().getAbsolutePath().getPath();
 			
-			if (method.equalsIgnoreCase("GET") && (path.indexOf("/help")>=0 || path.indexOf("/hash/download/")>=0)) {
+			if (method.equalsIgnoreCase("GET") && (path.indexOf("api/teste/")>=0 || path.indexOf("/help")>=0 || path.indexOf("/hash/download/")>=0)) {
 				return;
 			}
 			
