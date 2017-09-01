@@ -15,6 +15,7 @@ import javax.ws.rs.ext.Provider;
 import org.jboss.resteasy.core.ResourceMethodInvoker;
 
 import br.com.devtools.apidevtools.core.rest.RestSessao;
+import br.com.devtools.apidevtools.resource.teste.TesteController;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.AcessStatus;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.Session;
 import br.com.devtools.apidevtools.resource.user.permission.Permission;
@@ -39,11 +40,15 @@ public class RequestFilter implements ContainerRequestFilter {
 		            requestContext.getProperty("org.jboss.resteasy.core.ResourceMethodInvoker");
 			Method method2 = methodInvoker.getMethod();
 			
+			if (TesteController.class.equals(methodInvoker.getMethod().getDeclaringClass())) {
+				return;
+			}
+			
+			
 			String method = requestContext.getMethod();
 			String path = requestContext.getUriInfo().getAbsolutePath().getPath();
-			requestContext.getUriInfo().getMatchedResources().get(0);
 			
-			if (method.equalsIgnoreCase("GET") && (path.indexOf("api/teste/")>=0 || path.indexOf("/help")>=0 || path.indexOf("/hash/download/")>=0)) {
+			if (method.equalsIgnoreCase("GET") && (path.indexOf("/help")>=0 || path.indexOf("/hash/download/")>=0)) {
 				return;
 			}
 			

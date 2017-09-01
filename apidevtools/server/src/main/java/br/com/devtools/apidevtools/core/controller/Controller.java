@@ -30,6 +30,8 @@ import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 
 import br.com.devtools.apidevtools.core.help.HelpGenerator;
+import br.com.devtools.apidevtools.core.permission.PermissionMethod;
+import static br.com.devtools.apidevtools.core.permission.PermissionMethod.Type.*;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
 import br.com.devtools.apidevtools.core.rulemanager.RuleManager;
@@ -93,15 +95,18 @@ public abstract class Controller<Model> {
 	}
 	
 	private String sql;
+	
 	@GET
 	@Path("help")
 	@Produces(MediaType.TEXT_HTML)
+	@PermissionMethod(types=ALL, description="Ajuda")
 	public String help() {
 		return new HelpGenerator().help(this.getClass(), this.getClasse());
 	}
 	
 	@GET
 	@Path("{id}/revision")
+	@PermissionMethod(types=AUDIT, description="Buscar Auditoria")
 	public List<RevInfoResult<Model>> audited(@PathParam("id") Long id) {
 	
 		AuditReader reader = AuditReaderFactory.get(this.getSessao().getEm());
@@ -143,6 +148,7 @@ public abstract class Controller<Model> {
 	}
 	
 	@GET
+	@PermissionMethod(types={AUDIT, DELETE, PUT, GET}, description="Pesquisar")
 	public FormGet<Model> get(@QueryParam("page") Integer page, @QueryParam("numberRecords") Integer numberRecords) throws RestException {
 		
 		try {
@@ -273,6 +279,7 @@ public abstract class Controller<Model> {
 	
 	@GET
 	@Path("{id}")
+	@PermissionMethod(types={AUDIT, DELETE, PUT, GET}, description="Pesquisar")
 	public Model get(@PathParam("id") Long id) throws RestException {
 		
 		try {
@@ -292,6 +299,7 @@ public abstract class Controller<Model> {
 	}
 	
 	@POST
+	@PermissionMethod(types=POST, description="Gravar")
 	public Model post(Model model) throws RestException {
 		
 		try {
@@ -327,6 +335,7 @@ public abstract class Controller<Model> {
 	
 	@PUT
 	@Path("{id}")
+	@PermissionMethod(types=PUT, description="Alterar")
 	public Model put(@PathParam("id") Long id, Model model) throws RestException {
 		
 		try {
@@ -352,6 +361,7 @@ public abstract class Controller<Model> {
 	
 	@DELETE
 	@Path("{id}")
+	@PermissionMethod(types=DELETE, description="Excluir")
 	public Response delete(@PathParam("id") Long id) throws RestException {
 		
 		try {
