@@ -31,7 +31,7 @@ import org.hibernate.envers.query.AuditEntity;
 
 import br.com.devtools.apidevtools.core.help.HelpGenerator;
 import br.com.devtools.apidevtools.core.permission.PermissionMethod;
-import static br.com.devtools.apidevtools.core.permission.PermissionMethod.Type.*;
+import static br.com.devtools.apidevtools.core.permission.PermissionMethod.*;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
 import br.com.devtools.apidevtools.core.rulemanager.RuleManager;

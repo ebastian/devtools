@@ -1,6 +1,6 @@
 package br.com.devtools.apidevtools.resource.component;
 
-import static br.com.devtools.apidevtools.core.permission.PermissionMethod.Type.*;
+import static br.com.devtools.apidevtools.core.permission.PermissionMethod.*;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +20,8 @@ import br.com.devtools.apidevtools.resource.componentlast.ComponentLastResource;
 @PermissionClass(description="Componente")
 public class ComponentController extends Controller<Component> {
 
+	public static final String ATIVACAO = "ATIVACAO";
+	
 	public ComponentController() {
 	}
 	
@@ -30,7 +32,7 @@ public class ComponentController extends Controller<Component> {
 	
 	@PUT
 	@Path("{id}/kill")
-	@PermissionMethod(types=PUT, description="Desativar Componente")
+	@PermissionMethod(types=ATIVACAO, description="Desativar Componente")
 	public Component kill(@PathParam("id") Long id) throws Exception {
 		
 		try {
@@ -47,7 +49,7 @@ public class ComponentController extends Controller<Component> {
 	
 	@PUT
 	@Path("{id}/revive")
-	@PermissionMethod(types=PUT, description="Reativar Componente")
+	@PermissionMethod(types=ATIVACAO, description="Reativar Componente")
 	public Component revive(@PathParam("id") Long id) throws Exception {
 		
 		try {

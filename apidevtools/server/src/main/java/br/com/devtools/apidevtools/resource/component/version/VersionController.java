@@ -1,5 +1,9 @@
 package br.com.devtools.apidevtools.resource.component.version;
 
+import static br.com.devtools.apidevtools.core.permission.PermissionMethod.DELETE;
+import static br.com.devtools.apidevtools.core.permission.PermissionMethod.GET;
+import static br.com.devtools.apidevtools.core.permission.PermissionMethod.PUT;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +15,8 @@ import javax.ws.rs.PathParam;
 
 import br.com.devtools.apidevtools.core.controller.Controller;
 import br.com.devtools.apidevtools.core.controller.Filter;
+import br.com.devtools.apidevtools.core.permission.PermissionClass;
+import br.com.devtools.apidevtools.core.permission.PermissionMethod;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.resource.component.Component;
 import br.com.devtools.apidevtools.resource.component.ComponentController;
@@ -18,8 +24,11 @@ import br.com.devtools.apidevtools.resource.componentlast.ComponentLast;
 import br.com.devtools.apidevtools.resource.componentlast.ComponentLastResource;
 
 @Path("component/{componentId}/version")
+@PermissionClass(description="Versão")
 public class VersionController extends Controller<Version> {
 
+	private static final String ATIVACAO = "ATIVACAO"; 
+	
 	@PathParam("componentId") Long componentId;
 	
 	private Component component = null;
@@ -90,6 +99,7 @@ public class VersionController extends Controller<Version> {
 	
 	@PUT
 	@Path("{id}/kill")
+	@PermissionMethod(types=ATIVACAO, description="Desativa Versão")
 	public Version kill(@PathParam("id") Long id) throws Exception {
 		
 		try {
@@ -107,6 +117,7 @@ public class VersionController extends Controller<Version> {
 	
 	@PUT
 	@Path("{id}/revive")
+	@PermissionMethod(types=ATIVACAO, description="Reativa Versão")
 	public Version revive(@PathParam("id") Long id) throws Exception {
 		
 		try {
@@ -124,6 +135,7 @@ public class VersionController extends Controller<Version> {
 	
 	@GET
 	@Path("{id}/last")
+	@PermissionMethod(types={GET, PUT, DELETE}, description="Busca Último")
 	public ComponentLast last(@PathParam("id") Long versionId) throws Exception {
 		return new ComponentLastResource(this.getEm()).last(this.componentId, versionId);
 	}

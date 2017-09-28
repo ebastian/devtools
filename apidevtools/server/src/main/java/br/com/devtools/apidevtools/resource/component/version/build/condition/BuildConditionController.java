@@ -11,13 +11,18 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
 import br.com.devtools.apidevtools.core.controller.Controller;
+import br.com.devtools.apidevtools.core.permission.PermissionClass;
+import br.com.devtools.apidevtools.core.permission.PermissionMethod;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.resource.component.version.build.Build;
 import br.com.devtools.apidevtools.resource.component.version.build.BuildStatus;
 
 @Path("component/{componentId}/version/{versionId}/build/{buildId}/condition")
+@PermissionClass(description="Condições de uma Compilação")
 public class BuildConditionController extends Controller<BuildCondition> {
 
+	private static final String APROVACAO = "APROVACAO";
+	
 	@PathParam("componentId")
 	private Long componentId;
 	
@@ -132,6 +137,7 @@ public class BuildConditionController extends Controller<BuildCondition> {
 
 	@PUT
 	@Path("{id}/approve")
+	@PermissionMethod(types=APROVACAO, description="Aprova a Condição")
 	public BuildCondition approve(@PathParam("id") Long id) throws Exception {
 		try {
 			BuildCondition bc = this.get(id);
@@ -144,6 +150,7 @@ public class BuildConditionController extends Controller<BuildCondition> {
 	
 	@PUT
 	@Path("{id}/disapprove")
+	@PermissionMethod(types=APROVACAO, description="Reprova a Condição")
 	public BuildCondition disapprove(@PathParam("id") Long id) throws Exception {
 		try {
 			BuildCondition bc = this.get(id);

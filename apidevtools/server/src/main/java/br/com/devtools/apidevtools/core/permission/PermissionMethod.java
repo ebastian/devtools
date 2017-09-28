@@ -9,13 +9,14 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD) 
 public @interface PermissionMethod {
 
-	public enum Type {
-	   NONE, ALL, GET, POST, PUT, DELETE, AUDIT
-	}
+	public static final String ALL = "ALL";
+	public static final String GET = "GET";
+	public static final String POST = "POST";
+	public static final String PUT = "PUT";
+	public static final String DELETE = "DELETE";
+	public static final String AUDIT = "AUDIT";
 	
-	Type[] types() default Type.NONE;
-	
-	String[] custom() default "";
+	String[] types() default ALL;
 	
 	String description();
 	

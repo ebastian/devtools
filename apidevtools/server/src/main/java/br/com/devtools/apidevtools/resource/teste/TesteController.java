@@ -15,9 +15,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import br.com.devtools.apidevtools.core.help.HelpGenerator;
+import br.com.devtools.apidevtools.core.permission.PermissionClass;
 import br.com.devtools.apidevtools.core.rest.RestException;
 
 @Path("teste")
+@PermissionClass(description="Testes", allMethods="ALL")
 public class TesteController {
 
 	@GET

@@ -1,5 +1,7 @@
 package br.com.devtools.apidevtools.resource.user.acess;
 
+import static br.com.devtools.apidevtools.core.permission.PermissionMethod.ALL;
+
 import javax.inject.Inject;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.Consumes;
@@ -12,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 
 import br.com.devtools.apidevtools.core.crypto.Crypto;
 import br.com.devtools.apidevtools.core.help.HelpGenerator;
+import br.com.devtools.apidevtools.core.permission.PermissionClass;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.Acess;
@@ -23,6 +26,7 @@ import br.com.devtools.apidevtools.resource.user.rules.UserToken;
 @Path("acess")
 @Produces("application/json;charset=UTF-8")
 @Consumes("application/json;charset=UTF-8")
+@PermissionClass(description="Controle de Acesso", allMethods=ALL)
 public class AcessController {
 	
 	@Inject

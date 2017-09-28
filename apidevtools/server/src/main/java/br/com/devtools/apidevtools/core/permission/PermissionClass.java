@@ -10,5 +10,6 @@ import java.lang.annotation.Target;
 public @interface PermissionClass {
 
 	String description();
+	String allMethods() default "";
 	
 }

@@ -11,12 +11,14 @@ import javax.ws.rs.PathParam;
 
 import br.com.devtools.apidevtools.core.controller.Controller;
 import br.com.devtools.apidevtools.core.crypto.Crypto;
+import br.com.devtools.apidevtools.core.permission.PermissionClass;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.Acess;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.AcessStatus;
 import br.com.devtools.apidevtools.resource.user.privilege.Privilege;
 
 @Path("user")
+@PermissionClass(description="Usuário")
 public class UserController extends Controller<User>{
 
 	@Override

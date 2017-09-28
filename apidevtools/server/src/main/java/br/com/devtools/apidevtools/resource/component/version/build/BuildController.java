@@ -1,5 +1,7 @@
 package br.com.devtools.apidevtools.resource.component.version.build;
 
+import static br.com.devtools.apidevtools.core.permission.PermissionMethod.ALL;
+
 import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
@@ -26,6 +28,8 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import br.com.devtools.apidevtools.core.controller.Controller;
 import br.com.devtools.apidevtools.core.controller.Filter;
 import br.com.devtools.apidevtools.core.crypto.Crypto;
+import br.com.devtools.apidevtools.core.permission.PermissionClass;
+import br.com.devtools.apidevtools.core.permission.PermissionMethod;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.resource.component.version.Version;
 import br.com.devtools.apidevtools.resource.component.version.VersionController;
@@ -33,8 +37,13 @@ import br.com.devtools.apidevtools.resource.component.version.build.hash.BuildHa
 import br.com.devtools.apidevtools.resource.component.version.build.hash.BuildHashStatus;
 
 @Path("component/{componentId}/version/{versionId}/build")
+@PermissionClass(description="Compilação")
 public class BuildController extends Controller<Build> {
 
+	private static final String UPLOAD = "UPLOAD";
+	private static final String DOWNLOAD = "DOWNLOAD";
+	private static final String GERAHASH = "GERAHASH";
+	
 	@PathParam("componentId")
 	private Long componentId;
 	
@@ -107,6 +116,7 @@ public class BuildController extends Controller<Build> {
 	@POST
 	@Path("{id}/upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@PermissionMethod(types=UPLOAD, description="Upload de Arquivo")
 	public Response upload(MultipartFormDataInput multipartFormDataInput, @PathParam("id") Long buildId) throws RestException {
 		
 		try {
@@ -147,6 +157,7 @@ public class BuildController extends Controller<Build> {
 	@POST
 	@Path("upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@PermissionMethod(types=UPLOAD, description="Upload de Arquivo")
 	public Response createBuildAndUpload(MultipartFormDataInput multipartFormDataInput) throws RestException {
 		
 		try {
@@ -195,6 +206,7 @@ public class BuildController extends Controller<Build> {
 	@POST
 	@Path("{id}/upload")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@PermissionMethod(types=UPLOAD, description="Upload de Arquivo")
 	public Response upload(byte[] bytes, @PathParam("id") Long buildId) throws RestException {
 		
 		try {
@@ -223,6 +235,7 @@ public class BuildController extends Controller<Build> {
 	@POST
 	@Path("{id}/upload")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@PermissionMethod(types=UPLOAD, description="Upload de Arquivo")
 	public Response upload(Upload upload, @PathParam("id") Long buildId) throws RestException {
 		
 		return this.upload(upload.getBytes(), buildId);
@@ -231,15 +244,9 @@ public class BuildController extends Controller<Build> {
 	
 	
 	@GET
-	@Path("{id}/download")
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public byte[] download(@PathParam("id") Long buildId) throws RestException {
-		return this.download(buildId, null);
-	}
-	
-	@GET
 	@Path("{id}/hash")
 	@Produces(MediaType.APPLICATION_JSON)
+	@PermissionMethod(types=GERAHASH, description="Gera hash para Download externo")
 	public BuildHash hashForDownload(@PathParam("id") Long buildId) throws RestException {
 		
 		try {
@@ -269,6 +276,7 @@ public class BuildController extends Controller<Build> {
 	@GET
 	@Path("{id}/hash/download/{hash}/{nome}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	@PermissionMethod(types=ALL, description="Download do Componente pelo hash com nome")
 	public  byte[] downloadByhashAndName(@PathParam("id") Long buildId, @PathParam("hash") String hash, @PathParam("nome") String nome) throws RestException {
 		
 		try {
@@ -300,6 +308,7 @@ public class BuildController extends Controller<Build> {
 	@GET
 	@Path("{id}/hash/download/{hash}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	@PermissionMethod(types=ALL, description="Download do Componente pelo hash")
 	public byte[] downloadByhash(@PathParam("id") Long buildId, @PathParam("hash") String hash, @Context HttpServletResponse response) throws RestException {
 		
 		try {
@@ -333,9 +342,19 @@ public class BuildController extends Controller<Build> {
 		
 	}
 	
+
+	@GET
+	@Path("{id}/download")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	@PermissionMethod(types=DOWNLOAD, description="Download do Componente")
+	public byte[] download(@PathParam("id") Long buildId) throws RestException {
+		return this.download(buildId, null);
+	}
+	
 	@GET
 	@Path("{id}/download/{nome}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	@PermissionMethod(types=DOWNLOAD, description="Download do Componente com nome")
 	public byte[] download(@PathParam("id") Long buildId, @PathParam("nome") String nome) throws RestException {
 		
 		try {

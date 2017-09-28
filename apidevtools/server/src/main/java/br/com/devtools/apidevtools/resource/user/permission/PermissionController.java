@@ -8,11 +8,13 @@ import javax.ws.rs.PathParam;
 
 import br.com.devtools.apidevtools.core.controller.Controller;
 import br.com.devtools.apidevtools.core.controller.Filter;
+import br.com.devtools.apidevtools.core.permission.PermissionClass;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.resource.user.User;
 import br.com.devtools.apidevtools.resource.user.UserController;
 
 @Path("user/{userId}/permission")
+@PermissionClass(description="Permissões")
 public class PermissionController extends Controller<Permission> {
 
 	@PathParam("userId") Long userId;
