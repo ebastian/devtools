@@ -23,7 +23,7 @@ public class User {
 	
 	@Column(length=200)
 	private String email;
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -32,12 +32,12 @@ public class User {
 		this.id = id;
 	}
 
-	public String getNome() {
+	public String getName() {
 		return name;
 	}
 
-	public void setNome(String nome) {
-		this.name = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getEmail() {
@@ -47,5 +47,5 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
+	
 }
