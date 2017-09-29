@@ -21,6 +21,7 @@ import { ProductsModule } from './products/products.module';
 import { ProductsComponentsModule } from './products-components/products-components.module';
 import { UploadModule } from './upload/upload.module';
 import { DownloadModule } from './download/download.module';
+import { UserModule } from './user/user.module';
 
 import { routes } from './routes';
 
@@ -40,6 +41,7 @@ import { routes } from './routes';
     ProductsComponentsModule,
     UploadModule,
     DownloadModule,
+    UserModule,
     EbAppCore
   ],
   providers: [

@@ -1,0 +1,81 @@
+<div class="container-fluid">
+  <br>
+  <div class="row">
+    <div class="col-md-9">
+      <label>Id: {{user?.id === undefined ? '?' : user.id}}</label>
+    </div>
+    <div class="col-md-2" *ngIf="user?.id !== undefined">
+      <label>Situação: {{user?.death === null ? 'Ativo' : 'Desativado'}}</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <label>Nome</label>
+      <input class="form-control" [(ngModel)]="user.name" required>
+    </div>
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-3">
+      <label>Criação</label>
+      <input class="form-control" value="{{ user?.creation | date2 }}" readonly>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-6">
+      <label>E-mail</label>
+      <input type="email" class="form-control" [(ngModel)]="user.email" required>
+    </div>
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-3">
+      <label>Desativação</label>
+      <input class="form-control" value="{{ user?.death | date2 }}" readonly>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-2">
+      <label>Senha</label>
+      <input type="password" class="form-control" [(ngModel)]="user.password" required>
+    </div>
+    <div class="col-md-2">
+      <label>Repetir Senha</label>
+      <input type="password" class="form-control" [(ngModel)]="passwordCheck" required>
+    </div>
+    <div class="col-md-5">
+    </div>
+  </div>
+  <div class="row">
+    <br>
+    <div class="col-md-12">
+      <div class="controls">
+        <button class="btn btn-default" (click)="clickClear()">Novo</button>
+        <button class="btn btn-success" (click)="clickSave(user)">Salvar</button>
+        <!--
+      <button class="btn btn-danger" *ngIf="user?.id !== undefined" (click)="clickDelete(user)">Deletar</button>
+      -->
+        <button class="btn btn-default" *ngIf="user?.id !== undefined" (click)="clickToggleActive(user)">
+        {{user.death === null || user.death === undefined ? 'Desativar' : 'Ativar'}} 
+      </button>
+        <button class="btn btn-default" routerLink="/user">Cancelar</button>
+        <div class="checkbox">
+          <label>
+          <input type="checkbox" [checked]="saveAndContinue" (change)="saveAndContinue = !saveAndContinue">Continuar após salvar
+        </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="user?.id !== undefined">
+  <div class="col-md-12">
+    <br>
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="active">
+        <a href="javascript:void(0);">Privilégios</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<app-user-privileges-tab></app-user-privileges-tab>
