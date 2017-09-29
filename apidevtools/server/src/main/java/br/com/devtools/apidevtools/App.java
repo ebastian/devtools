@@ -64,7 +64,7 @@ public class App extends Application {
 					if (user==null) {
 						
 						user = new User();
-						user.setNome("Admin");
+						user.setName("Admin");
 						user.setEmail("admin@admin.com");
 						pc.post(user);
 
