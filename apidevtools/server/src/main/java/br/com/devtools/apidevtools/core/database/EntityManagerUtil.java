@@ -26,7 +26,7 @@ public class EntityManagerUtil implements IEntityMangerUtil {
 			
 			
 			.setProperty("hibernate.hbm2ddl.auto", "update")
-			.setProperty("hibernate.format_sql", "true")
+			.setProperty("hibernate.format_sql", "false")
 			.setProperty("hibernate.show_sql", "false");
 		
 		try {

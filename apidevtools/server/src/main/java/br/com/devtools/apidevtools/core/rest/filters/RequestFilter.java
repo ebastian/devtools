@@ -1,8 +1,9 @@
 package br.com.devtools.apidevtools.core.rest.filters;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
+import java.lang.annotation.Annotation;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import javax.inject.Inject;
 import javax.persistence.TypedQuery;
@@ -14,13 +15,11 @@ import javax.ws.rs.ext.Provider;
 
 import org.jboss.resteasy.core.ResourceMethodInvoker;
 
+import br.com.devtools.apidevtools.core.permission.PermissionClass;
+import br.com.devtools.apidevtools.core.permission.PermissionMethod;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
-import br.com.devtools.apidevtools.resource.teste.TesteController;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.AcessStatus;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.Session;
-import br.com.devtools.apidevtools.resource.user.permission.Permission;
-import br.com.devtools.apidevtools.resource.user.privilege.Privilege;
-import br.com.devtools.apidevtools.resource.user.privilege.PrivilegeType;
 
 @Provider
 public class RequestFilter implements ContainerRequestFilter {
@@ -38,19 +37,25 @@ public class RequestFilter implements ContainerRequestFilter {
 			
 			ResourceMethodInvoker methodInvoker = (ResourceMethodInvoker) 
 		            requestContext.getProperty("org.jboss.resteasy.core.ResourceMethodInvoker");
-			Method method2 = methodInvoker.getMethod();
 			
-			if (TesteController.class.equals(methodInvoker.getMethod().getDeclaringClass())) {
-				return;
+			PermissionClass pClass = methodInvoker.getResourceClass().getDeclaredAnnotation(PermissionClass.class);
+			
+			PermissionMethod pMethod = null;
+			
+			for (Annotation annotation : methodInvoker.getMethodAnnotations()) {
+				if (annotation.annotationType().equals(PermissionMethod.class)) {
+					pMethod = (PermissionMethod) annotation;
+				}
 			}
 			
-			
-			String method = requestContext.getMethod();
-			String path = requestContext.getUriInfo().getAbsolutePath().getPath();
-			
-			if (method.equalsIgnoreCase("GET") && (path.indexOf("/help")>=0 || path.indexOf("/hash/download/")>=0)) {
-				return;
+			if (pClass==null) {
+				throw new IOException("Sem configuração de Permisão na classe");
 			}
+			
+			if (pMethod==null && pClass.allMethods().length()==0) {
+				throw new IOException("Sem configuração de Permisão no método");
+			}
+			
 			
 			//String userToken = context.getHeader("user-token");
 			
@@ -64,41 +69,50 @@ public class RequestFilter implements ContainerRequestFilter {
 			
 			sessao.setSession(session);
 			
-			if (method.equalsIgnoreCase("POST") && path.indexOf("/login")>=0) {
+			String sessionToken = context.getHeader("session-token");
+			
+			if (sessionToken!=null && sessionToken.length()>0) {
+				
+				TypedQuery<Session> query = sessao.getEm().createQuery(
+						" select s from Session s " +
+						" inner join s.acess a " +
+						" where a.status = :status " +
+						" and s.hash = :hash " +
+						" and s.ip = :ip " +
+						" and s.useragent = :useragent "
+						, Session.class);
+				
+				try {
+					query.setParameter("status", AcessStatus.ACTIVE);
+					//query.setParameter("userhash", token.userCrypto(sessao));
+					query.setParameter("hash", sessionToken);
+					query.setParameter("ip", session.getIp());
+					query.setParameter("useragent", session.getUseragent());
+				} catch (Exception e) {
+					throw new IOException(e);
+				}
+				
+				Session s = query.getSingleResult();
+				
+				if (
+					s==null ||
+					!s.getUseragent().equals(session.getUseragent()) ||
+					!s.getIp().equals(session.getIp())
+				) {
+					throw new IOException();
+				}
+				
+				sessao.setSession(s);
+				
+			}
+			
+
+			if (Arrays.asList(pMethod.types()).contains("ALL")) {
 				return;
 			}
 			
-			String sessionToken = context.getHeader("session-token");
 			
-			TypedQuery<Session> query = sessao.getEm().createQuery(
-					" select s from Session s " +
-					" inner join s.acess a " +
-					" where a.status = :status " +
-					" and s.hash = :hash " +
-					" and s.ip = :ip " +
-					" and s.useragent = :useragent "
-					, Session.class);
-			
-			try {
-				query.setParameter("status", AcessStatus.ACTIVE);
-				//query.setParameter("userhash", token.userCrypto(sessao));
-				query.setParameter("hash", sessionToken);
-				query.setParameter("ip", session.getIp());
-				query.setParameter("useragent", session.getUseragent());
-			} catch (Exception e) {
-				throw new IOException(e);
-			}
-			
-			Session s = query.getSingleResult();
-			
-			if (
-				s==null ||
-				!s.getUseragent().equals(session.getUseragent()) ||
-				!s.getIp().equals(session.getIp())
-			) {
-				throw new IOException();
-			}
-			
+			/*
 			TypedQuery<Privilege> qPrivilege = sessao.getEm().createQuery(
 					" select p from Privilege p " +
 					" where p.user = :user "
@@ -130,8 +144,8 @@ public class RequestFilter implements ContainerRequestFilter {
 				}
 				
 			}
+			*/
 			
-			sessao.setSession(s);
 
 		} catch (Exception e) {
 			throw new IOException("Acesso negado");

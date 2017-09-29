@@ -27,7 +27,7 @@ public class Privilege {
 	
 	@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="userId", nullable=false, foreignKey=@ForeignKey(name="fk_Privilege_User"))
+	@JoinColumn(name="userId", nullable=false, foreignKey=@ForeignKey(name="fk_privilege_user"))
 	private User user;
 	
 	@Column

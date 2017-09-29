@@ -22,7 +22,6 @@ public class HelpController {
 	public static final String baseUrl = "http://localhost:8080/apidevtools/api/";
 	
 	public HelpController() {
-		System.out.println("HelpController");
 	}
 	
 	@GET

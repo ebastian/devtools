@@ -29,27 +29,24 @@ public class Permission {
 	
 	@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="userId", nullable=false, foreignKey=@ForeignKey(name="fk_Permission_User"))
+	@JoinColumn(name="userId", nullable=false, foreignKey=@ForeignKey(name="fk_permission_user"))
 	private User user;
 	
 	@Column(nullable=false, length=500)
 	private String className;
 	
+	@Column(nullable=false, length=100)
+	private String authorize;
+	
 	@Transient
-	private String description;
+	private Boolean check;
 	
-	@Column
-	private Boolean get;
+	@Transient
+	private String classDescription;
 	
-	@Column
-	private Boolean post;
+	@Transient
+	private String authorizeDescription;
 	
-	@Column
-	private Boolean put;
-	
-	@Column
-	private Boolean delete;
-
 	public Long getId() {
 		return id;
 	}
@@ -74,44 +71,36 @@ public class Permission {
 		this.className = className;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getAuthorize() {
+		return authorize;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setAuthorize(String authorize) {
+		this.authorize = authorize;
 	}
 
-	public Boolean getGet() {
-		return get;
+	public Boolean getCheck() {
+		return check;
 	}
 
-	public void setGet(Boolean get) {
-		this.get = get;
+	public void setCheck(Boolean check) {
+		this.check = check;
 	}
 
-	public Boolean getPost() {
-		return post;
+	public String getClassDescription() {
+		return classDescription;
 	}
 
-	public void setPost(Boolean post) {
-		this.post = post;
+	public void setClassDescription(String classDescription) {
+		this.classDescription = classDescription;
 	}
 
-	public Boolean getPut() {
-		return put;
+	public String getAuthorizeDescription() {
+		return authorizeDescription;
 	}
 
-	public void setPut(Boolean put) {
-		this.put = put;
-	}
-
-	public Boolean getDelete() {
-		return delete;
-	}
-
-	public void setDelete(Boolean delete) {
-		this.delete = delete;
+	public void setAuthorizeDescription(String authorizeDescription) {
+		this.authorizeDescription = authorizeDescription;
 	}
 	
 }

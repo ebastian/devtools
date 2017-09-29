@@ -33,7 +33,7 @@ public class Version {
 	
 	@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="componentId", nullable=false, foreignKey=@ForeignKey(name="fk_Version_Component"))
+	@JoinColumn(name="componentId", nullable=false, foreignKey=@ForeignKey(name="fk_version_component"))
 	private Component component;
 	
 	@Column(nullable=false)

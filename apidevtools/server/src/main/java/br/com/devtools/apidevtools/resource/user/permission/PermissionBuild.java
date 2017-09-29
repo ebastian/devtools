@@ -29,6 +29,77 @@ class PriTela {
 
 public class PermissionBuild {
 
+	public List<Permission> getPermission() throws Exception {
+		
+		try {
+			
+			List<Permission> returns = new ArrayList<>();
+			
+			List<Class<?>> listClass = new SearchClass("br.com.devtools.apidevtools.resource").byAnnotation(PermissionClass.class);
+			
+			Map<String, PriAce> mapPrivilege = new HashMap<>();
+			
+			for (Class<?> classe : listClass) {
+				
+				PermissionClass permissionClass = classe.getAnnotation(PermissionClass.class);
+				
+				Method[] declaredMethods = classe.getMethods();
+				
+				for (Method method : declaredMethods) {
+					
+					PermissionMethod permission = method.getAnnotation(PermissionMethod.class);
+					if (permission!=null) {
+						
+						if (permission.types().length!=1 || permission.types()[0]!=ALL) {
+							
+							for (String type : permission.types()) {
+								PriAce priAce = mapPrivilege.get(type.toString());
+								if (priAce==null) {
+									priAce = new PriAce();
+								}
+								priAce.descricoes.add(permission.description());
+								mapPrivilege.put(type.toString(), priAce);
+							}
+							
+						}
+						
+					} else if (permissionClass.allMethods().length()>0) {
+						Path path = method.getAnnotation(Path.class);
+						if (path!=null) {
+							PriAce priAce = mapPrivilege.get(permissionClass.allMethods());
+							if (priAce==null) {
+								priAce = new PriAce();
+							}
+							priAce.descricoes.add(method.getName());
+							mapPrivilege.put(permissionClass.allMethods(), priAce);
+						}
+					}
+					
+				}
+				
+				mapPrivilege.forEach((k,v)->{
+					
+					Permission p = new Permission();
+					p.setClassName(classe.getCanonicalName());
+					p.setClassDescription(permissionClass.description());
+					p.setAuthorize(k);
+					p.setAuthorizeDescription(v.descricoes.toString());
+					p.setCheck(false);
+					
+					returns.add(p);
+					
+				});
+				
+			}
+			
+			return returns;
+			
+		} catch (Exception e) {
+			throw e;
+		}
+		
+	}
+	
 	public Object build() {
 		
 		List<PriTela> list = new ArrayList<>();
