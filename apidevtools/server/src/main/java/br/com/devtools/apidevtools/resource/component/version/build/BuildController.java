@@ -2,6 +2,7 @@ package br.com.devtools.apidevtools.resource.component.version.build;
 
 import static br.com.devtools.apidevtools.core.permission.PermissionMethod.ALL;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
@@ -124,27 +125,23 @@ public class BuildController extends Controller<Build> {
 			Map<String, List<InputPart>> map = multipartFormDataInput.getFormDataMap();
 			List<InputPart> lstInputPart = map.get("uploadedFile");
 			
+			InputStream is = null;
+			
 			for (InputPart inputPart : lstInputPart) {
-				
-	        	InputStream inputStream = inputPart.getBody(InputStream.class, null);
-				PreparedStatement ps = this.getSessao().getConnection().prepareStatement("INSERT INTO upload (buildid, bytes) VALUES (?, ?)");
-				ps.setLong(1, buildId);
-				ps.setBinaryStream(2, inputStream);
-				ps.executeUpdate();
-				ps.close();
-				
+				is = inputPart.getBody(InputStream.class, null);
 			}
+			try (ByteArrayOutputStream os = new ByteArrayOutputStream();)
+		    {
+		        byte[] buffer = new byte[0xFFFF];
+
+		        for (int len; (len = is.read(buffer)) != -1;)
+		            os.write(buffer, 0, len);
+
+		        os.flush();
+		        
+		        this.upload(os.toByteArray(), buildId);
+		    }
 			
-			String sql = " select length(u.bytes) from Upload u where u.buildId = :buildId ";
-			TypedQuery<Integer> query = this.getSessao().getEm().createQuery(sql, Integer.class);
-			query.setParameter("buildId", buildId);
-			Integer size = query.getSingleResult();
-			
-			Build build = this.get(buildId);
-			build.setSize(size);
-			this.getSessao().getEm().merge(build);
-			
-			this.getSessao().commit();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
