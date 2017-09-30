@@ -16,8 +16,6 @@ import org.hibernate.envers.Audited;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.com.devtools.apidevtools.resource.user.User;
-
 @Audited
 @Entity
 @Table
@@ -29,8 +27,8 @@ public class Permission {
 	
 	@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="userId", nullable=false, foreignKey=@ForeignKey(name="fk_permission_user"))
-	private User user;
+	@JoinColumn(name="permissionGroupId", nullable=false, foreignKey=@ForeignKey(name="fk_permission"))
+	private PermissionGroup group;
 	
 	@Column(nullable=false, length=500)
 	private String className;
@@ -53,14 +51,6 @@ public class Permission {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	public String getClassName() {
@@ -101,6 +91,14 @@ public class Permission {
 
 	public void setAuthorizeDescription(String authorizeDescription) {
 		this.authorizeDescription = authorizeDescription;
+	}
+
+	public PermissionGroup getGroup() {
+		return group;
+	}
+
+	public void setGroup(PermissionGroup group) {
+		this.group = group;
 	}
 	
 }

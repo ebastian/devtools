@@ -18,10 +18,9 @@ import org.jboss.resteasy.core.ResourceMethodInvoker;
 import br.com.devtools.apidevtools.core.permission.PermissionClass;
 import br.com.devtools.apidevtools.core.permission.PermissionMethod;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
+import br.com.devtools.apidevtools.resource.user.UserType;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.AcessStatus;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.Session;
-import br.com.devtools.apidevtools.resource.user.privilege.Privilege;
-import br.com.devtools.apidevtools.resource.user.privilege.PrivilegeType;
 
 @Provider
 public class RequestFilter implements ContainerRequestFilter {
@@ -106,18 +105,10 @@ public class RequestFilter implements ContainerRequestFilter {
 				
 				sessao.setSession(s);
 				
-				TypedQuery<Privilege> qPrivilege = sessao.getEm().createQuery(
-						" select p from Privilege p " +
-						" where p.user = :user "
-						, Privilege.class);
-				
-				qPrivilege.setParameter("user", s.getAcess().getUser());
-				Privilege privilege = qPrivilege.getSingleResult();
-				
-				if (privilege.getType().equals(PrivilegeType.USER)) {
-					
-				} else {
+				if (s.getAcess().getUser().getType().equals(UserType.ADMIN)) {
 					return;
+				} else {
+					
 				}
 				
 			}

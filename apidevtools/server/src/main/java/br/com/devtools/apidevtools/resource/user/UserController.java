@@ -3,9 +3,8 @@ package br.com.devtools.apidevtools.resource.user;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import javax.ws.rs.GET;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -17,16 +16,14 @@ import br.com.devtools.apidevtools.core.permission.PermissionMethod;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.Acess;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.AcessStatus;
-import br.com.devtools.apidevtools.resource.user.permission.Permission;
-import br.com.devtools.apidevtools.resource.user.permission.PermissionBuild;
-import br.com.devtools.apidevtools.resource.user.privilege.Privilege;
+import br.com.devtools.apidevtools.resource.user.permission.PermissionController;
+import br.com.devtools.apidevtools.resource.user.permission.PermissionGroup;
 
 @Path("user")
 @PermissionClass(description = "Usuário")
 public class UserController extends Controller<User> {
 
 	private static final String ALTERAACESSO = "ALTERAACESSO";
-	private static final String ALTERAPROVILEGIO = "ALTERAPROVILEGIO";
 	private static final String ALTERAPERMISSAO = "ALTERAPERMISSAO";
 
 	@Override
@@ -39,7 +36,7 @@ public class UserController extends Controller<User> {
 	@PermissionMethod(types = ALTERAACESSO, description = "Altera Acesso ao Sistema")
 	public void createAcess(@PathParam("id") Long id, Acess acess) throws RestException {
 		try {
-
+			
 			Crypto crypto = new Crypto();
 			LocalDateTime now = LocalDateTime.now();
 			User user = this.get(id);
@@ -69,89 +66,85 @@ public class UserController extends Controller<User> {
 			throw new RestException(e);
 		}
 	}
-
+	
 	@POST
-	@Path("{id}/privilege")
-	@PermissionMethod(types = ALTERAPROVILEGIO, description = "Altera Acesso ao Sistema")
-	public void createPrivilege(@PathParam("id") Long id, Privilege p) throws RestException {
-
-		try {
-
-			User user = this.get(id);
-			Privilege privilege = null;
-
-			try {
-				
-				TypedQuery<Privilege> query = this.getSessao().getEm().createQuery(
-						" select a from Privilege a where a.user = :user ", Privilege.class);
-				query.setParameter("user", user);
-				
-				privilege = query.getSingleResult();
-				
-			} catch (NoResultException e) {
-			}
-
-			if (privilege == null) {
-				privilege = new Privilege();
-				privilege.setId(id);
-				privilege.setUser(this.get(id));
-			}
-
-			privilege.setType(p.getType());
-
-			this.getSessao().getEm().persist(privilege);
-			this.getSessao().commit();
-
-		} catch (Exception e) {
-			throw new RestException(e);
-		}
-
-	}
-
-	@GET
-	@Path("{id}/permission")
-	@PermissionMethod(types = ALTERAPERMISSAO, description = "Busca Permissão ao Sistema")
-	public List<Permission> getPermission(@PathParam("id") Long id) throws RestException {
+	@Path("{id}/permission/{permissionId}")
+	@PermissionMethod(types = ALTERAPERMISSAO, description = "Adiciona Grupo de Permissão ao Usuário")
+	public void addPermission(@PathParam("id") Long id, @PathParam("id") Long permissaoId) throws RestException {
 		
 		try {
 			
 			User user = this.get(id);
 			
-			List<Permission> permissions = new PermissionBuild().getPermission();
-			//permission.setUser(user);
+			PermissionController pController = new PermissionController();
+			pController.setSessao(this.getSessao());
+			pController.setContext(this.getContext());
 			
-			for (Permission permission : permissions) {
+			PermissionGroup permissionGroup = pController.get(permissaoId);
+			
+			TypedQuery<UserPermissionGroup> query = this.getSessao().getEm().createQuery(
+					" select upg from UserPermissionGroup upg  "
+					+ " where upg.user = :user "
+					+ " and upg.grupo = :grupo ",
+					UserPermissionGroup.class);
+			
+			query.setParameter("user", user);
+			query.setParameter("grupo", permissionGroup);
+			
+			UserPermissionGroup upg = query.getSingleResult();
+			
+			if (upg==null) {
 				
-				try {
-					
-					TypedQuery<Permission> query = this.getSessao().getEm().createQuery(
-							" select p from Permission p "
-							+ " where p.user = :user "
-							+ " and p.className = :className "
-							+ " and p.authorize = :authorize ",
-							Permission.class);
-					
-					query.setParameter("user", user);
-					query.setParameter("className", permission.getClassName());
-					query.setParameter("authorize", permission.getAuthorize());
-					
-					Permission p = query.getSingleResult();
-					
-					if (p!=null) {
-						permission.setId(p.getId());
-						permission.setCheck(true);
-					}
-					
-				} catch (NoResultException e) {
-				}
+				upg = new UserPermissionGroup();
+				upg.setUser(user);
+				upg.setGrupo(permissionGroup);
+				
+				this.getEm().persist(upg);
+				
+				this.getSessao().commit();
 				
 			}
-			
-			return permissions;
 			
 		} catch (Exception e) {
 			throw new RestException(e);
 		}
 	}
 
+	@DELETE
+	@Path("{id}/permission/{permissionId}")
+	@PermissionMethod(types = ALTERAPERMISSAO, description = "Remove Grupo de Permissão ao Usuário")
+	public void removePermission(@PathParam("id") Long id, @PathParam("id") Long permissaoId) throws RestException {
+		
+		try {
+			
+			User user = this.get(id);
+			
+			PermissionController pController = new PermissionController();
+			pController.setSessao(this.getSessao());
+			pController.setContext(this.getContext());
+			
+			PermissionGroup permissionGroup = pController.get(permissaoId);
+			
+			TypedQuery<UserPermissionGroup> query = this.getSessao().getEm().createQuery(
+					" select upg from UserPermissionGroup upg  "
+					+ " where upg.user = :user "
+					+ " and upg.grupo = :grupo ",
+					UserPermissionGroup.class);
+			
+			query.setParameter("user", user);
+			query.setParameter("grupo", permissionGroup);
+			
+			UserPermissionGroup upg = query.getSingleResult();
+			
+			if (upg!=null) {
+				
+				this.getEm().remove(upg);
+				this.getSessao().commit();
+				
+			}
+			
+		} catch (Exception e) {
+			throw new RestException(e);
+		}
+	}
 }

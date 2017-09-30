@@ -14,9 +14,8 @@ import br.com.devtools.apidevtools.core.database.EntityManagerUtilNoUpdate;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
 import br.com.devtools.apidevtools.resource.user.User;
 import br.com.devtools.apidevtools.resource.user.UserController;
+import br.com.devtools.apidevtools.resource.user.UserType;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.Acess;
-import br.com.devtools.apidevtools.resource.user.privilege.Privilege;
-import br.com.devtools.apidevtools.resource.user.privilege.PrivilegeType;
 
 @ApplicationPath("/api")
 public class App extends Application {
@@ -66,17 +65,13 @@ public class App extends Application {
 						user = new User();
 						user.setName("Admin");
 						user.setEmail("admin@admin.com");
+						user.setType(UserType.ADMIN);
 						pc.post(user);
 
 						Acess acess = new Acess();
 						acess.setName("admin");
 						acess.setPassword("admin");
 						pc.createAcess(user.getId(), acess);
-						
-						Privilege privilege = new Privilege();
-						privilege.setType(PrivilegeType.ADMIN);
-						
-						pc.createPrivilege(user.getId(), privilege);
 						
 					}
 					

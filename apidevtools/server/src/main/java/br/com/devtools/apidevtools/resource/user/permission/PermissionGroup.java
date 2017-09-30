@@ -1,34 +1,32 @@
-package br.com.devtools.apidevtools.resource.user;
+package br.com.devtools.apidevtools.resource.user.permission;
+
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
-@Table(name="users")
-public class User {
+@Table
+public class PermissionGroup {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(length=200)
+	@Column(nullable=false, length=100)
 	private String name;
 	
-	@Column(length=200)
-	private String email;
-
-	@Column
-	@Enumerated(EnumType.ORDINAL)
-	private UserType type;
+	@OneToMany(fetch=FetchType.EAGER, mappedBy="group")
+	private List<Permission> permissions;
 
 	public Long getId() {
 		return id;
@@ -46,20 +44,12 @@ public class User {
 		this.name = name;
 	}
 
-	public String getEmail() {
-		return email;
+	public List<Permission> getPermissions() {
+		return permissions;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public UserType getType() {
-		return type;
-	}
-
-	public void setType(UserType type) {
-		this.type = type;
+	public void setPermissions(List<Permission> permissions) {
+		this.permissions = permissions;
 	}
 	
 }
