@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
@@ -14,6 +15,7 @@ import br.com.devtools.apidevtools.core.crypto.Crypto;
 import br.com.devtools.apidevtools.core.permission.PermissionClass;
 import br.com.devtools.apidevtools.core.permission.PermissionMethod;
 import br.com.devtools.apidevtools.core.rest.RestException;
+import br.com.devtools.apidevtools.resource.component.Component;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.Acess;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.AcessStatus;
 import br.com.devtools.apidevtools.resource.user.permission.PermissionController;
@@ -25,12 +27,54 @@ public class UserController extends Controller<User> {
 
 	private static final String ALTERAACESSO = "ALTERAACESSO";
 	private static final String ALTERAPERMISSAO = "ALTERAPERMISSAO";
-
+	private static final String ATIVACAO = "ATIVACAO";
+	
 	@Override
 	public Class<User> getClasse() {
 		return User.class;
 	}
+	
+	@Override
+	protected void beforePost(User user) throws RestException {
+		user.setCreation(LocalDateTime.now());
+	}
+	
 
+	@PUT
+	@Path("{id}/kill")
+	@PermissionMethod(types=ATIVACAO, description="Desativar Componente")
+	public User kill(@PathParam("id") Long id) throws Exception {
+		
+		try {
+			
+			User user = this.get(id);
+			user.setDeath(LocalDateTime.now());
+			return this.put(id, user);
+			
+		} catch (Exception e) {
+			throw new RestException(e);
+		}
+		
+	}
+	
+	@PUT
+	@Path("{id}/revive")
+	@PermissionMethod(types=ATIVACAO, description="Reativar Usuário")
+	public User revive(@PathParam("id") Long id) throws Exception {
+		
+		try {
+			
+			User user = this.get(id);
+			user.setDeath(null);
+			return this.put(id, user);
+			
+		} catch (Exception e) {
+			throw new RestException(e);
+		}
+		
+	}
+	
+	
 	@POST
 	@Path("{id}/acess")
 	@PermissionMethod(types = ALTERAACESSO, description = "Altera Acesso ao Sistema")

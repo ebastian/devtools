@@ -1,5 +1,7 @@
 package br.com.devtools.apidevtools.resource.user;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -8,8 +10,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.hibernate.envers.Audited;
+
+import br.com.devtools.apidevtools.core.adapters.LocalDateTimerAdapter;
 
 @Audited
 @Entity
@@ -29,6 +34,14 @@ public class User {
 	@Column
 	@Enumerated(EnumType.ORDINAL)
 	private UserType type;
+	
+	@Column(nullable=false, updatable=false)
+	@XmlJavaTypeAdapter(value=LocalDateTimerAdapter.class)
+	private LocalDateTime creation;
+	
+	@Column(insertable=false)
+	@XmlJavaTypeAdapter(value=LocalDateTimerAdapter.class)
+	private LocalDateTime death;
 
 	public Long getId() {
 		return id;
@@ -60,6 +73,22 @@ public class User {
 
 	public void setType(UserType type) {
 		this.type = type;
+	}
+
+	public LocalDateTime getCreation() {
+		return creation;
+	}
+
+	public void setCreation(LocalDateTime creation) {
+		this.creation = creation;
+	}
+
+	public LocalDateTime getDeath() {
+		return death;
+	}
+
+	public void setDeath(LocalDateTime death) {
+		this.death = death;
 	}
 	
 }
