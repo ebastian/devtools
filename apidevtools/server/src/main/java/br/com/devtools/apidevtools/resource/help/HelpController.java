@@ -52,10 +52,10 @@ public class HelpController {
 	
 	@GET
 	@Path("privilege")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/json;charset=UTF-8")
 	@PermissionMethod(types=ALL, description="Privilégios do Sistema")
-	public Object privilege() {
-		return new PermissionBuild().build();
+	public Object privilege() throws Exception {
+		return new PermissionBuild().getPermission();
 	}
 	
 	public static String replaceParam(String path) {
