@@ -8,10 +8,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
 import br.com.devtools.apidevtools.resource.user.permission.Permission;
-import br.com.devtools.apidevtools.resource.user.permission.PermissionBuild;
 import br.com.devtools.apidevtools.resource.user.permission.PermissionController;
 import br.com.devtools.apidevtools.resource.user.permission.PermissionGroup;
 import dao.TestEntityManagerUtil;

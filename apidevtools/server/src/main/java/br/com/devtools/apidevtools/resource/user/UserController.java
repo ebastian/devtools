@@ -15,7 +15,6 @@ import br.com.devtools.apidevtools.core.crypto.Crypto;
 import br.com.devtools.apidevtools.core.permission.PermissionClass;
 import br.com.devtools.apidevtools.core.permission.PermissionMethod;
 import br.com.devtools.apidevtools.core.rest.RestException;
-import br.com.devtools.apidevtools.resource.component.Component;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.Acess;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.AcessStatus;
 import br.com.devtools.apidevtools.resource.user.permission.PermissionController;

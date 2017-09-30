@@ -2,7 +2,6 @@ package br.com.devtools.apidevtools;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.servlet.ServletContext;

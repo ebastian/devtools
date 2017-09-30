@@ -18,9 +18,11 @@ import org.jboss.resteasy.core.ResourceMethodInvoker;
 import br.com.devtools.apidevtools.core.permission.PermissionClass;
 import br.com.devtools.apidevtools.core.permission.PermissionMethod;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
+import br.com.devtools.apidevtools.resource.user.UserPermissionGroup;
 import br.com.devtools.apidevtools.resource.user.UserType;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.AcessStatus;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.Session;
+import br.com.devtools.apidevtools.resource.user.permission.Permission;
 
 @Provider
 public class RequestFilter implements ContainerRequestFilter {
@@ -98,60 +100,42 @@ public class RequestFilter implements ContainerRequestFilter {
 				if (
 					s==null ||
 					!s.getUseragent().equals(session.getUseragent()) ||
-					!s.getIp().equals(session.getIp())
+					!s.getIp().equals(session.getIp()) ||
+					s.getAcess().getDeath()!=null
 				) {
 					throw new IOException();
 				}
 				
 				sessao.setSession(s);
 				
-				if (s.getAcess().getUser().getType().equals(UserType.ADMIN)) {
-					return;
-				} else {
-					
-				}
-				
 			}
-			
 
 			if ((pMethod==null && pClass.allMethods().equals("ALL")) || Arrays.asList(pMethod.types()).contains("ALL")) {
 				return;
 			}
-			
-			
-			/*
-			TypedQuery<Privilege> qPrivilege = sessao.getEm().createQuery(
-					" select p from Privilege p " +
-					" where p.user = :user "
-					, Privilege.class);
-			
-			qPrivilege.setParameter("user", s.getAcess().getUser());
-			Privilege privilege = qPrivilege.getSingleResult();
-			
-			if (privilege.getType().equals(PrivilegeType.USER)) {
+
+			if (sessao.getSession().getAcess().getUser().getType().equals(UserType.ADMIN)) {
+				return;
+			} else {
 				
-				try {
-					String className = requestContext.getUriInfo().getMatchedResources().get(0).getClass().getName();
-					className = className.substring(0, className.indexOf("$"));
-					
-					String sqlPermission =
-						" select p from Permission p " +
-						" where p.user = :user " +
-						" and p.className = :className " +
-						" and p." +method.toLowerCase()+ " = true ";
-					
-					TypedQuery<Permission> qPermission = sessao.getEm().createQuery(sqlPermission, Permission.class);
-					qPermission.setParameter("user", s.getAcess().getUser());
-					qPermission.setParameter("className", className);
-					
-					qPermission.getResultList();
-					
-				} catch (Exception e) {
-					throw new IOException(e);
+				TypedQuery<UserPermissionGroup> queryGroupPermissions = sessao.getEm().createQuery(
+						" select p from UserPermissionGroup p " +
+						" where p.user = :user "
+						, UserPermissionGroup.class);
+				
+				queryGroupPermissions.setParameter("user", sessao.getSession().getAcess().getUser());
+				
+				for (UserPermissionGroup upg : queryGroupPermissions.getResultList()) {
+					for (Permission p : upg.getGrupo().getPermissions()) {
+						if (p.getClassName().equals(methodInvoker.getResourceClass().getName())) {
+							if (Arrays.asList(pMethod.types()).contains(p.getAuthorize())) {
+								return;
+							}
+						}
+					}
 				}
 				
 			}
-			*/
 			
 			throw new IOException("Acesso negado");
 			
