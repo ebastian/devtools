@@ -8,10 +8,10 @@ import { IAppConfig } from '../../iapp.config';
 
 import { AuthService } from '../../shared/auth/auth.service';
 
-import { ComponentVersion } from './component-version';
+import { UserPrivilege } from './user-privilege';
 
 @Injectable()
-export class ComponentVersionService {
+export class UserPrivilegeService {
 
   baseUrl: string;
   headers: Headers;
@@ -27,29 +27,26 @@ export class ComponentVersionService {
       'session-token': authService.sessionToken
     });
 
-    this.baseUrl = config.apiEndpoint + "component";
+    this.baseUrl = config.apiEndpoint + "user";
   }
 
-  public getItens(componentId: number): Promise<ComponentVersion[]> {
-    const url = this.baseUrl + "/" + componentId + "/version";
+  public getItens(userId: number): Promise<UserPrivilege[]> {
+    const url = this.baseUrl;
     return this.http.get(url, { headers: this.headers })
       .toPromise()
       .then(this.castResults)
       .catch(this.handleError);
   }
 
-  public save(item: ComponentVersion): Promise<ComponentVersion> {
-    const url = this.baseUrl + "/" + item.component.id + "/version";
-    if (item.id != undefined && item.id !== null) {
-      return this.http.put(url + "/" + item.id, JSON.stringify(item), { headers: this.headers })
+  public save(user: UserPrivilege): Promise<UserPrivilege> {
+    const url = this.baseUrl;
+    if (user.id != undefined && user.id !== null) {
+      return this.http.put(url + "/" + user.id, JSON.stringify(user), { headers: this.headers })
         .toPromise()
         .then(this.castResult)
         .catch(this.handleError);
     } else {
-      var d = new Date();
-      d.setHours(d.getHours()-3);
-      item.creation = d;
-      var data = JSON.stringify(item).replace(/Z\"/, "\"");
+      var data = JSON.stringify(user).replace(/Z\"/, "\"");
       return this.http.post(url, data, { headers: this.headers })
         .toPromise()
         .then(this.castResult)
@@ -57,32 +54,32 @@ export class ComponentVersionService {
     }
   }
 
-  public getItem(componentId: number, id: number): Promise<ComponentVersion> {
-    const url = this.baseUrl + "/" + componentId + "/version/" + id;
+  public getUser(id: number): Promise<UserPrivilege> {
+    const url = this.baseUrl + "/" + id;
     return this.http.get(url, { headers: this.headers })
       .toPromise()
-      .then(response => response.json() as ComponentVersion)
+      .then(response => response.json() as UserPrivilege)
       .catch(this.handleError);
   }
 
-  public remove(componentId: number, id: number): Promise<void> {
-    const url = this.baseUrl + "/" + componentId + "/version/" + id;
+  public remove(id: number): Promise<void> {
+    const url = this.baseUrl + "/" + id;
     return this.http.delete(url, { headers: this.headers })
       .toPromise()
       .then((res) => JSON.stringify(res))
       .catch(this.handleError);
   }
 
-  public kill(componentId: number, id: number): Promise<boolean> {
-    const url = this.baseUrl + "/" + componentId + "/version/" + id + "/kill";
+  public kill(id: number): Promise<boolean> {
+    const url = this.baseUrl + "/" + id + "/kill";
     return this.http.put(url, null, { headers: this.headers })
       .toPromise()
       .then(this.castResult)
       .catch(this.handleError);
   }
 
-  public revive(componentId: number, id: number): Promise<boolean> {
-    const url = this.baseUrl + "/" + componentId + "/version/" + id + "/revive";
+  public revive(id: number): Promise<boolean> {
+    const url = this.baseUrl + "/" + id + "/revive";
     return this.http.put(url, null, { headers: this.headers })
       .toPromise()
       .then(this.castResult)
@@ -97,13 +94,13 @@ export class ComponentVersionService {
 
   applyFilter = filter => itens => itens.filter(filter);
 
-  public getActiveItens = (componentId: number): Promise<ComponentVersion[]> => this.getItens(componentId).then(this.applyFilter(this.filterActives));
-  filterActives = (item: ComponentVersion) => item.death === null;
+  public getActiveItens = (userId: number): Promise<UserPrivilege[]> => this.getItens(userId).then(this.applyFilter(this.filterActives));
+  filterActives = (user: UserPrivilege) => true;
 
-  public getActivesItensByComponentId(componentId: number): Promise<ComponentVersion[]> {
-    return this.getActiveItens(componentId).then(comp => Promise.all(comp));
+  public getActivesItensByuserId(userId: number): Promise<UserPrivilege[]> {
+    return this.getActiveItens(userId).then(comp => Promise.all(comp));
   }
 
-  castResult = item => item.json() as ComponentVersion;
-  castResults = response => response.json().list as ComponentVersion[];
+  castResult = user => user.json() as UserPrivilege;
+  castResults = response => response.json().list as UserPrivilege[];
 }

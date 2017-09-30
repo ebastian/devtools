@@ -21,6 +21,10 @@ import { UploadAppComponent } from './upload/upload-app/upload-app.component';
 
 import { DownloadComponent } from './download/download.component';
 
+import { UserComponent } from './user/user.component';
+import { UserListComponent } from './user/user-list/user-list.component';
+import { UserFormComponent } from './user/user-form/user-form.component';
+
 export const routes: Route[] = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'login', component: LoginComponent},
@@ -54,6 +58,21 @@ export const routes: Route[] = [
     ]
   },
   { path: 'download', component: DownloadComponent, canActivate: [ AuthGuard ]}, 
+  { path: 'user', component: UserComponent, canActivate: [ AuthGuard ],
+    children: [
+      {
+        path: '',
+        canActivateChild: [ AuthGuard ],
+        children: [
+          { path: '', component: UserListComponent},
+          { path: ':id', component: UserListComponent},
+          { path: 'user', redirectTo: 'user/', pathMatch: 'full'},
+          { path: 'user/:id', component: UserFormComponent},
+          { path: 'user/incluir', component: UserFormComponent}
+        ]
+      }
+    ]
+  },
   { path: 'upload', component: UploadComponent, canActivate: [ AuthGuard ], 
     children: [
       {
