@@ -3,8 +3,10 @@ package br.com.devtools.apidevtools.resource.user;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -110,6 +112,30 @@ public class UserController extends Controller<User> {
 		}
 	}
 	
+	@GET
+	@Path("{id}/permission")
+	@PermissionMethod(types = ALTERAPERMISSAO, description = "Visializa Grupo de Permissão do Usuário")
+	public List<PermissionGroup> getPermission(@PathParam("id") Long id) throws RestException {
+		
+		try {
+			
+			User user = this.get(id);
+			
+			TypedQuery<PermissionGroup> query = this.getSessao().getEm().createQuery(
+					" select upg.grupo from UserPermissionGroup upg "
+					+ " where upg.user = :user ",
+					PermissionGroup.class);
+			
+			query.setParameter("user", user);
+			
+			return query.getResultList();
+			
+		} catch (Exception e) {
+			throw new RestException(e);
+		}
+		
+	}
+	
 	@POST
 	@Path("{id}/permission/{permissionId}")
 	@PermissionMethod(types = ALTERAPERMISSAO, description = "Adiciona Grupo de Permissão ao Usuário")
@@ -134,7 +160,13 @@ public class UserController extends Controller<User> {
 			query.setParameter("user", user);
 			query.setParameter("grupo", permissionGroup);
 			
-			UserPermissionGroup upg = query.getSingleResult();
+			UserPermissionGroup upg;
+			
+			try {
+				upg = query.getSingleResult();
+			} catch (NoResultException e) {
+				upg = null;
+			}
 			
 			if (upg==null) {
 				

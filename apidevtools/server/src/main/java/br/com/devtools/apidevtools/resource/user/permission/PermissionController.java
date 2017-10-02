@@ -45,10 +45,12 @@ public class PermissionController extends Controller<PermissionGroup> {
 	@Override
 	protected PermissionGroup afterPost(PermissionGroup group) throws RestException {
 		
-		for (Permission p : group.getPermissions()) {
-			p.setGroup(group);
-			if (p.getCheck()!=null && p.getCheck()) {
-				this.getEm().persist(p);
+		if (group.getPermissions()!=null) {
+			for (Permission p : group.getPermissions()) {
+				p.setGroup(group);
+				if (p.getCheck()!=null && p.getCheck()) {
+					this.getEm().persist(p);
+				}
 			}
 		}
 		
@@ -58,27 +60,30 @@ public class PermissionController extends Controller<PermissionGroup> {
 	@Override
 	protected void beforePut(PermissionGroup group) throws RestException {
 		
-		for (Permission p : group.getPermissions()) {
-			if (p.getCheck()!=null && p.getCheck()) {
-				if (p.getId()==null) {
-					p.setGroup(group);
-					this.getEm().persist(p);
-				} else {
-					p.setGroup(group);
-					this.getEm().merge(p);
+		if (group.getPermissions()!=null) {
+			for (Permission p : group.getPermissions()) {
+				if (p.getCheck()!=null && p.getCheck()) {
+					if (p.getId()==null) {
+						p.setGroup(group);
+						this.getEm().persist(p);
+					} else {
+						p.setGroup(group);
+						this.getEm().merge(p);
+					}
+				} else if (p.getId()!=null) {
+					this.getEm().remove(p);
 				}
-			} else if (p.getId()!=null) {
-				this.getEm().remove(p);
 			}
 		}
-		
 	}
 	
 	@Override
 	protected void beforeRemove(PermissionGroup group) throws RestException {
-		for (Permission p : group.getPermissions()) {
-			if (p.getId()!=null) {
-				this.getEm().remove(p);
+		if (group.getPermissions()!=null) {
+			for (Permission p : group.getPermissions()) {
+				if (p.getId()!=null) {
+					this.getEm().remove(p);
+				}
 			}
 		}
 		super.beforeRemove(group);
