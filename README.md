@@ -8,6 +8,11 @@ Hierarchy:
             |_ComponentVersion
                 |_VersionBuild
 
+    User
+        |_PermissionGroup
+            |_Permission
+        |_Access
+
 
 # apidevtools
 back-end - Java API Rest
