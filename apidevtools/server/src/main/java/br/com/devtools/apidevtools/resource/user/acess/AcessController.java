@@ -24,7 +24,7 @@ import br.com.devtools.apidevtools.resource.user.acess.artifact.Session;
 import br.com.devtools.apidevtools.resource.user.rules.UserToken;
 import io.swagger.annotations.Api;
 
-@Api("Controle de Acesso")
+@Api(value="Controle de Acesso", position=1)
 @Path("acess")
 @Produces("application/json;charset=UTF-8")
 @Consumes("application/json;charset=UTF-8")

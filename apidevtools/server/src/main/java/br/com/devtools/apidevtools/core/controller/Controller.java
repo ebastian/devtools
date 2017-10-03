@@ -1,5 +1,12 @@
 package br.com.devtools.apidevtools.core.controller;
 
+import static br.com.devtools.apidevtools.core.permission.PermissionMethod.ALL;
+import static br.com.devtools.apidevtools.core.permission.PermissionMethod.AUDIT;
+import static br.com.devtools.apidevtools.core.permission.PermissionMethod.DELETE;
+import static br.com.devtools.apidevtools.core.permission.PermissionMethod.GET;
+import static br.com.devtools.apidevtools.core.permission.PermissionMethod.POST;
+import static br.com.devtools.apidevtools.core.permission.PermissionMethod.PUT;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +38,6 @@ import org.hibernate.envers.query.AuditEntity;
 
 import br.com.devtools.apidevtools.core.help.HelpGenerator;
 import br.com.devtools.apidevtools.core.permission.PermissionMethod;
-import static br.com.devtools.apidevtools.core.permission.PermissionMethod.*;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
 import br.com.devtools.apidevtools.core.rulemanager.RuleManager;
@@ -41,10 +47,20 @@ import br.com.devtools.apidevtools.core.rulemanager.rules.RulePost;
 import br.com.devtools.apidevtools.core.rulemanager.rules.RulePut;
 import br.com.devtools.apidevtools.resource.revinfo.RevInfo;
 import br.com.devtools.apidevtools.resource.revinfo.RevInfoResult;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 
 @SuppressWarnings("unchecked")
 @Produces("application/json;charset=UTF-8")
 @Consumes("application/json;charset=UTF-8")
+
+@ApiImplicitParams({@ApiImplicitParam(
+				name="session-token",
+				value="Sessão do Usuário",
+				dataType="string",
+				paramType="header",
+				required=false )})
+
 public abstract class Controller<Model> {
 	
 	public abstract Class<Model> getClasse();
