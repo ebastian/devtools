@@ -14,7 +14,9 @@ import br.com.devtools.apidevtools.core.controller.Controller;
 import br.com.devtools.apidevtools.core.permission.PermissionClass;
 import br.com.devtools.apidevtools.core.permission.PermissionMethod;
 import br.com.devtools.apidevtools.core.rest.RestException;
+import io.swagger.annotations.Api;
 
+@Api("Grupo de Permissões")
 @Path("permission")
 @PermissionClass(description="Grupo de Permissões")
 public class PermissionController extends Controller<PermissionGroup> {

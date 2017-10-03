@@ -16,7 +16,9 @@ import br.com.devtools.apidevtools.core.permission.PermissionMethod;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.resource.component.version.build.Build;
 import br.com.devtools.apidevtools.resource.component.version.build.BuildStatus;
+import io.swagger.annotations.Api;
 
+@Api("Condições de uma Compilação")
 @Path("component/{componentId}/version/{versionId}/build/{buildId}/condition")
 @PermissionClass(description="Condições de uma Compilação")
 public class BuildConditionController extends Controller<BuildCondition> {

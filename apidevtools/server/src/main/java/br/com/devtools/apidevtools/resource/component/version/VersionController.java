@@ -22,7 +22,9 @@ import br.com.devtools.apidevtools.resource.component.Component;
 import br.com.devtools.apidevtools.resource.component.ComponentController;
 import br.com.devtools.apidevtools.resource.componentlast.ComponentLast;
 import br.com.devtools.apidevtools.resource.componentlast.ComponentLastResource;
+import io.swagger.annotations.Api;
 
+@Api("Versão")
 @Path("component/{componentId}/version")
 @PermissionClass(description="Versão")
 public class VersionController extends Controller<Version> {

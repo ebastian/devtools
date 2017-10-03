@@ -17,7 +17,9 @@ import javax.ws.rs.core.Response;
 import br.com.devtools.apidevtools.core.help.HelpGenerator;
 import br.com.devtools.apidevtools.core.permission.PermissionClass;
 import br.com.devtools.apidevtools.core.rest.RestException;
+import io.swagger.annotations.Api;
 
+@Api("Testes")
 @Path("teste")
 @PermissionClass(description="Testes", allMethods="ALL")
 public class TesteController {

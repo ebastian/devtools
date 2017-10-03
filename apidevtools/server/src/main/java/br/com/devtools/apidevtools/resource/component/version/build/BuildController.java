@@ -36,7 +36,9 @@ import br.com.devtools.apidevtools.resource.component.version.Version;
 import br.com.devtools.apidevtools.resource.component.version.VersionController;
 import br.com.devtools.apidevtools.resource.component.version.build.hash.BuildHash;
 import br.com.devtools.apidevtools.resource.component.version.build.hash.BuildHashStatus;
+import io.swagger.annotations.Api;
 
+@Api("Compilação")
 @Path("component/{componentId}/version/{versionId}/build")
 @PermissionClass(description="Compilação")
 public class BuildController extends Controller<Build> {

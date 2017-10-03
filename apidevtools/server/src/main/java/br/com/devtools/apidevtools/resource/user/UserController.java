@@ -21,7 +21,9 @@ import br.com.devtools.apidevtools.resource.user.acess.artifact.Acess;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.AcessStatus;
 import br.com.devtools.apidevtools.resource.user.permission.PermissionController;
 import br.com.devtools.apidevtools.resource.user.permission.PermissionGroup;
+import io.swagger.annotations.Api;
 
+@Api("Usuário")
 @Path("user")
 @PermissionClass(description = "Usuário")
 public class UserController extends Controller<User> {

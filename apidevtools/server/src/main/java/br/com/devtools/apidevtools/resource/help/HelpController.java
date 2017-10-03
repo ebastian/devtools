@@ -13,7 +13,9 @@ import br.com.devtools.apidevtools.core.permission.PermissionClass;
 import br.com.devtools.apidevtools.core.permission.PermissionMethod;
 import br.com.devtools.apidevtools.core.searchclass.SearchClass;
 import br.com.devtools.apidevtools.resource.user.permission.PermissionBuild;
+import io.swagger.annotations.Api;
 
+@Api("Ajuda")
 @Path("help")
 @Produces(MediaType.TEXT_HTML)
 @PermissionClass(description="Ajuda")
@@ -46,6 +48,7 @@ public class HelpController {
 		}
 		
 		help += "<a href=\"" + baseUrl + replaceParam("help/privilege") + "\">Sistem Privilege</a><br>";
+		help += "<a href=\"http://localhost:8080/apidevtools/doc/#/\">Swagger Help</a><br>";
 		
 		return "<div>"+help+"</div>";
 	}

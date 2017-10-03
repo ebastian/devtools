@@ -1,6 +1,8 @@
 package br.com.devtools.apidevtools.resource.component;
 
-import static br.com.devtools.apidevtools.core.permission.PermissionMethod.*;
+import static br.com.devtools.apidevtools.core.permission.PermissionMethod.DELETE;
+import static br.com.devtools.apidevtools.core.permission.PermissionMethod.GET;
+import static br.com.devtools.apidevtools.core.permission.PermissionMethod.PUT;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +17,9 @@ import br.com.devtools.apidevtools.core.permission.PermissionMethod;
 import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.resource.componentlast.ComponentLast;
 import br.com.devtools.apidevtools.resource.componentlast.ComponentLastResource;
+import io.swagger.annotations.Api;
 
+@Api(value="Componente")
 @Path("component")
 @PermissionClass(description="Componente")
 public class ComponentController extends Controller<Component> {

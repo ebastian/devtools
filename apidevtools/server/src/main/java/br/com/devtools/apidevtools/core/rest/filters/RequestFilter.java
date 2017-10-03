@@ -38,6 +38,10 @@ public class RequestFilter implements ContainerRequestFilter {
 		
 		try {
 			
+			if (requestContext.getUriInfo().getAbsolutePath().toString().indexOf("/api/swagger.json")>0) {
+				return ;
+			}
+			
 			ResourceMethodInvoker methodInvoker = (ResourceMethodInvoker) 
 		            requestContext.getProperty("org.jboss.resteasy.core.ResourceMethodInvoker");
 			
