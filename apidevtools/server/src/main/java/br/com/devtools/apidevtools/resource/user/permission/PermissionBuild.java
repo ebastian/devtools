@@ -79,14 +79,16 @@ public class PermissionBuild {
 				
 				mapPrivilege.forEach((k,v)->{
 					
-					Permission p = new Permission();
-					p.setClassName(classe.getCanonicalName());
-					p.setClassDescription(permissionClass.description());
-					p.setAuthorize(k);
-					p.setAuthorizeDescription(v.descricoes.toString());
-					p.setCheck(false);
-					
-					returns.add(p);
+					if (!k.equalsIgnoreCase("ALL")) {
+						Permission p = new Permission();
+						p.setClassName(classe.getCanonicalName());
+						p.setClassDescription(permissionClass.description());
+						p.setAuthorize(k);
+						p.setAuthorizeDescription(v.descricoes.toString());
+						p.setCheck(false);
+						
+						returns.add(p);
+					}
 					
 				});
 				
