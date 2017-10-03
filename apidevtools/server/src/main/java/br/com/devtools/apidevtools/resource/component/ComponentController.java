@@ -18,6 +18,7 @@ import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.resource.componentlast.ComponentLast;
 import br.com.devtools.apidevtools.resource.componentlast.ComponentLastResource;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @Api(value="Componente")
 @Path("component")
@@ -37,6 +38,7 @@ public class ComponentController extends Controller<Component> {
 	@PUT
 	@Path("{id}/kill")
 	@PermissionMethod(types=ATIVACAO, description="Desativar Componente")
+	@ApiOperation(value="Desativar Componente", notes="Desativa um componente adiciona sua data de desativação")
 	public Component kill(@PathParam("id") Long id) throws Exception {
 		
 		try {
@@ -54,6 +56,7 @@ public class ComponentController extends Controller<Component> {
 	@PUT
 	@Path("{id}/revive")
 	@PermissionMethod(types=ATIVACAO, description="Reativar Componente")
+	@ApiOperation(value="Reativar Componente", notes="Reativa um componente e remove sua data de desativação")
 	public Component revive(@PathParam("id") Long id) throws Exception {
 		
 		try {
@@ -71,6 +74,7 @@ public class ComponentController extends Controller<Component> {
 	@GET
 	@Path("{id}/last")
 	@PermissionMethod(types={GET, PUT, DELETE}, description="Buscar Último")
+	@ApiOperation(value="Buscar Último", notes="Busca última Versão e Compilação do Componente")
 	public ComponentLast last(@PathParam("id") Long id) throws Exception {
 		
 		return new ComponentLastResource(this.getEm()).last(id);

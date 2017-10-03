@@ -2,6 +2,8 @@ package br.com.devtools.apidevtools.resource.user.acess;
 
 import static br.com.devtools.apidevtools.core.permission.PermissionMethod.ALL;
 
+import java.util.Base64;
+
 import javax.inject.Inject;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.Consumes;
@@ -19,10 +21,12 @@ import br.com.devtools.apidevtools.core.rest.RestException;
 import br.com.devtools.apidevtools.core.rest.RestSessao;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.Acess;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.AcessStatus;
+import br.com.devtools.apidevtools.resource.user.acess.artifact.Login;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.LoginToken;
 import br.com.devtools.apidevtools.resource.user.acess.artifact.Session;
 import br.com.devtools.apidevtools.resource.user.rules.UserToken;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @Api(value="Controle de Acesso", position=1)
 @Path("acess")
@@ -53,16 +57,49 @@ public class AcessController {
 				"Ex.:admin;admin <br> convertendo para Base64 fica \"YWRtaW47YWRtaW4=\"<br><br>"+
 				"Enviar-lo como Header da requisição com o nome user-token.<br><br>" +
 				"O Método ira devolver o session-token.<br>" +
-				"Ambos os dados devem ser enviados em todos os métodos como Header:<br>" +
+				"Este devem ser enviado em todos os métodos como Header:<br>" +
 				"Ex.:<br>" +
-				"user-token : YWRtaW47YWRtaW4=<br>"+
+				//"user-token : YWRtaW47YWRtaW4=<br>"+
 				"session-token : e23ece7940281f4c79d81c1568ee713cd263731850948a9e90d3e5943c79690c8663c442639a514b9341523b834ffe383ad5eb8aeecb22b87e707cb9f1b5f155";
 		
 		return new HelpGenerator().help(this.getClass(), Acess.class, description);
 	}
 
 	@POST
+	@Path("loginbyuser")
+	@ApiOperation(
+			value="Login por usuário e senha",
+			notes=	"Utilizar NomeDeAcesso e Senha concatenado <br>" +
+					"Ex.:\n{\n" + 
+					"\"login\": \"admin\",\n" + 
+					"\"password\": \"admin\"\n" + 
+					"} <br><br>"+
+					"O Método ira devolver o session-token.<br>" +
+					"Este deve ser enviado em todos os métodos como Header:<br>" +
+					"Ex.:<br>" +
+					"session-token : e23ece7940281f4c79d81c1568ee713cd263731850948a9e90d3e5943c79690c8663c442639a514b9341523b834ffe383ad5eb8aeecb22b87e707cb9f1b5f155")
+	public LoginToken login(Login login) throws RestException {
+		
+		try {
+			String token = Base64.getEncoder().encodeToString((login.getLogin()+";"+login.getPassword()).getBytes());
+			return this.login(token);
+		} catch (Exception e) {
+			throw new RestException(e);
+		}
+	}
+	
+	@POST
 	@Path("login")
+	@ApiOperation(
+			value="Login por Token",
+			notes=	"Utilizar NomeDeAcesso e Senha concatenado com um ponto e virgula(;) e convertido para Base64:<br>" +
+					"Ex.:admin;admin <br> convertendo para Base64 fica \"YWRtaW47YWRtaW4=\"<br><br>"+
+					"Enviar-lo como Header da requisição com o nome user-token.<br><br>" +
+					"O Método ira devolver o session-token.<br>" +
+					"Ambos os dados devem ser enviados em todos os métodos como Header:<br>" +
+					"Ex.:<br>" +
+					"user-token : YWRtaW47YWRtaW4=<br>"+
+					"session-token : e23ece7940281f4c79d81c1568ee713cd263731850948a9e90d3e5943c79690c8663c442639a514b9341523b834ffe383ad5eb8aeecb22b87e707cb9f1b5f155")
 	public LoginToken login(@HeaderParam("user-token") String token) throws RestException {
 		
 		try {

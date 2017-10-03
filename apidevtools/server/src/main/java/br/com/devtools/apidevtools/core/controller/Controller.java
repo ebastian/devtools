@@ -49,6 +49,7 @@ import br.com.devtools.apidevtools.resource.revinfo.RevInfo;
 import br.com.devtools.apidevtools.resource.revinfo.RevInfoResult;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 
 @SuppressWarnings("unchecked")
 @Produces("application/json;charset=UTF-8")
@@ -116,6 +117,7 @@ public abstract class Controller<Model> {
 	@Path("help")
 	@Produces(MediaType.TEXT_HTML)
 	@PermissionMethod(types=ALL, description="Ajuda")
+	@ApiOperation(value="Ajuda", hidden=true)
 	public String help() {
 		return new HelpGenerator().help(this.getClass(), this.getClasse());
 	}
@@ -123,6 +125,7 @@ public abstract class Controller<Model> {
 	@GET
 	@Path("{id}/revision")
 	@PermissionMethod(types=AUDIT, description="Buscar Auditoria")
+	@ApiOperation(value="Buscar auditoria", notes="Mostra histórico de alterações pelo ID do modelo")
 	public List<RevInfoResult<Model>> audited(@PathParam("id") Long id) {
 	
 		AuditReader reader = AuditReaderFactory.get(this.getSessao().getEm());
@@ -165,6 +168,7 @@ public abstract class Controller<Model> {
 	
 	@GET
 	@PermissionMethod(types={AUDIT, DELETE, PUT, GET}, description="Pesquisar")
+	@ApiOperation(value="Pesquisar", notes="Mostra lista paginada de modelos")
 	public FormGet<Model> get(@QueryParam("page") Integer page, @QueryParam("numberRecords") Integer numberRecords) throws RestException {
 		
 		try {
@@ -296,6 +300,7 @@ public abstract class Controller<Model> {
 	@GET
 	@Path("{id}")
 	@PermissionMethod(types={AUDIT, DELETE, PUT, GET}, description="Pesquisar")
+	@ApiOperation(value="Pesquisar", notes="Mostra modelo pelo ID")
 	public Model get(@PathParam("id") Long id) throws RestException {
 		
 		try {
@@ -316,6 +321,7 @@ public abstract class Controller<Model> {
 	
 	@POST
 	@PermissionMethod(types=POST, description="Gravar")
+	@ApiOperation(value="Gravar", notes="Grava um modelo")
 	public Model post(Model model) throws RestException {
 		
 		try {
@@ -352,6 +358,7 @@ public abstract class Controller<Model> {
 	@PUT
 	@Path("{id}")
 	@PermissionMethod(types=PUT, description="Alterar")
+	@ApiOperation(value="Alterar", notes="Altera um modelo pelo ID")
 	public Model put(@PathParam("id") Long id, Model model) throws RestException {
 		
 		try {
@@ -378,6 +385,7 @@ public abstract class Controller<Model> {
 	@DELETE
 	@Path("{id}")
 	@PermissionMethod(types=DELETE, description="Excluir")
+	@ApiOperation(value="Excluir", notes="Remove um modelo pelo ID")
 	public Response delete(@PathParam("id") Long id) throws RestException {
 		
 		try {
