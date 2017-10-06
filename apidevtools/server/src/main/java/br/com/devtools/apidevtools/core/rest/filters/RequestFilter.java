@@ -115,10 +115,12 @@ public class RequestFilter implements ContainerRequestFilter {
 			}
 
 			if ((pMethod==null && pClass.allMethods().equals("ALL")) || Arrays.asList(pMethod.types()).contains("ALL")) {
+				sessao.close();
 				return;
 			}
 
 			if (sessao.getSession().getAcess().getUser().getType().equals(UserType.ADMIN)) {
+				sessao.close();
 				return;
 			} else {
 				
@@ -133,6 +135,7 @@ public class RequestFilter implements ContainerRequestFilter {
 					for (Permission p : upg.getGrupo().getPermissions()) {
 						if (p.getClassName().equals(methodInvoker.getResourceClass().getName())) {
 							if (Arrays.asList(pMethod.types()).contains(p.getAuthorize())) {
+								sessao.close();
 								return;
 							}
 						}
