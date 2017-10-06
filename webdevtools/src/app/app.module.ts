@@ -22,6 +22,7 @@ import { ProductsComponentsModule } from './products-components/products-compone
 import { UploadModule } from './upload/upload.module';
 import { DownloadModule } from './download/download.module';
 import { UserModule } from './user/user.module';
+import { ValidateModule } from './validate/validate.module';
 
 import { routes } from './routes';
 
@@ -42,6 +43,7 @@ import { routes } from './routes';
     UploadModule,
     DownloadModule,
     UserModule,
+    ValidateModule,
     EbAppCore
   ],
   providers: [

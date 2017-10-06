@@ -7,6 +7,7 @@ export class User extends Entity {
   status: number;
   email: string;
   password: string;
+  type: string;
   creation: Date;
   death: Date;
 

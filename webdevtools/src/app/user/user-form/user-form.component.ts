@@ -45,7 +45,7 @@ export class UserFormComponent implements OnInit {
   loadUser = (id: number) => this.service.getUser(id).then(this.assignUser).then(this.logUser).then(this.unBusy).then(this.openUsers);
   assignUser = userLoaded => this.user = (userLoaded !== null && userLoaded !== undefined ? userLoaded as User : new User());
   logUser = () => console.log("User loaded: " + JSON.stringify(this.user));
-  openUsers = () => this.user.id !== undefined ? this.selectTab('components') : '';
+  openUsers = () => this.user.id !== undefined ? this.selectTab('usuario') : '';
 
   selectTab = (abaId: string): string => this.selectedTab = abaId;
 
@@ -57,10 +57,10 @@ export class UserFormComponent implements OnInit {
   };
 
   saveResponse = (comp:User) => {
-    this.saveAndContinue ? this.assignUser(comp) : this.showProductList();
+    this.saveAndContinue ? this.assignUser(comp) : this.showUsersList();
   }
 
-  clickDelete = (user: User): void => { this.service.remove(user.id); this.showProductList(); };
+  clickDelete = (user: User): void => { this.service.remove(user.id); this.showUsersList(); };
   clickClear = () => this.user = new User();
   clickToggleActive = (user: User): void => {
     if(user.death === null || user.death === undefined) {
@@ -75,6 +75,6 @@ export class UserFormComponent implements OnInit {
       this.loadUser(this.user.id);
   }
 
-  showProductList = (): Promise<boolean> => this.router.navigate(["./users"]);
+  showUsersList = (): Promise<boolean> => this.router.navigate(["./usuario"]);
 
 }

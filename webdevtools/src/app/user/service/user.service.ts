@@ -30,7 +30,7 @@ export class UserService {
     this.baseUrl = config.apiEndpoint + "user";
   }
 
-  public getItens(userId: number): Promise<User[]> {
+  public getItens(): Promise<User[]> {
     const url = this.baseUrl;
     return this.http.get(url, { headers: this.headers })
       .toPromise()
@@ -40,6 +40,8 @@ export class UserService {
 
   public save(user: User): Promise<User> {
     const url = this.baseUrl;
+    user.type = 'ADMIN';
+    user.password = undefined;
     if (user.id != undefined && user.id !== null) {
       return this.http.put(url + "/" + user.id, JSON.stringify(user), { headers: this.headers })
         .toPromise()
@@ -97,12 +99,8 @@ export class UserService {
 
   applyFilter = filter => itens => itens.filter(filter);
 
-  public getActiveItens = (userId: number): Promise<User[]> => this.getItens(userId).then(this.applyFilter(this.filterActives));
+  public getActiveItens = (): Promise<User[]> => this.getItens().then(this.applyFilter(this.filterActives));
   filterActives = (user: User) => user.death === null;
-
-  public getActivesItensByuserId(userId: number): Promise<User[]> {
-    return this.getActiveItens(userId).then(comp => Promise.all(comp));
-  }
 
   castResult = user => user.json() as User;
   castResults = response => response.json().list as User[];

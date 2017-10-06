@@ -6,79 +6,79 @@
 </div>
 -->
 <table class="table table-hover table-striped">
-  <tr>
-    <th>ID</th>
-    <th>Funcionalidade</th>
-    <th>Descrição</th>
-    <th>Leitura</th>
-    <th>Inclusão</th>
-    <th>Alteração</th>
-    <th>Remoção</th>
-    <th>Ações</th>
-  </tr>
-  <tr *ngFor="let privil of privileges">
-    <td>ID</td>
-    <td>{{privil.className}}</td>
-    <td>{{privil.description}}</td>
-    <td>
-      <input type="checkbox" readonly>
-    </td>
-    <td>
-      <input type="checkbox" readonly>
-    </td>
-    <td>
-      <input type="checkbox" readonly>
-    </td>
-    <td>
-      <input type="checkbox" readonly>
-    </td>
-    <td>
-      <button type="button" class="btn btn-default btn-xs">
-            <span class="glyphicon glyphicon-ban-circle"></span>
-            <ng-template #btnDeactivate>
-              <span class="glyphicon glyphicon-ok-circle"></span>
-            </ng-template>
-      </button>
-      <button type="button" class="btn btn-default btn-xs" routerLink="/upload/build">
-            <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
+    <tr>
+      <th>ID</th>
+      <th>Funcionalidade</th>
+      <th>Descrição</th>
+      <th>Leitura</th>
+      <th>Inclusão</th>
+      <th>Alteração</th>
+      <th>Remoção</th>
+      <th>Ações</th>
+    </tr>
+    <tr *ngFor="let privil of privileges">
+      <td>ID</td>
+      <td>{{privil.className}}</td>
+      <td>{{privil.description}}</td>
+      <td>
+        <input type="checkbox" readonly>
+      </td>
+      <td>
+        <input type="checkbox" readonly>
+      </td>
+      <td>
+        <input type="checkbox" readonly>
+      </td>
+      <td>
+        <input type="checkbox" readonly>
+      </td>
+      <td>
+        <button type="button" class="btn btn-default btn-xs">
+              <span class="glyphicon glyphicon-ban-circle"></span>
+              <ng-template #btnDeactivate>
+                <span class="glyphicon glyphicon-ok-circle"></span>
+              </ng-template>
         </button>
-      <button type="button" class="btn btn-default btn-xs">
-        <span class="glyphicon glyphicon-remove " aria-hidden="true"></span>
-      </button>
-    </td>
-  </tr>
-  <tr>
-    <td style="vertical-align: middle">?</td>
-    <td>
-      <select class="form-control">
-        <option>Produtos</option>
-        <option>Componentes</option>
-        <option>Versões</option>
-        <option>Builds</option>
-      </select>
-    </td>
-    <td>
-      <input type="text" class="form-control" readonly>
-    </td>
-    <td>
-      <input type="checkbox">
-    </td>
-    <td>
-      <input type="checkbox">
-    </td>
-    <td>
-      <input type="checkbox">
-    </td>
-    <td>
-      <input type="checkbox">
-    </td>
-    <td>
-      <button type="button" class="btn btn-default" (click)="clickSave(user)">
-        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-      </button>
-      <button type="button" class="btn btn-default" (click)="clickClear()">
-        <span class="glyphicon glyphicon-erase " aria-hidden="true"></span>
-      </button>
-    </td>
-  </tr>
-</table>
+        <button type="button" class="btn btn-default btn-xs" routerLink="/upload/build">
+              <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
+          </button>
+        <button type="button" class="btn btn-default btn-xs">
+          <span class="glyphicon glyphicon-remove " aria-hidden="true"></span>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: middle">?</td>
+      <td>
+        <select class="form-control">
+          <option>Produtos</option>
+          <option>Componentes</option>
+          <option>Versões</option>
+          <option>Builds</option>
+        </select>
+      </td>
+      <td>
+        <input type="text" class="form-control" readonly>
+      </td>
+      <td>
+        <input type="checkbox">
+      </td>
+      <td>
+        <input type="checkbox">
+      </td>
+      <td>
+        <input type="checkbox">
+      </td>
+      <td>
+        <input type="checkbox">
+      </td>
+      <td>
+        <button type="button" class="btn btn-default" (click)="clickSave(user)">
+          <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="btn btn-default" (click)="clickClear()">
+          <span class="glyphicon glyphicon-erase " aria-hidden="true"></span>
+        </button>
+      </td>
+    </tr>
+  </table>

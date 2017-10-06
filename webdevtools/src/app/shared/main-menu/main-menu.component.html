@@ -22,15 +22,13 @@
   </li>
   -->
   <li class="list-group-item">
-    <a routerLink="/builds/validar" class="list-group-item disabled">
-      Validar Build
-    </a>
+    <a routerLink="/validar" class="list-group-item" [class.active]="routerPrefix === 'validar'">Validar Build</a>
   </li>
   <li class="list-group-item">
     <a routerLink="/download" class="list-group-item" [class.active]="routePrefix === 'download'">Downloads</a>
   </li>
   <li class="list-group-item">
-    <a routerLink="/user" class="list-group-item" [class.active]="routePrefix === 'user'">Usuários</a>
+    <a routerLink="/usuarios" class="list-group-item" [class.active]="routePrefix === 'usuario'">Usuários</a>
   </li>
   <li class="list-group-item">
     <a href="http://localhost:8080/apidevtools/api/help" target="_blank" class="list-group-item">Ajuda</a>

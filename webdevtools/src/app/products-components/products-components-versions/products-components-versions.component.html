@@ -26,14 +26,14 @@
     <td>{{version.death === null || version.death === undefined ? 'Ativo' : 'Inativo'}}</td>
     <td>
       <button type="button" class="btn btn-default btn-xs" (click)="toggleVersionActive(version)">
-            <span class="glyphicon glyphicon-ban-circle" *ngIf="version.death === null || version.death === undefined;else btnDeactivate"></span>
-            <ng-template #btnDeactivate>
-              <span class="glyphicon glyphicon-ok-circle"></span>
-            </ng-template>
+        <span class="glyphicon glyphicon-ban-circle" *ngIf="version.death === null || version.death === undefined;else btnDeactivate"></span>
+        <ng-template #btnDeactivate>
+          <span class="glyphicon glyphicon-ok-circle"></span>
+        </ng-template>
       </button>
       <button type="button" class="btn btn-default btn-xs" *ngIf="version.death === null || version.death === undefined" routerLink="/upload/build">
-            <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
-        </button>
+        <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
+      </button>
       <button type="button" class="btn btn-default btn-xs" (click)="clickDelete(version)">
         <span class="glyphicon glyphicon-remove " aria-hidden="true"></span>
       </button>

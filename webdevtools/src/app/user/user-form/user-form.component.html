@@ -14,6 +14,16 @@
       <input class="form-control" [(ngModel)]="user.name" required>
     </div>
     <div class="col-md-3">
+      <label>Perfil</label>
+      <select class="form-control">
+        <option>Administrador</option>
+        <option>Programador</option>
+        <option>Testador</option>
+        <option>Analista</option>
+        <option>Suporte</option>
+        <option>Parceiro</option>
+        <option>Implantador</option>
+      </select>
     </div>
     <div class="col-md-3">
       <label>Criação</label>
@@ -56,18 +66,19 @@
       <button class="btn btn-danger" *ngIf="user?.id !== undefined" (click)="clickDelete(user)">Deletar</button>
       -->
         <button class="btn btn-default" *ngIf="user?.id !== undefined" (click)="clickToggleActive(user)">
-        {{user.death === null || user.death === undefined ? 'Desativar' : 'Ativar'}} 
-      </button>
-        <button class="btn btn-default" routerLink="/user">Cancelar</button>
+          {{user.death === null || user.death === undefined ? 'Desativar' : 'Ativar'}}
+        </button>
+        <button class="btn btn-default" routerLink="/usuarios">Cancelar</button>
         <div class="checkbox">
           <label>
-          <input type="checkbox" [checked]="saveAndContinue" (change)="saveAndContinue = !saveAndContinue">Continuar após salvar
-        </label>
+            <input type="checkbox" [checked]="saveAndContinue" (change)="saveAndContinue = !saveAndContinue">Continuar após salvar
+          </label>
         </div>
       </div>
     </div>
   </div>
 </div>
+<!--
 <div class="row" *ngIf="user?.id !== undefined">
   <div class="col-md-12">
     <br>
@@ -79,3 +90,4 @@
   </div>
 </div>
 <app-user-privileges-tab></app-user-privileges-tab>
+-->
